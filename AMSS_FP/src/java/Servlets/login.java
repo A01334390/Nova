@@ -138,7 +138,6 @@ public class login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         //Make this an MD5 hash
-        System.out.println(username);
         if (Handler.userValidation(username, password)) {
             Usuario us = Handler.userSearch(username,"*");
             request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());

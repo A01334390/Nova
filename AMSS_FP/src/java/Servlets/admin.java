@@ -94,8 +94,7 @@ public class admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("usuario");
-        System.out.println(id);
-        if (id == null || id.equals("")) {
+        if (Handler.userSearch(id, "*")==null) {
             Usuario user = null;
             try {
                 user = new Usuario(1000, request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("email"), request.getParameter("usuario"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaNacimiento")), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaValidez")), Integer.parseInt(request.getParameter("privilegio")));
