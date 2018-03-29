@@ -5,6 +5,8 @@
  */
 package BasicElements;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -41,8 +43,6 @@ public class Paciente {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
-    
-    
 
     public int getPacienteID() {
         return pacienteID;
@@ -140,12 +140,17 @@ public class Paciente {
         this.amai = amai;
     }
 
-    public Date getFechaDeNacimiento() {
-        return fechaDeNacimiento;
+    public String getFechaDeNacimiento() {
+        return dateToString(fechaDeNacimiento);
     }
 
     public void setFechaDeNacimiento(Date fechaDeNacimiento) {
         this.fechaDeNacimiento = fechaDeNacimiento;
+    }
+    
+    private static String dateToString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return dateFormat.format(date);
     }
 
 }

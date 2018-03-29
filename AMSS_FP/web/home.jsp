@@ -48,7 +48,9 @@
     </div>
 
     <div class="container">
-        <p><a href="admin?action=add">Agregar nuevo usuario</a></p>
+        <%if (session.getAttribute("currentPrivilegeLevel").equals(1)) {%>
+        <p><a href="paciente?action=add">Agregar nuevo usuario</a></p>
+        <% } %>
         <table>
             <thead>
             <th>Nombres</th>
@@ -82,8 +84,16 @@
                         }
                     %>
                     <td><%=genero%></td>
-                    <td class="centeredform"><a href="paciente?action=edit&username=<%=paciente[i].getUsuario()%>">Editar</a>  
-                        <a href="paciente?action=erase&username=<%=paciente[i].getUsuario()%>">Eliminar</a> </td>
+                    <td class="centeredform">
+                        <%
+                            if (session.getAttribute("currentPrivilegeLevel").equals(1)) {
+                        %>
+                        <a href="paciente?action=edit&username=<%=paciente[i].getUsuario()%>">Editar /</a>  
+                        <a href="paciente?action=erase&username=<%=paciente[i].getUsuario()%>">Eliminar /</a>
+                        <%
+                            }
+                        %>
+                        <a href="paciente?action=view&username=<%=paciente[i].getUsuario()%>">Ver Expediente</a></td>
                 </tr>
                 <% }%>
             </tbody>
