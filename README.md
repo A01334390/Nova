@@ -2,7 +2,7 @@
 A Tecnologico de Monterrey's Project for AMSS
 
 ## Technology Used
-This project has been developed using [Java Servlets](https://en.wikipedia.org/wiki/Java_servlet) and using an RDBMS such as (MySQL)[https://www.mysql.com]. Front-End was achieved using (Skeleton)[http://getskeleton.com]. 
+This project has been developed using [Java Servlets](https://en.wikipedia.org/wiki/Java_servlet) and using an RDBMS such as (MySQL)[https://www.mysql.com]. Front-End was achieved using [Skeleton](http://getskeleton.com). 
 
 ## Versioning
 
