@@ -140,7 +140,7 @@ public class login extends HttpServlet {
         //Make this an MD5 hash
         System.out.println(username);
         if (Handler.userValidation(username, password)) {
-            Usuario us = Handler.userSearch(username);
+            Usuario us = Handler.userSearch(username,"*");
             request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());
             request.getSession().setAttribute("currentPrivilegeLevel", us.getPrivilegio());
             String goTo;

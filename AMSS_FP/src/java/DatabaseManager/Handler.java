@@ -55,13 +55,14 @@ public class Handler {
         }
         return false;
     }
-    
+
     /**
      * Searches and retrieves information about an User
+     *
      * @param username
-     * @return 
+     * @return
      */
-    public static Usuario userSearch(String username) {
+    public static Usuario userSearch(String username, String select) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -69,18 +70,96 @@ public class Handler {
         }
         try {
             try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
-                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.Usuario WHERE usuario='" + username + "'");
+                ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Usuario(resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"));
+                    return new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"));
                 }
                 //return session;
-                              }
+            }
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }
 
         return null;
+    }
+
+    public static Usuario[] getAllUsers() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.Usuario");
+                //if there is no data on the data set, the session return will be false
+                ArrayList<Usuario> array = new ArrayList<>();
+                while (resultset.next()) {
+                    array.add(new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio")));
+                }
+                return array.toArray(new Usuario[array.size()]);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static boolean deleteUsuario(String usuarioID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("DELETE FROM AMSS_BDD.Usuario WHERE usuario='" + usuarioID + "';");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean addUser(Usuario user,String password) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String rment = "INSERT INTO AMSS_BDD.Usuario(primerNombre,segundoNombre,fechaNacimiento,email,usuario,contrasenia,fechaValidez,privilegio,idDomicilio) VALUES ('"+user.getPrimerNombre()+"','"+user.getSegundoNombre()+"','"+user.getFechaNacimiento()+"','"+user.getEmail()+"','"+user.getUsuario()+"','"+password+"','"+user.getFechaValidez()+"',"+user.getPrivilegio()+",0);";
+            System.out.println(rment);
+            int rowsaffected = statement.executeUpdate("INSERT INTO AMSS_BDD.Usuario(primerNombre,segundoNombre,fechaNacimiento,email,usuario,contrasenia,fechaValidez,privilegio) VALUES ('"+user.getPrimerNombre()+"','"+user.getSegundoNombre()+"','"+user.getFechaNacimiento()+"','"+user.getEmail()+"','"+user.getUsuario()+"','"+password+"','"+user.getFechaValidez()+"',"+user.getPrivilegio()+");");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean updateUser(Usuario user,String password) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("UPDATE AMSS_BDD.Usuario "
+                            + "SET primerNombre='"+user.getPrimerNombre()+"',segundoNombre='"+user.getSegundoNombre()+"',fechaNacimiento='"+user.getFechaNacimiento().toString()+"',email='"+user.getEmail()+"',usuario='"+user.getUsuario()+"',contrasenia='"+password+"',fechaValidez='"+user.getFechaValidez().toString()+"',privilegio='"+user.getPrivilegio()+"'"
+                            + " WHERE usuario='"+user.getUsuario()+"';");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
     }
 
 }

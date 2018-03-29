@@ -4,19 +4,23 @@
  * and open the template in the editor.
  */
 package BasicElements;
+
 /**
  *
  * @author Luna
  */
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-public class Usuario {
-    private String primerNombre,segundoNombre,usuario;
-    private String email;
-    private Date fechaNacimiento,fechaValidez;
-    private int privilegio;
 
-    public Usuario(String primerNombre, String segundoNombre, String email, String usuario, Date fechaNacimiento, Date fechaValidez, int privilegio) {
+public class Usuario {
+
+    private String primerNombre, segundoNombre, usuario;
+    private String email;
+    private Date fechaNacimiento, fechaValidez;
+    private int privilegio, id;
+
+    public Usuario(int id, String primerNombre, String segundoNombre, String email, String usuario, Date fechaNacimiento, Date fechaValidez, int privilegio) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.email = email;
@@ -25,7 +29,7 @@ public class Usuario {
         this.fechaValidez = fechaValidez;
         this.privilegio = privilegio;
     }
-    
+
     public String getPrimerNombre() {
         return primerNombre;
     }
@@ -49,7 +53,8 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
-        public String getUsuario() {
+
+    public String getUsuario() {
         return usuario;
     }
 
@@ -57,16 +62,16 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    public String getFechaNacimiento() {
+        return dateToString(fechaNacimiento);
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Date getFechaValidez() {
-        return fechaValidez;
+    public String getFechaValidez() {
+        return dateToString(fechaValidez);
     }
 
     public void setFechaValidez(Date fechaValidez) {
@@ -80,6 +85,14 @@ public class Usuario {
     public void setPrivilegio(int privilegio) {
         this.privilegio = privilegio;
     }
-    
-    
+
+    public int getId() {
+        return this.id;
+    }
+
+    private static String dateToString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return dateFormat.format(date);
+    }
+
 }
