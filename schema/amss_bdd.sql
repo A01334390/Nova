@@ -36,8 +36,18 @@ CREATE TABLE `Domicilio` (
   `codigoPostal` varchar(10) NOT NULL,
   PRIMARY KEY (`idDomicilio`),
   UNIQUE KEY `idDomicilio_UNIQUE` (`idDomicilio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Domicilio`
+--
+
+LOCK TABLES `Domicilio` WRITE;
+/*!40000 ALTER TABLE `Domicilio` DISABLE KEYS */;
+INSERT INTO `Domicilio` VALUES (1,'Mexico','CDMX','Tlalpan','Ejidos de Huipulco','Transmisiones',222,0,'22222');
+/*!40000 ALTER TABLE `Domicilio` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `FitbitUserData`
@@ -58,6 +68,15 @@ CREATE TABLE `FitbitUserData` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `FitbitUserData`
+--
+
+LOCK TABLES `FitbitUserData` WRITE;
+/*!40000 ALTER TABLE `FitbitUserData` DISABLE KEYS */;
+/*!40000 ALTER TABLE `FitbitUserData` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Paciente`
 --
 
@@ -68,6 +87,7 @@ CREATE TABLE `Paciente` (
   `idPaciente` int(11) NOT NULL AUTO_INCREMENT,
   `primerNombre` varchar(80) DEFAULT NULL,
   `segundoNombre` varchar(45) DEFAULT NULL,
+  `usuario` varchar(45) DEFAULT NULL,
   `fechaDeNacimiento` datetime DEFAULT NULL,
   `genero` tinyint(4) DEFAULT NULL,
   `email` varchar(80) DEFAULT NULL,
@@ -86,24 +106,18 @@ CREATE TABLE `Paciente` (
   KEY `FITAPP_CONSUMER_KEY_idx` (`FITAPP_CONSUMER_KEY`),
   CONSTRAINT `FITAPP_CONSUMER_KEY` FOREIGN KEY (`FITAPP_CONSUMER_KEY`) REFERENCES `FitbitUserData` (`idFitbitUserData`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `IdDomicilio` FOREIGN KEY (`idDomicilio`) REFERENCES `Domicilio` (`idDomicilio`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `TipoUsuario`
+-- Dumping data for table `Paciente`
 --
 
-DROP TABLE IF EXISTS `TipoUsuario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TipoUsuario` (
-  `idTipoUsuario` int(11) NOT NULL AUTO_INCREMENT,
-  `area` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idTipoUsuario`),
-  UNIQUE KEY `idTipoUsuario_UNIQUE` (`idTipoUsuario`),
-  UNIQUE KEY `area_UNIQUE` (`area`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `Paciente` WRITE;
+/*!40000 ALTER TABLE `Paciente` DISABLE KEYS */;
+INSERT INTO `Paciente` VALUES (6,'Natalie','Cullens','1000','2018-06-04 00:00:00',0,'a@a.com','a','a',0,'A+','IMSS','A/B',0,NULL,NULL);
+/*!40000 ALTER TABLE `Paciente` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `Usuario`
@@ -121,14 +135,25 @@ CREATE TABLE `Usuario` (
   `usuario` varchar(45) NOT NULL,
   `contrasenia` varchar(512) NOT NULL,
   `fechaValidez` datetime DEFAULT NULL,
+  `privilegio` int(11) NOT NULL,
   `idDomicilio` int(11) DEFAULT NULL,
   PRIMARY KEY (`idUsuario`,`usuario`),
   UNIQUE KEY `idUsuario_UNIQUE` (`idUsuario`),
   UNIQUE KEY `usuario_UNIQUE` (`usuario`),
   KEY `Domicilio_idx` (`idDomicilio`),
   CONSTRAINT `Domicilio` FOREIGN KEY (`idDomicilio`) REFERENCES `Domicilio` (`idDomicilio`) ON DELETE SET NULL ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Usuario`
+--
+
+LOCK TABLES `Usuario` WRITE;
+/*!40000 ALTER TABLE `Usuario` DISABLE KEYS */;
+INSERT INTO `Usuario` VALUES (1,'Luna','Cullens','2012-12-12 00:00:00','luna@me.com','luna','password','2012-12-30 00:00:00',0,1),(12,'Maya','Cullens','2033-09-03 00:00:00','maya@test.com','maya','maya','2006-12-06 00:00:00',3,NULL),(14,'Donaji','Mancera','2016-04-01 00:00:00','donaji@test.com','donaji','donaji','2016-04-01 00:00:00',1,NULL);
+/*!40000 ALTER TABLE `Usuario` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `ValoracionGerontologica`
@@ -147,6 +172,7 @@ CREATE TABLE `ValoracionGerontologica` (
   `apoyosocialPercibido` varchar(255) DEFAULT NULL,
   `actividadesComunitarias` varchar(255) DEFAULT NULL,
   `impresionDiagnostica` varchar(255) DEFAULT NULL,
+  `fechaLlenado` date DEFAULT NULL,
   `idUsuario` int(11) DEFAULT NULL,
   `idPaciente` int(11) DEFAULT NULL,
   PRIMARY KEY (`idValoracionGerontologica`),
@@ -155,8 +181,18 @@ CREATE TABLE `ValoracionGerontologica` (
   KEY `idPac_idx` (`idPaciente`),
   CONSTRAINT `idUsuario` FOREIGN KEY (`idUsuario`) REFERENCES `Usuario` (`idUsuario`) ON DELETE SET NULL ON UPDATE NO ACTION,
   CONSTRAINT `pac` FOREIGN KEY (`idPaciente`) REFERENCES `Paciente` (`idPaciente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ValoracionGerontologica`
+--
+
+LOCK TABLES `ValoracionGerontologica` WRITE;
+/*!40000 ALTER TABLE `ValoracionGerontologica` DISABLE KEYS */;
+INSERT INTO `ValoracionGerontologica` VALUES (2,'A','S','D','F','G','H','J','K','2009-12-09',14,6);
+/*!40000 ALTER TABLE `ValoracionGerontologica` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `evaluacionFragilidad`
@@ -182,6 +218,7 @@ CREATE TABLE `evaluacionFragilidad` (
   `evaluacionCognitiva` varchar(512) DEFAULT NULL,
   `evaluacionNutricional` varchar(512) DEFAULT NULL,
   `evaluacionDeFragilidad` varchar(512) DEFAULT NULL,
+  `fechaLlenado` date DEFAULT NULL,
   `IdPaciente` int(11) DEFAULT NULL,
   `idUsuario` int(11) DEFAULT NULL,
   PRIMARY KEY (`idevaluacionFragilidad`),
@@ -190,8 +227,18 @@ CREATE TABLE `evaluacionFragilidad` (
   KEY `idUs_idx` (`idUsuario`),
   CONSTRAINT `idPac` FOREIGN KEY (`IdPaciente`) REFERENCES `Paciente` (`idPaciente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `idUs` FOREIGN KEY (`idUsuario`) REFERENCES `Usuario` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `evaluacionFragilidad`
+--
+
+LOCK TABLES `evaluacionFragilidad` WRITE;
+/*!40000 ALTER TABLE `evaluacionFragilidad` DISABLE KEYS */;
+INSERT INTO `evaluacionFragilidad` VALUES (1,0,'A',0,'A','A','A','A','null',0,'A','A','A','A','A','A','2012-12-12',6,14),(4,0,'B',0,'B','B','A','B','null',0,'B','B','B','B','B','B','2006-12-06',6,14);
+/*!40000 ALTER TABLE `evaluacionFragilidad` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `formatoGeriatria`
@@ -218,6 +265,7 @@ CREATE TABLE `formatoGeriatria` (
   `pruebaDesempenio_interpretacion` varchar(45) DEFAULT NULL,
   `levantateAnda` varchar(10) DEFAULT NULL,
   `levantateAnda_interpretacion` varchar(45) DEFAULT NULL,
+  `fechaLlenado` datetime DEFAULT NULL,
   `idUsuario` int(11) DEFAULT NULL,
   `idPaciente` int(11) DEFAULT NULL,
   PRIMARY KEY (`idformatoGeriatria`),
@@ -225,8 +273,18 @@ CREATE TABLE `formatoGeriatria` (
   KEY `pa_idx` (`idPaciente`),
   CONSTRAINT `pa` FOREIGN KEY (`idPaciente`) REFERENCES `Paciente` (`idPaciente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `us` FOREIGN KEY (`idUsuario`) REFERENCES `Usuario` (`idUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `formatoGeriatria`
+--
+
+LOCK TABLES `formatoGeriatria` WRITE;
+/*!40000 ALTER TABLE `formatoGeriatria` DISABLE KEYS */;
+INSERT INTO `formatoGeriatria` VALUES (1,'6/6','6','6','6','6','6','6','6','6','6','6','6','6','6','6','6','2012-12-12 00:00:00',NULL,NULL),(11,'q','q','q','q','q','q','q','q','q','q','q','q','q','q','q','q','2012-12-12 00:00:00',14,6);
+/*!40000 ALTER TABLE `formatoGeriatria` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `valoracionFitbit`
@@ -241,6 +299,23 @@ CREATE TABLE `valoracionFitbit` (
   PRIMARY KEY (`idvaloracionFitbit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `valoracionFitbit`
+--
+
+LOCK TABLES `valoracionFitbit` WRITE;
+/*!40000 ALTER TABLE `valoracionFitbit` DISABLE KEYS */;
+/*!40000 ALTER TABLE `valoracionFitbit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping events for database 'AMSS_BDD'
+--
+
+--
+-- Dumping routines for database 'AMSS_BDD'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -251,4 +326,4 @@ CREATE TABLE `valoracionFitbit` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-28 13:38:07
+-- Dump completed on 2018-03-30  0:33:09
