@@ -4,6 +4,7 @@
     Author     : Luna
 --%>
 
+<%@page import="BasicElements.formaGerontologia"%>
 <%@page import="BasicElements.formaFragilidad"%>
 <%@page import="BasicElements.formaGeriatria"%>
 <%@page import="DatabaseManager.Handler"%>
@@ -161,7 +162,7 @@
             %>
             <hr>
             <h5> Dispositivos Fitbit Asociados </h5>
-            <a href='social?action=add'>Agregar nueva valoracion social</a>
+            <a href='fitbit?action=add'>Agregar nueva valoracion social</a>
             <table>
                 <thead>
                 <th>ID Pebble</th>
@@ -169,6 +170,43 @@
                 <th>Acciones</th>
                 </thead>
                 <tbody>
+                </tbody>
+            </table>
+            <%
+                }
+            %>
+        </div>
+        
+        <div class="container" style="margin-top: 5%">
+            <%
+                if (session.getAttribute("currentPrivilegeLevel").equals(1) || session.getAttribute("currentPrivilegeLevel").equals(4)) {
+            %>
+            <hr>
+            <h5> Formatos de Gerontologia Asociados </h5>
+            <a href='social?action=add&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<c:out value="${paciente.getPacienteID()}"/>'>Agregar nueva valoracion gerontologica</a>
+            <table>
+                <thead>
+                <th>ID Forma</th>
+                <th>Fecha de asignacion</th>
+                <th>Acciones</th>
+                </thead>
+                <tbody>
+                    <%
+                        formaGerontologia formGeront[] = Handler.getAllformaGerontologia();
+                        for(int i = 0;i<formGeront.length;i++){
+                    %>
+                    <tr>
+                        <td><%=formGeront[i].getIdvaloracionGerontologica()%></td>
+                        <td><%=formGeront[i].getFechaLlenado()%></td>
+                        <td>
+                            <a href="social?action=show&idForm=<%=formGeront[i].getIdvaloracionGerontologica()%>&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<c:out value="${paciente.getPacienteID()}"/>">Ver</a>
+                            <a href="social?action=edit&idForm=<%=formGeront[i].getIdvaloracionGerontologica()%>&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<c:out value="${paciente.getPacienteID()}"/>">Editar</a>
+                            <a href="social?action=erase&idForm=<%=formGeront[i].getIdvaloracionGerontologica()%>">Eliminar</a>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    %>
                 </tbody>
             </table>
             <%

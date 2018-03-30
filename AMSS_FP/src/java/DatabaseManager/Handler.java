@@ -728,7 +728,150 @@ public class Handler {
                     + "`idUsuario` = " + forma.getIdUsuario() + "\n"
                     + "WHERE `idevaluacionFragilidad` = " + forma.getIdevaluacionFragilidad() + ";";
             System.out.println(qer);
-            int rowsaffected = statement.executeUpdate(qer); 
+            int rowsaffected = statement.executeUpdate(qer);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static formaGerontologia formaGerontologiaSearch(String idForm) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica WHERE idValoracionGerontologica=" + idForm + ";");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    formaGerontologia form;
+                    form = new formaGerontologia(resultset.getInt("idvaloracionGerontologica"), resultset.getString("dispositivosUso"), resultset.getString("dispositivoMayorUso"), resultset.getString("frecuenciaUso"), resultset.getString("actividadesUso"), resultset.getString("usosFavorecer"), resultset.getString("apoyosocialPercibido"), resultset.getString("actividadesComunitarias"), resultset.getString("impresionDiagnostica"), resultset.getDate("fechaLlenado"), resultset.getInt("idUsuario"), resultset.getInt("idPaciente"));
+                    return form;
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static formaGerontologia[] getAllformaGerontologia() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica ;");
+                //if there is no data on the data set, the session return will be false
+                ArrayList<formaGerontologia> array = new ArrayList<>();
+                while (resultset.next()) {
+                    formaGerontologia form;
+                    form = new formaGerontologia(resultset.getInt("idvaloracionGerontologica"), resultset.getString("dispositivosUso"), resultset.getString("dispositivoMayorUso"), resultset.getString("frecuenciaUso"), resultset.getString("actividadesUso"), resultset.getString("usosFavorecer"), resultset.getString("apoyosocialPercibido"), resultset.getString("actividadesComunitarias"), resultset.getString("impresionDiagnostica"), resultset.getDate("fechaLlenado"), resultset.getInt("idUsuario"), resultset.getInt("idPaciente"));
+                    array.add(form);
+                }
+                return array.toArray(new formaGerontologia[array.size()]);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static boolean deleteFormaGerontologia(String idForm) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`ValoracionGerontologica`\n"
+                    + "WHERE idValoracionGerontologica=" + idForm + ";");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean addFormaGerontologia(formaGerontologia forma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String rment = "INSERT INTO `AMSS_BDD`.`ValoracionGerontologica`\n"
+                    + "("
+                    + "`dispositivosUso`,\n"
+                    + "`dispositivoMayorUso`,\n"
+                    + "`frecuenciaUso`,\n"
+                    + "`actividadesUso`,\n"
+                    + "`usosFavorecer`,\n"
+                    + "`apoyosocialPercibido`,\n"
+                    + "`actividadesComunitarias`,\n"
+                    + "`impresionDiagnostica`,\n"
+                    + "`fechaLlenado`,\n"
+                    + "`idUsuario`,\n"
+                    + "`idPaciente`)\n"
+                    + "VALUES\n"
+                    + "("
+                    + "'" + forma.getDispositivosUso() + "',\n"
+                    + "'" + forma.getDispositivoMayorUso() + "',\n"
+                    + "'" + forma.getFrecuenciaUso() + "',\n"
+                    + "'" + forma.getActividadesUso() + "',\n"
+                    + "'" + forma.getUsosFavorecer() + "',\n"
+                    + "'" + forma.getApoyosocialPercibido() + "',\n"
+                    + "'" + forma.getActividadesComunitarias() + "',\n"
+                    + "'" + forma.getImpresionDiagnostica() + "',\n"
+                    + "'" + forma.getFechaLlenado() + "',\n"
+                    + "" + forma.getIdUsuario() + ",\n"
+                    + "" + forma.getIdPaciente() + ");";
+            System.out.println(rment);
+            int rowsaffected = statement.executeUpdate(rment);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean updateFormaGerontologia(formaGerontologia forma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String qer = "UPDATE `AMSS_BDD`.`ValoracionGerontologica`\n"
+                    + "SET\n"
+                    + "`dispositivosUso` = '"+forma.getDispositivosUso()+"',\n"
+                    + "`dispositivoMayorUso` = '"+forma.getDispositivoMayorUso()+"',\n"
+                    + "`frecuenciaUso` = '"+forma.getFrecuenciaUso()+"',\n"
+                    + "`actividadesUso` = '"+forma.getActividadesUso()+"',\n"
+                    + "`usosFavorecer` = '"+forma.getUsosFavorecer()+"',\n"
+                    + "`apoyosocialPercibido` = '"+forma.getApoyosocialPercibido()+"',\n"
+                    + "`actividadesComunitarias` = '"+forma.getActividadesComunitarias()+"',\n"
+                    + "`impresionDiagnostica` = '"+forma.getImpresionDiagnostica()+"',\n"
+                    + "`fechaLlenado` = '"+forma.getFechaLlenado()+"',\n"
+                    + "`idUsuario` = "+forma.getIdUsuario()+",\n"
+                    + "`idPaciente` = "+forma.getIdPaciente()+"\n"
+                    + "WHERE `idValoracionGerontologica` = "+forma.getIdvaloracionGerontologica()+";";
+            System.out.println(qer);
+            int rowsaffected = statement.executeUpdate(qer);
             return rowsaffected > 0;
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
