@@ -142,6 +142,7 @@ public class login extends HttpServlet {
             Usuario us = Handler.userSearch(username,"*");
             request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());
             request.getSession().setAttribute("currentPrivilegeLevel", us.getPrivilegio());
+            request.getSession().setAttribute("idUsuario", us.getId());
             String goTo;
             if(us.getPrivilegio() == 0){
                 goTo = "adminHome.jsp";

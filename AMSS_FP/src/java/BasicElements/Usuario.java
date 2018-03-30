@@ -28,6 +28,7 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.fechaValidez = fechaValidez;
         this.privilegio = privilegio;
+        this.id = id;
     }
 
     public String getPrimerNombre() {

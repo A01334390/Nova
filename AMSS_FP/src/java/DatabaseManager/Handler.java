@@ -84,6 +84,28 @@ public class Handler {
 
         return null;
     }
+    
+    public static Usuario userSearchid(String username, String select) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE idUsuario='" + username + "'");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    return new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"));
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
 
     public static Usuario[] getAllUsers() {
         try {
@@ -181,7 +203,30 @@ public class Handler {
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
                     return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"));
-                    
+
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+    
+    public static Paciente pacienteSearchid(String username, String select) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE idPaciente=" + username + "");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"));
+
                 }
                 //return session;
             }
@@ -296,22 +341,188 @@ public class Handler {
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("UPDATE `AMSS_BDD`.`Paciente`\n"
                     + "SET\n"
-                    + "`primerNombre` = '"+paciente.getPrimerNombre()+"',\n"
-                    + "`segundoNombre` = '"+paciente.getSegundoNombre()+"',\n"
-                    + "`usuario` = '"+paciente.getUsuario()+"',\n"
-                    + "`fechaDeNacimiento` = '"+paciente.getFechaDeNacimiento()+"',\n"
-                    + "`genero` = "+paciente.getGenero()+",\n"
-                    + "`email` = '"+paciente.getEmail()+"',\n"
-                    + "`nacionalidad` = '"+paciente.getNacionalidad()+"',\n"
-                    + "`estadoNacimiento` = '"+paciente.getEstadoNacimiento()+"',\n"
-                    + "`estadoCivil` = "+paciente.getEstadoCivil()+",\n"
-                    + "`tipoSangre` = '"+paciente.getTipoSangre()+"',\n"
-                    + "`afiliacionMedica` = '"+paciente.getAfiliacionMedica()+"',\n"
-                    + "`amai` = '"+paciente.getAmai()+"',\n"
-                    + "`cohabitacion` = "+paciente.getCohabitacion()+",\n"
+                    + "`primerNombre` = '" + paciente.getPrimerNombre() + "',\n"
+                    + "`segundoNombre` = '" + paciente.getSegundoNombre() + "',\n"
+                    + "`usuario` = '" + paciente.getUsuario() + "',\n"
+                    + "`fechaDeNacimiento` = '" + paciente.getFechaDeNacimiento() + "',\n"
+                    + "`genero` = " + paciente.getGenero() + ",\n"
+                    + "`email` = '" + paciente.getEmail() + "',\n"
+                    + "`nacionalidad` = '" + paciente.getNacionalidad() + "',\n"
+                    + "`estadoNacimiento` = '" + paciente.getEstadoNacimiento() + "',\n"
+                    + "`estadoCivil` = " + paciente.getEstadoCivil() + ",\n"
+                    + "`tipoSangre` = '" + paciente.getTipoSangre() + "',\n"
+                    + "`afiliacionMedica` = '" + paciente.getAfiliacionMedica() + "',\n"
+                    + "`amai` = '" + paciente.getAmai() + "',\n"
+                    + "`cohabitacion` = " + paciente.getCohabitacion() + ",\n"
                     + "`idDomicilio` = null,\n"
                     + "`FITAPP_CONSUMER_KEY` = null\n"
-                    + "WHERE `usuario` = '"+paciente.getUsuario()+"';");
+                    + "WHERE `usuario` = '" + paciente.getUsuario() + "';");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+// .---. .----..----. .-.  .--.  .---. .----. .-.  .--.  
+///   __}| {_  | {}  }| | / {} \{_   _}| {}  }| | / {} \ 
+//\  {_ }| {__ | .-. \| |/  /\  \ | |  | .-. \| |/  /\  \
+// `---' `----'`-' `-'`-'`-'  `-' `-'  `-' `-'`-'`-'  `-'
+    
+    public static formaGeriatria formaGeriatriaSearch(String idForma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria WHERE idformatoGeriatria=" + idForma + ";");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    return new formaGeriatria(resultset.getInt("idformatoGeriatria"), resultset.getString("katz"), resultset.getString("katz_interpretacion"), resultset.getString("barthel"), resultset.getString("barthel_interpretacion"), resultset.getString("lawtonBrody"), resultset.getString("lawtonBrody_interpretacion"), resultset.getString("estadoMental"), resultset.getString("estadoMental_interpretacion"), resultset.getString("escalaDepresion"), resultset.getString("escalaDepresion_interpretacion"), resultset.getString("cribadoNutricional"), resultset.getString("cribadoNutricional_interpretacion"), resultset.getString("pruebaDesempenio"), resultset.getString("pruebaDesempenio_interpretacion"), resultset.getString("levantateAnda"), resultset.getString("levantateAnda_interpretacion"), resultset.getDate("fechaLlenado"), resultset.getInt("idUsuario"), resultset.getInt("idPaciente"));
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+    
+    public static formaGeriatria[] getAllformaGeriatria() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria;");
+                //if there is no data on the data set, the session return will be false
+                ArrayList<formaGeriatria> array = new ArrayList<>();
+                while (resultset.next()) {
+                    array.add(new formaGeriatria(resultset.getInt("idformatoGeriatria"), resultset.getString("katz"), resultset.getString("katz_interpretacion"), resultset.getString("barthel"), resultset.getString("barthel_interpretacion"), resultset.getString("lawtonBrody"), resultset.getString("lawtonBrody_interpretacion"), resultset.getString("estadoMental"), resultset.getString("estadoMental_interpretacion"), resultset.getString("escalaDepresion"), resultset.getString("escalaDepresion_interpretacion"), resultset.getString("cribadoNutricional"), resultset.getString("cribadoNutricional_interpretacion"), resultset.getString("pruebaDesempenio"), resultset.getString("pruebaDesempenio_interpretacion"), resultset.getString("levantateAnda"), resultset.getString("levantateAnda_interpretacion"), resultset.getDate("fechaLlenado"), resultset.getInt("idUsuario"), resultset.getInt("idPaciente")));
+                }
+                return array.toArray(new formaGeriatria[array.size()]);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static boolean deleteFormaGeriatria(String formaID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`formatoGeriatria`\n"
+                    + "WHERE idformatoGeriatria=" + formaID + ";");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean addFormaGeriatria(formaGeriatria forma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String rment = "INSERT INTO `AMSS_BDD`.`formatoGeriatria`\n"
+                    + "("
+                    + "`katz`,\n"
+                    + "`katz_interpretacion`,\n"
+                    + "`barthel`,\n"
+                    + "`barthel_interpretacion`,\n"
+                    + "`lawtonBrody`,\n"
+                    + "`lawtonBrody_interpretacion`,\n"
+                    + "`estadoMental`,\n"
+                    + "`estadoMental_interpretacion`,\n"
+                    + "`escalaDepresion`,\n"
+                    + "`escalaDepresion_interpretacion`,\n"
+                    + "`cribadoNutricional`,\n"
+                    + "`cribadoNutricional_interpretacion`,\n"
+                    + "`pruebaDesempenio`,\n"
+                    + "`pruebaDesempenio_interpretacion`,\n"
+                    + "`levantateAnda`,\n"
+                    + "`levantateAnda_interpretacion`,\n"
+                    + "`fechaLlenado`,\n"
+                    + "`idUsuario`,\n"
+                    + "`idPaciente`)\n"
+                    + "VALUES\n"
+                    + "("
+                    + "'" + forma.getKatz() + "',\n"
+                    + "'" + forma.getKatz_interpretacion() + "',\n"
+                    + "'" + forma.getBarthel() + "',\n"
+                    + "'" + forma.getBarthel_interpretacion() + "',\n"
+                    + "'" + forma.getLawtonBrody() + "',\n"
+                    + "'" + forma.getLawtonBrody_interpretacion() + "',\n"
+                    + "'" + forma.getEstadoMental() + "',\n"
+                    + "'" + forma.getEstadoMental_interpretacion() + "',\n"
+                    + "'" + forma.getEscalaDepresion() + "',\n"
+                    + "'" + forma.getEscalaDepresion_interpretacion() + "',\n"
+                    + "'" + forma.getCribadoNutricional() + "',\n"
+                    + "'" + forma.getCribadoNutricional_interpretacion() + "',\n"
+                    + "'" + forma.getPruebaDesempenio() + "',\n"
+                    + "'" + forma.getPruebaDesempenio_interpretacion() + "',\n"
+                    + "'" + forma.getLevantateAnda() + "',\n"
+                    + "'" + forma.getLevantateAnda_interpretacion() + "',\n"
+                    + "'" + forma.getFechaLlenado() + "',\n"
+                    + "" + forma.getIdUsuario() + ",\n"
+                    + "" + forma.getIdPaciente() + ");";
+            System.out.println(rment);
+            int rowsaffected = statement.executeUpdate(rment);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean updateFormaGeriatria(formaGeriatria forma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("UPDATE `AMSS_BDD`.`formatoGeriatria`\n"
+                    + "SET\n"
+                    + "`katz` = '"+forma.getKatz()+"',\n"
+                    + "`katz_interpretacion` = '"+forma.getKatz_interpretacion()+"',\n"
+                    + "`barthel` = '"+forma.getBarthel()+"',\n"
+                    + "`barthel_interpretacion` = '"+forma.getBarthel_interpretacion()+"',\n"
+                    + "`lawtonBrody` = '"+forma.getLawtonBrody()+"',\n"
+                    + "`lawtonBrody_interpretacion` = '"+forma.getLawtonBrody_interpretacion()+"',\n"
+                    + "`estadoMental` = '"+forma.getEstadoMental()+"',\n"
+                    + "`estadoMental_interpretacion` = '"+forma.getEstadoMental_interpretacion()+"',\n"
+                    + "`escalaDepresion` = '"+forma.getEscalaDepresion()+"',\n"
+                    + "`escalaDepresion_interpretacion` = '"+forma.getEscalaDepresion_interpretacion()+"',\n"
+                    + "`cribadoNutricional` = '"+forma.getCribadoNutricional()+"',\n"
+                    + "`cribadoNutricional_interpretacion` = '"+forma.getCribadoNutricional_interpretacion()+"',\n"
+                    + "`pruebaDesempenio` = '"+forma.getPruebaDesempenio()+"',\n"
+                    + "`pruebaDesempenio_interpretacion` = '"+forma.getPruebaDesempenio_interpretacion()+"',\n"
+                    + "`levantateAnda` = '"+forma.getLevantateAnda()+"',\n"
+                    + "`levantateAnda_interpretacion` = '"+forma.getLevantateAnda_interpretacion()+"',\n"
+                    + "`fechaLlenado` = '"+forma.getFechaLlenado()+"',\n"
+                    + "`idUsuario` = "+forma.getIdUsuario()+",\n"
+                    + "`idPaciente` = "+forma.getIdPaciente()+"\n"
+                    + "WHERE `idformatoGeriatria` = "+forma.getIdformatoGeriatra()+";");
             return rowsaffected > 0;
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
