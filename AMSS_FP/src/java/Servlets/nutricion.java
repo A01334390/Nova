@@ -7,7 +7,7 @@ package Servlets;
 
 import BasicElements.Paciente;
 import BasicElements.Usuario;
-import BasicElements.formaGeriatria;
+import BasicElements.formaFragilidad;
 import DatabaseManager.Handler;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Luna
  */
-public class geriatria extends HttpServlet {
+public class nutricion extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +44,10 @@ public class geriatria extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet geriatria</title>");
+            out.println("<title>Servlet nutricion</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet geriatria at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet nutricion at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,45 +70,45 @@ public class geriatria extends HttpServlet {
             String idPaciente = request.getParameter("idPaciente");
             Usuario us = Handler.userSearchid(idUsuario, "*");
             Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("usuario",us);
-            request.setAttribute("paciente",pac);
-             request.setAttribute("show",false);
-            RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
+            request.setAttribute("usuario", us);
+            request.setAttribute("paciente", pac);
+            request.setAttribute("show", false);
+            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("edit")) {
             String idForm = request.getParameter("idForm");
             String idUsuario = request.getParameter("idUsuario");
             String idPaciente = request.getParameter("idPaciente");
-            formaGeriatria forma = Handler.formaGeriatriaSearch(idForm);
             Usuario us = Handler.userSearchid(idUsuario, "*");
             Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("forma", forma);
-            request.setAttribute("usuario",us);
-            request.setAttribute("paciente",pac);
-            request.setAttribute("show",false);
-            RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
+            formaFragilidad ff = Handler.formaFragilidadSearch(idForm);
+            request.setAttribute("usuario", us);
+            request.setAttribute("paciente", pac);
+            request.setAttribute("forma", ff);
+            request.setAttribute("show", false);
+            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("erase")) {
-            String formID = request.getParameter("idForm");
-            Handler.deleteFormaGeriatria(formID);
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            request.setAttribute("forma", null);
+            String idForm = request.getParameter("idForm");
+            Handler.deleteFormaFragilidad(idForm);
+            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
             req.forward(request, response);
         }
-        if(request.getParameter("action").equals("show")){
-            String formID = request.getParameter("idForm");
+        if (request.getParameter("action").equals("show")) {
+            String idForm = request.getParameter("idForm");
             String idUsuario = request.getParameter("idUsuario");
             String idPaciente = request.getParameter("idPaciente");
-            formaGeriatria forma = Handler.formaGeriatriaSearch(formID);
             Usuario us = Handler.userSearchid(idUsuario, "*");
             Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("forma", forma);
-            request.setAttribute("forma", forma);
-            request.setAttribute("usuario",us);
-            request.setAttribute("paciente",pac);
-            request.setAttribute("show",true);
-            RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
+            formaFragilidad ff = Handler.formaFragilidadSearch(idForm);
+            request.setAttribute("usuario", us);
+            request.setAttribute("paciente", pac);
+            request.setAttribute("forma", ff);
+            request.setAttribute("show", true);
+            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
             req.forward(request, response);
         }
     }
@@ -123,27 +123,24 @@ public class geriatria extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String formID = request.getParameter("idForm");
-        if (Handler.formaGeriatriaSearch(formID) == null) {
-            formaGeriatria forma = null;
+        String formID = request.getParameter("idevaluacionFragilidad");
+        if (Handler.formaFragilidadSearch(formID) == null) {
+            formaFragilidad forma = null;
             try {
-                String idUsuario = request.getParameter("idUsuario");
-                String idPaciente = request.getParameter("idPaciente");
-                forma = new formaGeriatria(1000, request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawtonBrody"), request.getParameter("lawtonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(idUsuario), Integer.parseInt(idPaciente));
+                forma = new formaFragilidad(1000, Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
             } catch (ParseException ex) {
-                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Handler.addFormaGeriatria(forma);
+            Handler.addFormaFragilidad(forma);
         } else {
-            formaGeriatria forma = null;
+            formaFragilidad forma = null;
             try {
-                forma = new formaGeriatria(Integer.parseInt("-1"), request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawthonBrody"), request.getParameter("lawthonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                forma = new formaFragilidad(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
             } catch (ParseException ex) {
-                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Handler.updateFormaGeriatria(forma);
+            Handler.updateFormaFragilidad(forma);
         }
-        response.sendRedirect("PacienteViews/pacienteAll.jsp");
         RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
         if (disp != null) {
             disp.include(request, response);

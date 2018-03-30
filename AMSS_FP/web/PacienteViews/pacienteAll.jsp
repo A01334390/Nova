@@ -4,6 +4,7 @@
     Author     : Luna
 --%>
 
+<%@page import="BasicElements.formaFragilidad"%>
 <%@page import="BasicElements.formaGeriatria"%>
 <%@page import="DatabaseManager.Handler"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -122,21 +123,36 @@
             %>
             <hr>
             <h5> Formatos de Nutriologia </h5>
-            <a href='nutricion?action=add'>Agregar nueva valoracion de nutricion</a>
+            <a href='nutricion?action=add&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<c:out value="${paciente.getPacienteID()}"/>'>Agregar nueva valoracion de nutricion</a>
             <table>
                 <thead>
                 <th>ID Formato</th>
                 <th>Fecha de llenado</th>
                 <th>Acciones</th>
                 </thead>
-                <%
-
-                %>
+                    <%
+                        }
+                    %>
                 <tbody>
+                    <%
+                        formaFragilidad formaFrag[] = Handler.getAllformaFragilidad();
+                        for (int i = 0; i < formaFrag.length; i++) {
+                    %>
+                    <tr>
+                        <td><%=formaFrag[i].getIdevaluacionFragilidad()%></td>
+                        <td><%=formaFrag[i].getFechaLlenado()%></td>
+                        <td>
+                            <a href="nutricion?action=show&idForm=<%=formaFrag[i].getIdevaluacionFragilidad()%>&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<c:out value="${paciente.getPacienteID()}"/>">Ver</a>
+                            <a href="nutricion?action=edit&idForm=<%=formaFrag[i].getIdevaluacionFragilidad()%>&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<c:out value="${paciente.getPacienteID()}"/>">Editar</a>
+                            <a href="nutricion?action=erase&idForm=<%=formaFrag[i].getIdevaluacionFragilidad()%>">Eliminar</a>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    %>
                 </tbody>
             </table>
-            <%                }
-            %>
+
         </div>
 
         <div class="container" style="margin-top: 5%">

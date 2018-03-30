@@ -84,7 +84,7 @@ public class Handler {
 
         return null;
     }
-    
+
     public static Usuario userSearchid(String username, String select) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -213,7 +213,7 @@ public class Handler {
 
         return null;
     }
-    
+
     public static Paciente pacienteSearchid(String username, String select) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -368,7 +368,6 @@ public class Handler {
 ///   __}| {_  | {}  }| | / {} \{_   _}| {}  }| | / {} \ 
 //\  {_ }| {__ | .-. \| |/  /\  \ | |  | .-. \| |/  /\  \
 // `---' `----'`-' `-'`-'`-'  `-' `-'  `-' `-'`-'`-'  `-'
-    
     public static formaGeriatria formaGeriatriaSearch(String idForma) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -390,7 +389,7 @@ public class Handler {
 
         return null;
     }
-    
+
     public static formaGeriatria[] getAllformaGeriatria() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -503,26 +502,233 @@ public class Handler {
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("UPDATE `AMSS_BDD`.`formatoGeriatria`\n"
                     + "SET\n"
-                    + "`katz` = '"+forma.getKatz()+"',\n"
-                    + "`katz_interpretacion` = '"+forma.getKatz_interpretacion()+"',\n"
-                    + "`barthel` = '"+forma.getBarthel()+"',\n"
-                    + "`barthel_interpretacion` = '"+forma.getBarthel_interpretacion()+"',\n"
-                    + "`lawtonBrody` = '"+forma.getLawtonBrody()+"',\n"
-                    + "`lawtonBrody_interpretacion` = '"+forma.getLawtonBrody_interpretacion()+"',\n"
-                    + "`estadoMental` = '"+forma.getEstadoMental()+"',\n"
-                    + "`estadoMental_interpretacion` = '"+forma.getEstadoMental_interpretacion()+"',\n"
-                    + "`escalaDepresion` = '"+forma.getEscalaDepresion()+"',\n"
-                    + "`escalaDepresion_interpretacion` = '"+forma.getEscalaDepresion_interpretacion()+"',\n"
-                    + "`cribadoNutricional` = '"+forma.getCribadoNutricional()+"',\n"
-                    + "`cribadoNutricional_interpretacion` = '"+forma.getCribadoNutricional_interpretacion()+"',\n"
-                    + "`pruebaDesempenio` = '"+forma.getPruebaDesempenio()+"',\n"
-                    + "`pruebaDesempenio_interpretacion` = '"+forma.getPruebaDesempenio_interpretacion()+"',\n"
-                    + "`levantateAnda` = '"+forma.getLevantateAnda()+"',\n"
-                    + "`levantateAnda_interpretacion` = '"+forma.getLevantateAnda_interpretacion()+"',\n"
-                    + "`fechaLlenado` = '"+forma.getFechaLlenado()+"',\n"
-                    + "`idUsuario` = "+forma.getIdUsuario()+",\n"
-                    + "`idPaciente` = "+forma.getIdPaciente()+"\n"
-                    + "WHERE `idformatoGeriatria` = "+forma.getIdformatoGeriatra()+";");
+                    + "`katz` = '" + forma.getKatz() + "',\n"
+                    + "`katz_interpretacion` = '" + forma.getKatz_interpretacion() + "',\n"
+                    + "`barthel` = '" + forma.getBarthel() + "',\n"
+                    + "`barthel_interpretacion` = '" + forma.getBarthel_interpretacion() + "',\n"
+                    + "`lawtonBrody` = '" + forma.getLawtonBrody() + "',\n"
+                    + "`lawtonBrody_interpretacion` = '" + forma.getLawtonBrody_interpretacion() + "',\n"
+                    + "`estadoMental` = '" + forma.getEstadoMental() + "',\n"
+                    + "`estadoMental_interpretacion` = '" + forma.getEstadoMental_interpretacion() + "',\n"
+                    + "`escalaDepresion` = '" + forma.getEscalaDepresion() + "',\n"
+                    + "`escalaDepresion_interpretacion` = '" + forma.getEscalaDepresion_interpretacion() + "',\n"
+                    + "`cribadoNutricional` = '" + forma.getCribadoNutricional() + "',\n"
+                    + "`cribadoNutricional_interpretacion` = '" + forma.getCribadoNutricional_interpretacion() + "',\n"
+                    + "`pruebaDesempenio` = '" + forma.getPruebaDesempenio() + "',\n"
+                    + "`pruebaDesempenio_interpretacion` = '" + forma.getPruebaDesempenio_interpretacion() + "',\n"
+                    + "`levantateAnda` = '" + forma.getLevantateAnda() + "',\n"
+                    + "`levantateAnda_interpretacion` = '" + forma.getLevantateAnda_interpretacion() + "',\n"
+                    + "`fechaLlenado` = '" + forma.getFechaLlenado() + "',\n"
+                    + "`idUsuario` = " + forma.getIdUsuario() + ",\n"
+                    + "`idPaciente` = " + forma.getIdPaciente() + "\n"
+                    + "WHERE `idformatoGeriatria` = " + forma.getIdformatoGeriatra() + ";");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+// ________                                                        __                 
+//|        \                                                      |  \                
+//| $$$$$$$$______    ______   ______ ____    ______          ____| $$  ______        
+//| $$__   /      \  /      \ |      \    \  |      \        /      $$ /      \       
+//| $$  \ |  $$$$$$\|  $$$$$$\| $$$$$$\$$$$\  \$$$$$$\      |  $$$$$$$|  $$$$$$\      
+//| $$$$$ | $$  | $$| $$   \$$| $$ | $$ | $$ /      $$      | $$  | $$| $$    $$      
+//| $$    | $$__/ $$| $$      | $$ | $$ | $$|  $$$$$$$      | $$__| $$| $$$$$$$$      
+//| $$     \$$    $$| $$      | $$ | $$ | $$ \$$    $$       \$$    $$ \$$     \      
+// \$$      \$$$$$$  \$$       \$$  \$$  \$$  \$$$$$$$        \$$$$$$$  \$$$$$$$      
+//                                                                                    
+//                                                                                    
+//                                                                                    
+// ________                             __  __  __        __                  __      
+//|        \                           |  \|  \|  \      |  \                |  \     
+//| $$$$$$$$______   ______    ______   \$$| $$ \$$  ____| $$  ______    ____| $$     
+//| $$__   /      \ |      \  /      \ |  \| $$|  \ /      $$ |      \  /      $$     
+//| $$  \ |  $$$$$$\ \$$$$$$\|  $$$$$$\| $$| $$| $$|  $$$$$$$  \$$$$$$\|  $$$$$$$     
+//| $$$$$ | $$   \$$/      $$| $$  | $$| $$| $$| $$| $$  | $$ /      $$| $$  | $$     
+//| $$    | $$     |  $$$$$$$| $$__| $$| $$| $$| $$| $$__| $$|  $$$$$$$| $$__| $$     
+//| $$    | $$      \$$    $$ \$$    $$| $$| $$| $$ \$$    $$ \$$    $$ \$$    $$     
+// \$$     \$$       \$$$$$$$ _\$$$$$$$ \$$ \$$ \$$  \$$$$$$$  \$$$$$$$  \$$$$$$$     
+//                           |  \__| $$                                               
+//                            \$$    $$                                               
+//                             \$$$$$$                                                
+    public static formaFragilidad[] getAllformaFragilidad() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT `evaluacionFragilidad`.`idevaluacionFragilidad`,\n"
+                        + "    `evaluacionFragilidad`.`perdidaPeso`,\n"
+                        + "    `evaluacionFragilidad`.`perdidaPeso_interpretacion`,\n"
+                        + "    `evaluacionFragilidad`.`pobreResistencia`,\n"
+                        + "    `evaluacionFragilidad`.`pobreResistencia_interpretacion`,\n"
+                        + "    `evaluacionFragilidad`.`velocidadMarcha`,\n"
+                        + "    `evaluacionFragilidad`.`velocidadMarcha_interpretacion`,\n"
+                        + "    `evaluacionFragilidad`.`fuerzaPresion`,\n"
+                        + "    `evaluacionFragilidad`.`fuerzaPresion_interpretacion`,\n"
+                        + "    `evaluacionFragilidad`.`actividadFisica`,\n"
+                        + "    `evaluacionFragilidad`.`actividadFisica_interpretacion`,\n"
+                        + "    `evaluacionFragilidad`.`diagnostico`,\n"
+                        + "    `evaluacionFragilidad`.`evaluacionFuncional`,\n"
+                        + "    `evaluacionFragilidad`.`evaluacionCognitiva`,\n"
+                        + "    `evaluacionFragilidad`.`evaluacionNutricional`,\n"
+                        + "    `evaluacionFragilidad`.`evaluacionDeFragilidad`,\n"
+                        + "    `evaluacionFragilidad`.`fechaLlenado`,\n"
+                        + "    `evaluacionFragilidad`.`IdPaciente`,\n"
+                        + "    `evaluacionFragilidad`.`idUsuario`\n"
+                        + "FROM `AMSS_BDD`.`evaluacionFragilidad`;");
+                //if there is no data on the data set, the session return will be false
+                ArrayList<formaFragilidad> array = new ArrayList<>();
+                while (resultset.next()) {
+                    array.add(new formaFragilidad(resultset.getInt("idevaluacionFragilidad"), resultset.getInt("pobreResistencia"), resultset.getInt("actividadFisica"), resultset.getString("perdidaPeso"), resultset.getString("perdidaPeso_interpretacion"), resultset.getString("pobreResistencia_interpretacion"), resultset.getString("velocidadMarcha"), resultset.getString("velocidadMarcha_interpretacion"), resultset.getString("fuerzaPresion"), resultset.getString("fuerzaPresion_interpretacion"), resultset.getString("actividadFisica_interpretacion"), resultset.getString("diagnostico"), resultset.getString("evaluacionFuncional"), resultset.getString("evaluacionCognitiva"), resultset.getString("evaluacionNutricional"), resultset.getString("evaluacionDeFragilidad"), resultset.getDate("fechaLlenado"), resultset.getInt("idUsuario"), resultset.getInt("idPaciente")));
+                }
+                return array.toArray(new formaFragilidad[array.size()]);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static formaFragilidad formaFragilidadSearch(String idForma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.evaluacionFragilidad WHERE idevaluacionFragilidad=" + idForma + ";");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    formaFragilidad form;
+                    String fuerzaPresion = resultset.getString("fuerzaPresion_interpretacion");
+                    String actividadFisica = resultset.getString("actividadFisica_interpretacion");
+                    form = new formaFragilidad(resultset.getInt("idevaluacionFragilidad"), resultset.getInt("pobreResistencia"), resultset.getInt("actividadFisica"), resultset.getString("perdidaPeso"), resultset.getString("perdidaPeso_interpretacion"), resultset.getString("pobreResistencia_interpretacion"), resultset.getString("velocidadMarcha"), resultset.getString("velocidadMarcha_interpretacion"), resultset.getString("fuerzaPresion"), fuerzaPresion, actividadFisica, resultset.getString("diagnostico"), resultset.getString("evaluacionFuncional"), resultset.getString("evaluacionCognitiva"), resultset.getString("evaluacionNutricional"), resultset.getString("evaluacionDeFragilidad"), resultset.getDate("fechaLlenado"), resultset.getInt("idUsuario"), resultset.getInt("idPaciente"));
+                    return form;
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static boolean deleteFormaFragilidad(String formaID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`evaluacionFragilidad`\n"
+                    + "WHERE idevaluacionFragilidad=" + formaID + ";");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean addFormaFragilidad(formaFragilidad forma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String rment = "INSERT INTO `AMSS_BDD`.`evaluacionFragilidad`\n"
+                    + "("
+                    + "`perdidaPeso`,\n"
+                    + "`perdidaPeso_interpretacion`,\n"
+                    + "`pobreResistencia`,\n"
+                    + "`pobreResistencia_interpretacion`,\n"
+                    + "`velocidadMarcha`,\n"
+                    + "`velocidadMarcha_interpretacion`,\n"
+                    + "`fuerzaPresion`,\n"
+                    + "`fuerzaPresion_interpretacion`,\n"
+                    + "`actividadFisica`,\n"
+                    + "`actividadFisica_interpretacion`,\n"
+                    + "`diagnostico`,\n"
+                    + "`evaluacionFuncional`,\n"
+                    + "`evaluacionCognitiva`,\n"
+                    + "`evaluacionNutricional`,\n"
+                    + "`evaluacionDeFragilidad`,\n"
+                    + "`fechaLlenado`,\n"
+                    + "`IdPaciente`,\n"
+                    + "`idUsuario`)\n"
+                    + "VALUES\n"
+                    + "("
+                    + "" + forma.getPerdidaPeso() + ",\n"
+                    + "'" + forma.getPerdidaPeso_interpretacion() + "',\n"
+                    + "" + forma.getPobreResistencia() + ",\n"
+                    + "'" + forma.getPobreResistencia_interpretacion() + "',\n"
+                    + "'" + forma.getVelocidadMarcha() + "',\n"
+                    + "'" + forma.getVelocidadMarcha_interpretacion() + "',\n"
+                    + "'" + forma.getFuerzaPresion() + "',\n"
+                    + "'" + forma.getFuerzaPresion_interpretacion() + "',\n"
+                    + "" + forma.getActividadFisica() + ",\n"
+                    + "'" + forma.getActividadFisica_interpretacion() + "',\n"
+                    + "'" + forma.getDiagnostico() + "',\n"
+                    + "'" + forma.getEvaluacionFuncional() + "',\n"
+                    + "'" + forma.getEvaluacionCognitiva() + "',\n"
+                    + "'" + forma.getEvaluacionNutricional() + "',\n"
+                    + "'" + forma.getEvaluacionDeFragilidad() + "',\n"
+                    + "'" + forma.getFechaLlenado() + "',\n"
+                    + "" + forma.getIdPaciente() + ",\n"
+                    + "" + forma.getIdUsuario() + ");";
+            System.out.println(rment);
+            int rowsaffected = statement.executeUpdate(rment);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean updateFormaFragilidad(formaFragilidad forma) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String qer = "UPDATE `AMSS_BDD`.`evaluacionFragilidad`\n"
+                    + "SET\n"
+                    + "`perdidaPeso` = '" + forma.getPerdidaPeso() + "',\n"
+                    + "`perdidaPeso_interpretacion` = '" + forma.getPerdidaPeso_interpretacion() + "',\n"
+                    + "`pobreResistencia` = " + forma.getPobreResistencia() + ",\n"
+                    + "`pobreResistencia_interpretacion` = '" + forma.getPobreResistencia_interpretacion() + "',\n"
+                    + "`velocidadMarcha` = '" + forma.getVelocidadMarcha() + "',\n"
+                    + "`velocidadMarcha_interpretacion` = '" + forma.getVelocidadMarcha_interpretacion() + "',\n"
+                    + "`fuerzaPresion` = '" + forma.getFuerzaPresion() + "',\n"
+                    + "`fuerzaPresion_interpretacion` = '" + forma.getFuerzaPresion_interpretacion() + "',\n"
+                    + "`actividadFisica` = " + forma.getActividadFisica() + ",\n"
+                    + "`actividadFisica_interpretacion` = '" + forma.getActividadFisica_interpretacion() + "',\n"
+                    + "`diagnostico` = '" + forma.getDiagnostico() + "',\n"
+                    + "`evaluacionFuncional` = '" + forma.getEvaluacionFuncional() + "',\n"
+                    + "`evaluacionCognitiva` = '" + forma.getEvaluacionCognitiva() + "',\n"
+                    + "`evaluacionNutricional` = '" + forma.getEvaluacionNutricional() + "',\n"
+                    + "`evaluacionDeFragilidad` = '" + forma.getEvaluacionDeFragilidad() + "',\n"
+                    + "`fechaLlenado` = '" + forma.getFechaLlenado() + "',\n"
+                    + "`IdPaciente` = " + forma.getIdPaciente() + ",\n"
+                    + "`idUsuario` = " + forma.getIdUsuario() + "\n"
+                    + "WHERE `idevaluacionFragilidad` = " + forma.getIdevaluacionFragilidad() + ";";
+            System.out.println(qer);
+            int rowsaffected = statement.executeUpdate(qer); 
             return rowsaffected > 0;
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
