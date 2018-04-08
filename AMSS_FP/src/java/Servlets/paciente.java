@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import BasicElements.Domicilio;
 import BasicElements.Paciente;
 import DatabaseManager.Handler;
 import java.io.IOException;
@@ -70,20 +71,25 @@ public class paciente extends HttpServlet {
         if (request.getParameter("action").equals("edit")) {
             String pacienteID = request.getParameter("username");
             Paciente paciente = Handler.pacienteSearch(pacienteID, "*");
+            Domicilio dom = Handler.searchDomicilio(pacienteID);
             request.setAttribute("paciente", paciente);
+            request.setAttribute("domicilio",dom);
             RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteForm.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("erase")) {
             String pacienteID = request.getParameter("username");
             Handler.deletePaciente(pacienteID);
+            Handler.deleteDomicilio(pacienteID);
             RequestDispatcher req = request.getRequestDispatcher("/home.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("view")) {
             String pacienteID = request.getParameter("username");
             Paciente paciente = Handler.pacienteSearch(pacienteID, "*");
+            Domicilio dom = Handler.searchDomicilio(pacienteID);
             request.setAttribute("paciente", paciente);
+            request.setAttribute("domicilio",dom);
             RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
             req.forward(request, response);
         }
@@ -108,6 +114,10 @@ public class paciente extends HttpServlet {
                 Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
             }
             Handler.addPaciente(pac);
+            //Now add the address
+            Domicilio dom = null;
+            dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
+            Handler.addDomicilio(dom);
         } else {
             Paciente pac = null;
             try {
@@ -116,6 +126,9 @@ public class paciente extends HttpServlet {
                 Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
             }
             Handler.updatePaciente(pac);
+            Domicilio dom = null;
+            dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
+            Handler.updateDomicilio(dom);
         }
         response.sendRedirect("home.jsp");
         RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");

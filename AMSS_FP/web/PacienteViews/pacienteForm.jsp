@@ -33,6 +33,12 @@
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/skeleton.css">
+        <script>
+            submitForms = function () {
+                document.forms["formAddPaciente"].submit();
+                document.forms["formAddDomicilio"].submit();
+            }
+        </script>
 
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -186,8 +192,52 @@
                             </div>
                         </div>
                     </div>
-                    <input class="button-primary" type="submit" value="Submit">
+                    <hr>
+                    <h1>Domicilio</h1>
+                    <p>A continuacion, ingresa tu domicilio.</p>
+                    <div class="row">
+                        <div class="three columns">
+                            <label for="katz">Pais :</label>
+                            <input class="u-full-width" type="text" name="pais" value="<c:out value="${domicilio.getPais()}"/>">
+                        </div>
+                        <div class="four columns">
+                            <label for="katz">Estado :</label>
+                            <input class="u-full-width" type="text" name="estado" value="<c:out value="${domicilio.getEstado()}"/>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="three columns">
+                            <label for="katz">Ciudad :</label>
+                            <input class="u-full-width" type="text" name="ciudad" value="<c:out value="${domicilio.getCiudad()}"/>">
+                        </div>
+                        <div class="four columns">
+                            <label for="katz">Colonia :</label>
+                            <input class="u-full-width" type="text" name="colonia" value="<c:out value="${domicilio.getColonia()}"/>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="three columns">
+                            <label for="katz">Calle :</label>
+                            <input class="u-full-width" type="text" name="calle" value="<c:out value="${domicilio.getCalle()}"/>">
+                        </div>
+                        <div class="two columns">
+                            <label for="katz">Numero Externo :</label>
+                            <input class="u-full-width" type="text" name="numeroExterno" value="<c:out value="${domicilio.getNumeroExterno()}"/>">
+                        </div>
+                        <div class="two columns">
+                            <label for="katz">Numero Interno :</label>
+                            <input class="u-full-width" type="text" name="numeroInterno" value="<c:out value="${domicilio.getNumeroInterno()}"/>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="seven columns">
+                            <label for="katz">Codigo Postal :</label>
+                            <input class="u-full-width" type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
+                        </div>
+                    </div>
+                    <input class="button-primary" type="submit" value="Submit" />
                 </form>
             </div>
         </div>
+
 </html>

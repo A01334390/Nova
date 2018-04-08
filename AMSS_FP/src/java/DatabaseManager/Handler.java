@@ -302,12 +302,11 @@ public class Handler {
                     + "`afiliacionMedica`,\n"
                     + "`amai`,\n"
                     + "`cohabitacion`,\n"
-                    + "`idDomicilio`,\n"
                     + "`FITAPP_CONSUMER_KEY`)\n"
                     + "VALUES(\n"
                     + "'" + paciente.getPrimerNombre() + "',\n"
                     + "'" + paciente.getSegundoNombre() + "',\n"
-                    + "'" + paciente.getPacienteID() + "',\n"
+                    + "'" + paciente.getUsuario()+ "',\n"
                     + "'" + paciente.getFechaDeNacimiento() + "',\n"
                     + "" + paciente.getGenero() + ",\n"
                     + "'" + paciente.getEmail() + "',\n"
@@ -318,7 +317,6 @@ public class Handler {
                     + "'" + paciente.getAfiliacionMedica() + "',\n"
                     + "'" + paciente.getAmai() + "',\n"
                     + "" + paciente.getCohabitacion() + ",\n"
-                    + "null,\n"
                     + "null\n"
                     + ");";
             System.out.println(rment);
@@ -354,7 +352,6 @@ public class Handler {
                     + "`afiliacionMedica` = '" + paciente.getAfiliacionMedica() + "',\n"
                     + "`amai` = '" + paciente.getAmai() + "',\n"
                     + "`cohabitacion` = " + paciente.getCohabitacion() + ",\n"
-                    + "`idDomicilio` = null,\n"
                     + "`FITAPP_CONSUMER_KEY` = null\n"
                     + "WHERE `usuario` = '" + paciente.getUsuario() + "';");
             return rowsaffected > 0;
@@ -858,18 +855,18 @@ public class Handler {
             Statement statement = connection.createStatement();
             String qer = "UPDATE `AMSS_BDD`.`ValoracionGerontologica`\n"
                     + "SET\n"
-                    + "`dispositivosUso` = '"+forma.getDispositivosUso()+"',\n"
-                    + "`dispositivoMayorUso` = '"+forma.getDispositivoMayorUso()+"',\n"
-                    + "`frecuenciaUso` = '"+forma.getFrecuenciaUso()+"',\n"
-                    + "`actividadesUso` = '"+forma.getActividadesUso()+"',\n"
-                    + "`usosFavorecer` = '"+forma.getUsosFavorecer()+"',\n"
-                    + "`apoyosocialPercibido` = '"+forma.getApoyosocialPercibido()+"',\n"
-                    + "`actividadesComunitarias` = '"+forma.getActividadesComunitarias()+"',\n"
-                    + "`impresionDiagnostica` = '"+forma.getImpresionDiagnostica()+"',\n"
-                    + "`fechaLlenado` = '"+forma.getFechaLlenado()+"',\n"
-                    + "`idUsuario` = "+forma.getIdUsuario()+",\n"
-                    + "`idPaciente` = "+forma.getIdPaciente()+"\n"
-                    + "WHERE `idValoracionGerontologica` = "+forma.getIdvaloracionGerontologica()+";";
+                    + "`dispositivosUso` = '" + forma.getDispositivosUso() + "',\n"
+                    + "`dispositivoMayorUso` = '" + forma.getDispositivoMayorUso() + "',\n"
+                    + "`frecuenciaUso` = '" + forma.getFrecuenciaUso() + "',\n"
+                    + "`actividadesUso` = '" + forma.getActividadesUso() + "',\n"
+                    + "`usosFavorecer` = '" + forma.getUsosFavorecer() + "',\n"
+                    + "`apoyosocialPercibido` = '" + forma.getApoyosocialPercibido() + "',\n"
+                    + "`actividadesComunitarias` = '" + forma.getActividadesComunitarias() + "',\n"
+                    + "`impresionDiagnostica` = '" + forma.getImpresionDiagnostica() + "',\n"
+                    + "`fechaLlenado` = '" + forma.getFechaLlenado() + "',\n"
+                    + "`idUsuario` = " + forma.getIdUsuario() + ",\n"
+                    + "`idPaciente` = " + forma.getIdPaciente() + "\n"
+                    + "WHERE `idValoracionGerontologica` = " + forma.getIdvaloracionGerontologica() + ";";
             System.out.println(qer);
             int rowsaffected = statement.executeUpdate(qer);
             return rowsaffected > 0;
@@ -877,6 +874,137 @@ public class Handler {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }
         return false;
+    }
+
+// ____            _     _ _ _     
+//|    \ ___ _____|_|___|_| |_|___ 
+//|  |  | . |     | |  _| | | | . |
+//|____/|___|_|_|_|_|___|_|_|_|___|
+//
+    /**
+     *
+     * @param dom
+     * @return
+     */
+    public static boolean deleteDomicilio(String usuario) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`Domicilio`\n"
+                    + "WHERE usuario='" + usuario + "';");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean addDomicilio(Domicilio dom) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String rment = "INSERT INTO `AMSS_BDD`.`Domicilio`\n"
+                    + "("
+                    + "`pais`,\n"
+                    + "`estado`,\n"
+                    + "`ciudad`,\n"
+                    + "`colonia`,\n"
+                    + "`calle`,\n"
+                    + "`numeroExterno`,\n"
+                    + "`numeroInterno`,\n"
+                    + "`codigoPostal`,\n"
+                    + "`usuario`)\n"
+                    + "VALUES(\n"
+                    + "'" + dom.getPais() + "',\n"
+                    + "'" + dom.getEstado() + "',\n"
+                    + "'" + dom.getCiudad() + "',\n"
+                    + "'" + dom.getColonia() + "',\n"
+                    + "'" + dom.getCalle() + "',\n"
+                    + "" + dom.getNumeroExterno() + ",\n"
+                    + "" + dom.getNumeroInterno() + ",\n"
+                    + "'" + dom.getCodigoPostal() + "',\n"
+                    + "'" + dom.getUsuario() + "');";
+            System.out.println(rment);
+            int rowsaffected = statement.executeUpdate(rment);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean updateDomicilio(Domicilio dom) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String qer = "UPDATE `AMSS_BDD`.`Domicilio`\n"
+                    + "SET\n"
+                    + "`pais` = '" + dom.getPais() + "',\n"
+                    + "`estado` = '" + dom.getEstado() + "',\n"
+                    + "`ciudad` = '" + dom.getCiudad() + "',\n"
+                    + "`colonia` = '" + dom.getColonia() + "',\n"
+                    + "`calle` = '" + dom.getCalle() + "',\n"
+                    + "`numeroExterno` = " + dom.getNumeroExterno() + ",\n"
+                    + "`numeroInterno` = " + dom.getNumeroInterno() + ",\n"
+                    + "`codigoPostal` = '" + dom.getCodigoPostal() + "',\n"
+                    + "`usuario` = '" + dom.getUsuario() + "'\n"
+                    + "WHERE `usuario` = '"+dom.getUsuario()+"';";
+            System.out.println(qer);
+            int rowsaffected = statement.executeUpdate(qer);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static Domicilio searchDomicilio(String user) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT `Domicilio`.`idDomicilio`,\n"
+                        + "    `Domicilio`.`pais`,\n"
+                        + "    `Domicilio`.`estado`,\n"
+                        + "    `Domicilio`.`ciudad`,\n"
+                        + "    `Domicilio`.`colonia`,\n"
+                        + "    `Domicilio`.`calle`,\n"
+                        + "    `Domicilio`.`numeroExterno`,\n"
+                        + "    `Domicilio`.`numeroInterno`,\n"
+                        + "    `Domicilio`.`codigoPostal`,\n"
+                        + "    `Domicilio`.`usuario`\n"
+                        + "FROM `AMSS_BDD`.`Domicilio` WHERE usuario='" + user + "';");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    Domicilio dom;
+                    dom = new Domicilio(resultset.getString("pais"), resultset.getString("estado"), resultset.getString("ciudad"), resultset.getString("colonia"), resultset.getString("calle"), resultset.getString("codigoPostal"), resultset.getString("usuario"), resultset.getInt("numeroInterno"), resultset.getInt("numeroExterno"));
+                    return dom;
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
     }
 
 }
