@@ -86,10 +86,7 @@ public class paciente extends HttpServlet {
         }
         if (request.getParameter("action").equals("view")) {
             String pacienteID = request.getParameter("username");
-            Paciente paciente = Handler.pacienteSearch(pacienteID, "*");
-            Domicilio dom = Handler.searchDomicilio(pacienteID);
-            request.setAttribute("paciente", paciente);
-            request.setAttribute("domicilio",dom);
+            request.getSession().setAttribute("pacienteUsername", pacienteID);
             RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
             req.forward(request, response);
         }

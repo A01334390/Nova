@@ -94,7 +94,7 @@ public class nutricion extends HttpServlet {
             request.setAttribute("forma", null);
             String idForm = request.getParameter("idForm");
             Handler.deleteFormaFragilidad(idForm);
-            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
+            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("show")) {

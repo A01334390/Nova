@@ -387,7 +387,7 @@ public class Handler {
         return null;
     }
 
-    public static formaGeriatria[] getAllformaGeriatria() {
+    public static formaGeriatria[] getAllformaGeriatria(String idPaciente) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -395,7 +395,7 @@ public class Handler {
         }
         try {
             try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
-                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria;");
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria WHERE idPaciente = "+idPaciente+";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaGeriatria> array = new ArrayList<>();
                 while (resultset.next()) {
@@ -550,7 +550,7 @@ public class Handler {
 //                           |  \__| $$                                               
 //                            \$$    $$                                               
 //                             \$$$$$$                                                
-    public static formaFragilidad[] getAllformaFragilidad() {
+    public static formaFragilidad[] getAllformaFragilidad(String idPaciente) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -577,7 +577,7 @@ public class Handler {
                         + "    `evaluacionFragilidad`.`fechaLlenado`,\n"
                         + "    `evaluacionFragilidad`.`IdPaciente`,\n"
                         + "    `evaluacionFragilidad`.`idUsuario`\n"
-                        + "FROM `AMSS_BDD`.`evaluacionFragilidad`;");
+                        + "FROM `AMSS_BDD`.`evaluacionFragilidad` WHERE idPaciente="+idPaciente+";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaFragilidad> array = new ArrayList<>();
                 while (resultset.next()) {
@@ -757,7 +757,7 @@ public class Handler {
         return null;
     }
 
-    public static formaGerontologia[] getAllformaGerontologia() {
+    public static formaGerontologia[] getAllformaGerontologia(String idPaciente) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -765,7 +765,7 @@ public class Handler {
         }
         try {
             try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
-                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica ;");
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica WHERE idPaciente="+idPaciente+";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaGerontologia> array = new ArrayList<>();
                 while (resultset.next()) {

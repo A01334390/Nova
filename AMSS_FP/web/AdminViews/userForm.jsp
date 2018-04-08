@@ -75,8 +75,8 @@
                             <input class="u-full-width" type="text" placeholder="username"  name="usuario" value="<c:out value="${usuario.getUsuario()}"/>">
                         </div>
                     </div>
-                        
-                        <div class="row">
+
+                    <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Contraseña : </label>
                             <input class="u-full-width" type="password" placeholder="password"  name="password" value="<c:out value="${usuario.getUsuario()}"/>">
