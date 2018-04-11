@@ -4,6 +4,7 @@
     Author     : Luna
 --%>
 
+<%@page import="com.sun.xml.internal.messaging.saaj.util.Base64"%>
 <%@page import="BasicElements.Fitbit"%>
 <%@page import="DatabaseManager.Handler"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -32,28 +33,93 @@
 
         <!-- SCRIPT
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-        <%Fitbit fitbit = Handler.getAllFitbit();%>
-        <script>
-                // get the url
-                var url = window.location.href;
-                //getting the access token from url
-                var access_token = url.split("#")[1].split("=")[1].split("&")[0];
+        <%Fitbit fitbit = Handler.getAllFitbit();
+            String text = fitbit.getOAUTH_CLIENTID() + ":" + fitbit.getCLIENT_SECRET();
+            byte[] encodedBytes = Base64.encode(text.getBytes());
+            String encoded = new String(encodedBytes);
+        %>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
 
-                // get the userid
-                var userId = url.split("#")[1].split("=")[2].split("&")[0];
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {packages: ['corechart', 'line']});
 
-                console.log(access_token);
-                console.log(userId);
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart);
 
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'https://api.fitbit.com/1/user/' + userId + '/activities/heart/date/today/1w.json');
-                xhr.setRequestHeader("Authorization", 'Bearer ' + access_token);
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        document.getElementById("results").innerHTML += xhr.responseText;
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart(data) {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                    ['Mushrooms', 3],
+                    ['Onions', 1],
+                    ['Olives', 1],
+                    ['Zucchini', 1],
+                    ['Pepperoni', 2]
+                ]);
+
+                // Set chart options
+                var options = {
+                    hAxis: {
+                        title: 'Actividad'
+                    },
+                    vAxis: {
+                        title: 'Tiempo'
                     }
                 };
-                xhr.send();
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+        </script>
+        <script>
+            // get the url
+            var url = window.location.href;
+            //getting the access token from url
+            var access_token = url.split("#")[1].split("=")[1].split("&")[0];
+
+            // get the userid
+            var userId = url.split("#")[1].split("=")[2].split("&")[0];
+            
+          
+
+            console.log(access_token);
+            console.log(userId);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://api.fitbit.com/1/user/' + userId + '/activities/steps/date/1w.json');
+            xhr.setRequestHeader("Authorization", 'Bearer ' + access_token);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    drawChart(xhr.responseText);
+                    document.getElementById("results").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+
+            function revokeAccess() {
+
+                var params = "token=" + access_token;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://api.fitbit.com/oauth2/revoke');
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.setRequestHeader("Authorization", 'Basic <%=encoded%>', true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText)
+                    }
+                };
+                xhr.send(params);
+            }
         </script>
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -92,13 +158,15 @@
                     </div>
                 </div>
                 <a href="https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FAMSS_FP%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800"/>Accesar a Fitbit</a>
+                <button onclick="revokeAccess()">revokeAccess</button>
             </div>
         </div>
-        
+
         <div>
             <div class='container' id='results'>
-                
+
             </div>
+            <div id="chart_div"></div>
         </div>
     </body>
 </html>

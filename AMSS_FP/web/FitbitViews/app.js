@@ -15,8 +15,10 @@ xhr.open('GET', 'https://api.fitbit.com/1/user/' + userId + '/activities/heart/d
 xhr.setRequestHeader("Authorization", 'Bearer ' + access_token);
 xhr.onload = function () {
     if (xhr.status === 200) {
-        document.getElementById("results").innerHTML+=xhr.responseText;
+        document.getElementById("results").innerHTML += xhr.responseText;
     }
 };
 xhr.send();
+
+
 
