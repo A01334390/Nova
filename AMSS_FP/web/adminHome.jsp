@@ -46,11 +46,12 @@
             <div class="six columns" style="margin-top: 15%">
                 <h1>Bienvenido a la pagina de Administradores
                     , <%=session.getAttribute("currentSessionName")%></h1>
-                <h5> Aqui podras ver los usuarios registrados, editar sus datos y eliminarlos del sistema. </h5>
             </div>
         </div>
-        
+        <hr>
         <div class="container">
+            <h1>Usuarios</h1>
+            <h5> Aqui podras ver los usuarios registrados, editar sus datos y eliminarlos del sistema. </h5>
             <p><a href="admin?action=add">Agregar nuevo usuario</a></p>
             <table>
                 <thead>
@@ -94,6 +95,35 @@
                     </tr>
                     <% }%>
                 </tbody>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class='container'>
+            <h1>Aplicaciones de Fitbit</h1>
+            <h5>Aqui podras registrar los parametros de conexion con la app de Fitbit</h5>
+            <table>
+                <thead>
+                <th>URL de Fitbit</th>
+                <th>URL de API Fitbit</th>
+                <th>OAuth2.0 ID de Cliente</th>
+                <th>URI de redireccion</th>
+                <th>Tiempo de expiracion</th>
+                <th>Acciones</th>
+                </thead>
+                <tbody>
+                    <%
+                        Fitbit fitbit = Handler.getAllFitbit();
+                        if (fitbit == null) {%>
+                <a href="fitbit?action=add">Agregar nuevas credenciales</a>
+                <%}else{%>
+                <td><%=fitbit.getFITBIT_URL()%></td>
+                <td><%=fitbit.getFITBIT_API_URL()%></td>
+                <td><%=fitbit.getOAUTH_CLIENTID()%></td>
+                <td><%=fitbit.getREDIRECT_URI()%></td>
+                <td><%=fitbit.getEXPIRATION_TIME()%></td>
+                <td><a href="fitbit?action=erase&OAUTH_CLIENTID=<%=fitbit.getOAUTH_CLIENTID()%>">Eliminar</a></td>
+                <%}%>
                 </tbody>
             </table>
         </div>

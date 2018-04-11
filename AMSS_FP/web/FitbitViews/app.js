@@ -18,5 +18,5 @@ xhr.onload = function () {
         document.getElementById("results").innerHTML+=xhr.responseText;
     }
 };
-xhr.send()
+xhr.send();
 

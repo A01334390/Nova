@@ -55,13 +55,13 @@
                 <p><%
                     int genero = paciente.getGenero();
                     String vals;
-                    if(genero==0){
+                    if (genero == 0) {
                         vals = "Hombre";
-                    }else if(genero == 1){
+                    } else if (genero == 1) {
                         vals = "Mujer";
-                    }else if(genero ==3) {
+                    } else if (genero == 3) {
                         vals = "Deseo no mencionarlo";
-                    }else{
+                    } else {
                         vals = "Otros";
                     }
                     %><%=vals%>
@@ -79,9 +79,9 @@
                 <label> AMAI </label>
                 <p><%=paciente.getAmai()%></p>
                 <label>Cohabitacion</label>
-                <p><%=paciente.getCohabitacion()==0? "No" : "Si"%></p>
+                <p><%=paciente.getCohabitacion() == 0 ? "No" : "Si"%></p>
                 <label>Estado Civil</label>
-                <p><%=paciente.getEstadoCivil()==0? "Soltero/A" : paciente.getEstadoCivil()==1? "Casado/a" : paciente.getEstadoCivil()==2? "Viudo/a" : "Divorciado/a"%></p>
+                <p><%=paciente.getEstadoCivil() == 0 ? "Soltero/A" : paciente.getEstadoCivil() == 1 ? "Casado/a" : paciente.getEstadoCivil() == 2 ? "Viudo/a" : "Divorciado/a"%></p>
             </div>
         </div>
 
@@ -177,17 +177,8 @@
                 if (session.getAttribute("currentPrivilegeLevel").equals(1) || session.getAttribute("currentPrivilegeLevel").equals(4)) {
             %>
             <hr>
-            <h5> Dispositivos Fitbit Asociados </h5>
-            <a href='fitbit?action=add'>Agregar nueva valoracion social</a>
-            <table>
-                <thead>
-                <th>ID Pebble</th>
-                <th>Fecha de asignacion</th>
-                <th>Acciones</th>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <h5> Información de movilidad </h5>
+            <a href='fitbit?action=show'>Ver información de movilidad del paciente</a>
             <%
                 }
             %>

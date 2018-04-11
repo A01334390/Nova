@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import BasicElements.Fitbit;
+import DatabaseManager.Handler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -36,7 +38,7 @@ public class fitbit extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet fitbit</title>");            
+            out.println("<title>Servlet fitbit</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet fitbit at " + request.getContextPath() + "</h1>");
@@ -56,8 +58,26 @@ public class fitbit extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher req = request.getRequestDispatcher("/FitbitViews/fitbit-connection.jsp");
-        req.forward(request, response);
+        if (request.getParameter("action").equals("add")) {
+            request.setAttribute("fitbit", null);
+            RequestDispatcher req = request.getRequestDispatcher("/FitbitViews/fitbitForm.jsp");
+            req.forward(request, response);
+        }
+        
+        if(request.getParameter("action").equals("show")){
+            Fitbit fitbit = Handler.getAllFitbit();
+            RequestDispatcher req = request.getRequestDispatcher("/FitbitViews/fitbit-connection.jsp");
+            req.forward(request, response);
+        }   
+        if (request.getParameter("action").equals("erase")) {
+            String OAUTH_CLIENTID = request.getParameter("OAUTH_CLIENTID");
+            Handler.deleteFitbit(OAUTH_CLIENTID);
+            RequestDispatcher disp = getServletContext().getRequestDispatcher("/FitbitViews/fitbitForm.jsp");
+            if (disp != null) {
+                disp.include(request, response);
+            }
+        }
+
     }
 
     /**
@@ -70,7 +90,12 @@ public class fitbit extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+        Fitbit fitbit = new Fitbit(1000, request.getParameter("FITBIT_URL"), request.getParameter("FITBIT_API_URL"), request.getParameter("OAUTH_CLIENTID"), request.getParameter("CLIENT_SECRET"), request.getParameter("REDIRECT_URI"), request.getParameter("EXPIRATION_TIME"));
+        Handler.addFitbit(fitbit);
+        RequestDispatcher disp = getServletContext().getRequestDispatcher("/adminHome.jsp");
+        if (disp != null) {
+            disp.include(request, response);
+        }
     }
 
     /**

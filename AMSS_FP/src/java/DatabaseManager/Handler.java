@@ -301,12 +301,11 @@ public class Handler {
                     + "`tipoSangre`,\n"
                     + "`afiliacionMedica`,\n"
                     + "`amai`,\n"
-                    + "`cohabitacion`,\n"
-                    + "`FITAPP_CONSUMER_KEY`)\n"
+                    + "`cohabitacion`)\n"
                     + "VALUES(\n"
                     + "'" + paciente.getPrimerNombre() + "',\n"
                     + "'" + paciente.getSegundoNombre() + "',\n"
-                    + "'" + paciente.getUsuario()+ "',\n"
+                    + "'" + paciente.getUsuario() + "',\n"
                     + "'" + paciente.getFechaDeNacimiento() + "',\n"
                     + "" + paciente.getGenero() + ",\n"
                     + "'" + paciente.getEmail() + "',\n"
@@ -316,8 +315,7 @@ public class Handler {
                     + "'" + paciente.getTipoSangre() + "',\n"
                     + "'" + paciente.getAfiliacionMedica() + "',\n"
                     + "'" + paciente.getAmai() + "',\n"
-                    + "" + paciente.getCohabitacion() + ",\n"
-                    + "null\n"
+                    + "" + paciente.getCohabitacion() + "\n"
                     + ");";
             System.out.println(rment);
             int rowsaffected = statement.executeUpdate(rment);
@@ -351,8 +349,7 @@ public class Handler {
                     + "`tipoSangre` = '" + paciente.getTipoSangre() + "',\n"
                     + "`afiliacionMedica` = '" + paciente.getAfiliacionMedica() + "',\n"
                     + "`amai` = '" + paciente.getAmai() + "',\n"
-                    + "`cohabitacion` = " + paciente.getCohabitacion() + ",\n"
-                    + "`FITAPP_CONSUMER_KEY` = null\n"
+                    + "`cohabitacion` = " + paciente.getCohabitacion() + "\n"
                     + "WHERE `usuario` = '" + paciente.getUsuario() + "';");
             return rowsaffected > 0;
         } catch (SQLException e) {
@@ -395,7 +392,7 @@ public class Handler {
         }
         try {
             try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
-                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria WHERE idPaciente = "+idPaciente+";");
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria WHERE idPaciente = " + idPaciente + ";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaGeriatria> array = new ArrayList<>();
                 while (resultset.next()) {
@@ -577,7 +574,7 @@ public class Handler {
                         + "    `evaluacionFragilidad`.`fechaLlenado`,\n"
                         + "    `evaluacionFragilidad`.`IdPaciente`,\n"
                         + "    `evaluacionFragilidad`.`idUsuario`\n"
-                        + "FROM `AMSS_BDD`.`evaluacionFragilidad` WHERE idPaciente="+idPaciente+";");
+                        + "FROM `AMSS_BDD`.`evaluacionFragilidad` WHERE idPaciente=" + idPaciente + ";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaFragilidad> array = new ArrayList<>();
                 while (resultset.next()) {
@@ -765,7 +762,7 @@ public class Handler {
         }
         try {
             try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
-                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica WHERE idPaciente="+idPaciente+";");
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica WHERE idPaciente=" + idPaciente + ";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaGerontologia> array = new ArrayList<>();
                 while (resultset.next()) {
@@ -963,7 +960,7 @@ public class Handler {
                     + "`numeroInterno` = " + dom.getNumeroInterno() + ",\n"
                     + "`codigoPostal` = '" + dom.getCodigoPostal() + "',\n"
                     + "`usuario` = '" + dom.getUsuario() + "'\n"
-                    + "WHERE `usuario` = '"+dom.getUsuario()+"';";
+                    + "WHERE `usuario` = '" + dom.getUsuario() + "';";
             System.out.println(qer);
             int rowsaffected = statement.executeUpdate(qer);
             return rowsaffected > 0;
@@ -1005,6 +1002,103 @@ public class Handler {
         }
 
         return null;
+    }
+
+    public static Fitbit searchFitbit(String OAUTH_CLIENTID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.FitbitUserData WHERE OAUTH_CLIENTID='" + OAUTH_CLIENTID + "';");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    Fitbit fitbit = new Fitbit(resultset.getInt("idFitbitUserData"), resultset.getString("FITBIT_URL"), resultset.getString("FITBIT_API_URL"), resultset.getString("OAUTH_CLIENTID"), resultset.getString("CLIENT_SECRET"), resultset.getString("REDIRECT_URI"), resultset.getString("EXPIRATION_TIME"));
+                    return fitbit;
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static boolean deleteFitbit(String OAUTH_CLIENTID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            int rowsaffected = statement.executeUpdate("DELETE FROM AMSS_BDD.FitbitUserData WHERE OAUTH_CLIENTID='" + OAUTH_CLIENTID + "';");
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static Fitbit getAllFitbit() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.FitbitUserData;");
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    Fitbit fitbit = new Fitbit(resultset.getInt("idFitbitUserData"), resultset.getString("FITBIT_URL"), resultset.getString("FITBIT_API_URL"), resultset.getString("OAUTH_CLIENTID"), resultset.getString("CLIENT_SECRET"), resultset.getString("REDIRECT_URI"), resultset.getString("EXPIRATION_TIME"));
+                    return fitbit;
+                }
+                //return session;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static boolean addFitbit(Fitbit fitbit) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            String rment = "INSERT INTO `AMSS_BDD`.`FitbitUserData`\n"
+                    + "("
+                    + "`FITBIT_URL`,\n"
+                    + "`FITBIT_API_URL`,\n"
+                    + "`OAUTH_CLIENTID`,\n"
+                    + "`CLIENT_SECRET`,\n"
+                    + "`REDIRECT_URI`,\n"
+                    + "`EXPIRATION_TIME`)\n"
+                    + "VALUES\n"
+                    + "("
+                    + "'" + fitbit.getFITBIT_URL() + "',\n"
+                    + "'" + fitbit.getFITBIT_API_URL() + "',\n"
+                    + "'" + fitbit.getOAUTH_CLIENTID() + "',\n"
+                    + "'" + fitbit.getCLIENT_SECRET() + "',\n"
+                    + "'" + fitbit.getREDIRECT_URI() + "',\n"
+                    + "'" + fitbit.getEXPIRATION_TIME() + "');";
+            System.out.println(rment);
+            int rowsaffected = statement.executeUpdate(rment);
+            return rowsaffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
     }
 
 }
