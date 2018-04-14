@@ -4,6 +4,7 @@
     Author     : Luna
 --%>
 
+<%@page import="BasicElements.valoracionFitbit"%>
 <%@page import="BasicElements.Paciente"%>
 <%@page import="BasicElements.formaGerontologia"%>
 <%@page import="BasicElements.formaFragilidad"%>
@@ -179,9 +180,32 @@
             <hr>
             <h5> Información de movilidad </h5>
             <a href='fitbit?action=show'>Ver información de movilidad del paciente</a>
+            <table>
+                <thead>
+                <th> Fecha pedida </th>
+                <th> Periodo Pedido </th>
+                <th> Acciones </th>
+                </thead>
+                <tbody>
+                    <%
+                        valoracionFitbit vf[] = Handler.getAllValoracionFitbit(session.getAttribute("pacienteUsername").toString());
+                        for(int i=0;i<vf.length;i++){                             
+                    %>
+                    <tr>
+                <td><%=vf[i].getFechaPedida()%></td>
+                <td><%=vf[i].getTiempoPedido()%></td>
+                <td>
+                    <a href='fitbit?action=see&valoracionID=<%=vf[i].getIdValoracionFitbit()%>'>Ver</a>
+                    <a href='fitbit?action=eliminate&valoracionID=<%=vf[i].getIdValoracionFitbit()%>'>Eliminar</a>
+                </td>
+                    </tr>
+                    <%}%>
+                </tbody>
+            </table>
             <%
                 }
             %>
+            
         </div>
 
         <div class="container" style="margin-top: 5%">

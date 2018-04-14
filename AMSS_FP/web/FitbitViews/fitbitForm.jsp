@@ -83,6 +83,7 @@
                             <input class="u-full-width" type="text" placeholder="604800" name="EXPIRATION_TIME" value="">
                         </div>
                     </div>
+                    <input class="u-full-width" type="text" value="ngraph" name="diff" hidden>
                     <input class="button-primary" type="submit" value="Submit" />
             </div>
         </div>

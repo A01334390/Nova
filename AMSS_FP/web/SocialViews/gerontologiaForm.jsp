@@ -49,16 +49,13 @@
             <form action="social" method="POST" name="formAddGerontologia">
                 <div class="row">
                     <div class="three columns">
-                        <label for="katz">ID Formato Gerontologia :</label>
-                        <input class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
+                        <input hidden class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
                     </div>
                     <div class="three columns">
-                        <label for="katz">ID de Usuario :</label>
-                        <input class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario.getId()}"/>">
+                        <input hidden class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario.getId()}"/>">
                     </div>
                     <div class="three columns">
-                        <label for="katz">ID de Paciente :</label>
-                        <input class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente.getPacienteID()}"/>">
+                        <input hidden class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente.getPacienteID()}"/>">
                     </div>
                 </div>
 

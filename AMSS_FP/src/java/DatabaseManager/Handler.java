@@ -12,6 +12,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1099,6 +1100,125 @@ public class Handler {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }
         return false;
+    }
+
+    public static boolean addValoracionFitbit(valoracionFitbit vf) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            PreparedStatement pre = connection.prepareStatement("INSERT INTO `AMSS_BDD`.`valoracionFitbit`\n"
+                    + "("
+                    + "`usuario`,\n"
+                    + "`datosMovilidad`,\n"
+                    + "`fechaPedida`,\n"
+                    + "`tiempoPedido`)\n"
+                    + "VALUES\n"
+                    + "(?,?,?,?);");
+            pre.setString(1, vf.getUsuario());
+            byte[] byteContent = vf.getDatosMovilidad().getBytes();
+            Blob blob = connection.createBlob();
+            blob.setBytes(1, byteContent);
+            pre.setBlob(2, blob);
+            pre.setDate(3, convertFromJAVADateToSQLDate(vf.getFechaPedida()));
+            pre.setString(4, vf.getTiempoPedido());
+            pre.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static java.sql.Date convertFromJAVADateToSQLDate(
+            java.util.Date javaDate) {
+        java.sql.Date sqlDate = null;
+        if (javaDate != null) {
+            sqlDate = new Date(javaDate.getTime());
+        }
+        return sqlDate;
+    }
+
+    public static valoracionFitbit[] getAllValoracionFitbit(String usuario) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ArrayList<valoracionFitbit> array = new ArrayList<>();
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                PreparedStatement pre = connection.prepareStatement("SELECT * FROM AMSS_BDD.valoracionFitbit WHERE usuario=?;");
+                pre.setString(1, usuario);
+                ResultSet rs = pre.executeQuery();
+                while (rs.next()) {
+                    Blob blob = rs.getBlob("datosMovilidad");
+                    array.add(new valoracionFitbit(
+                            rs.getInt("idvaloracionFitbit"),
+                            rs.getString("usuario"),
+                            Arrays.toString(blob.getBytes(1, (int) blob.length())),
+                            rs.getDate("fechaPedida"),
+                            rs.getString("tiempoPedido")
+                    ));
+                }
+
+                //return session;
+            }
+            return array.toArray(new valoracionFitbit[array.size()]);
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static valoracionFitbit searchValoracionFitbit(String valoracionID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            valoracionFitbit vf = null;
+            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+                PreparedStatement pre = connection.prepareStatement("SELECT * FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit=?;");
+                pre.setString(1, valoracionID);
+                ResultSet rs = pre.executeQuery();
+                while (rs.next()) {
+                    Blob blob = rs.getBlob("datosMovilidad");
+                    vf = new valoracionFitbit(
+                            rs.getInt("idvaloracionFitbit"),
+                            rs.getString("usuario"),
+                            new String(blob.getBytes(1, (int)blob.length())),
+                            rs.getDate("fechaPedida"),
+                            rs.getString("tiempoPedido")
+                    );
+                }
+            }
+            return vf;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+
+    public static void deleteValoracionFitbit(String valoracionID) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit="+valoracionID+";");
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
     }
 
 }
