@@ -31,14 +31,32 @@
 
         <!-- CSS
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/skeleton.css">
+        <link rel="stylesheet" href="css/normalize.css" type="text/css">
+        <link rel="stylesheet" href="css/skeleton.css" type="text/css">
+        
+        <script src="js/site.js"></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css">
 
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <link rel="icon" type="image/png" href="images/favicon.png">
     </head>
     <body>
+        <div class="navbar-spacer"></div>
+        <nav class="navbar">
+            <div class="container">
+                <ul class="navbar-list">
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="index.jsp">Nova</a>
+                    </li>
+                </ul>
+                <ul class="navbar-list">
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="PacienteViews/pacienteAll.jsp">Regresar</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
         <div class="container">
             <div class="six columns" style="margin-top: 15%">
                 <h1>Bienvenido a la Forma de Gerontologia</h1>
@@ -49,13 +67,13 @@
             <form action="social" method="POST" name="formAddGerontologia">
                 <div class="row">
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
+                        <input  class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
                     </div>
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario.getId()}"/>">
+                        <input  class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
                     </div>
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente.getPacienteID()}"/>">
+                        <input  class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
                     </div>
                 </div>
 

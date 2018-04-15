@@ -6,15 +6,17 @@
 package DatabaseManager;
 
 import BasicElements.*;
-import java.security.*;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.security.Security;
+import org.bouncycastle.jcajce.provider.digest.SHA3.DigestSHA3;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  *
@@ -33,8 +35,10 @@ public class Handler {
      * @param username, as String
      * @param password, as String
      * @return if the user exists in the database
+     * @throws java.io.UnsupportedEncodingException
      */
-    public static boolean userValidation(String username, String password) {
+    public static boolean userValidation(String username, String password) throws UnsupportedEncodingException {
+        Security.addProvider(new BouncyCastleProvider());
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -43,7 +47,21 @@ public class Handler {
         int count = 0;
         try {
             try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
-                ResultSet resultset = statement.executeQuery("SELECT usuario FROM AMSS_BDD.Usuario WHERE usuario='" + username + "' AND contrasenia='" + password + "'");
+                PreparedStatement pre = connection.prepareStatement("SELECT usuario FROM AMSS_BDD.Usuario WHERE usuario=? AND contrasenia=?;");
+                pre.setString(1, username);
+                //Create the HASH
+                DigestSHA3 md = new DigestSHA3(256);
+                md.update(password.getBytes());
+                //Make the byte to a String
+                byte[] digest = md.digest();
+                StringBuffer buff = new StringBuffer();
+
+                for (byte b : digest) {
+                    buff.append(String.format("%02x", b & 0xFF));
+                }
+                String paswuord = buff.toString();
+                pre.setString(2, paswuord);
+                ResultSet resultset = pre.executeQuery();
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
                     count++;
@@ -75,7 +93,10 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"));
+                    byte[] image = resultset.getBytes("image");
+                    Usuario us = new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"), null);
+                    us.setPreparedPhoto(image);
+                    return us;
                 }
                 //return session;
             }
@@ -97,9 +118,9 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE idUsuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"));
+                    return new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"), resultset.getBinaryStream("image"));
                 }
-                //return session;
+
             }
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
@@ -120,7 +141,7 @@ public class Handler {
                 //if there is no data on the data set, the session return will be false
                 ArrayList<Usuario> array = new ArrayList<>();
                 while (resultset.next()) {
-                    array.add(new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio")));
+                    array.add(new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"), resultset.getBinaryStream("image")));
                 }
                 return array.toArray(new Usuario[array.size()]);
             }
@@ -139,8 +160,8 @@ public class Handler {
         }
         try {
             Connection connection = DriverManager.getConnection(host, huser, hpassword);
-            Statement statement = connection.createStatement();
-            int rowsaffected = statement.executeUpdate("DELETE FROM AMSS_BDD.Usuario WHERE usuario='" + usuarioID + "';");
+            PreparedStatement pre = connection.prepareStatement("DELETE FROM AMSS_BDD.Usuario WHERE usuario='" + usuarioID + "';");
+            int rowsaffected = pre.executeUpdate();
             return rowsaffected > 0;
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
@@ -156,18 +177,35 @@ public class Handler {
         }
         try {
             Connection connection = DriverManager.getConnection(host, huser, hpassword);
-            Statement statement = connection.createStatement();
-            String rment = "INSERT INTO AMSS_BDD.Usuario(primerNombre,segundoNombre,fechaNacimiento,email,usuario,contrasenia,fechaValidez,privilegio,idDomicilio) VALUES ('" + user.getPrimerNombre() + "','" + user.getSegundoNombre() + "','" + user.getFechaNacimiento() + "','" + user.getEmail() + "','" + user.getUsuario() + "','" + password + "','" + user.getFechaValidez() + "'," + user.getPrivilegio() + ",0);";
-            System.out.println(rment);
-            int rowsaffected = statement.executeUpdate("INSERT INTO AMSS_BDD.Usuario(primerNombre,segundoNombre,fechaNacimiento,email,usuario,contrasenia,fechaValidez,privilegio) VALUES ('" + user.getPrimerNombre() + "','" + user.getSegundoNombre() + "','" + user.getFechaNacimiento() + "','" + user.getEmail() + "','" + user.getUsuario() + "','" + password + "','" + user.getFechaValidez() + "'," + user.getPrivilegio() + ");");
-            return rowsaffected > 0;
+            PreparedStatement pre = connection.prepareStatement("INSERT INTO AMSS_BDD.Usuario(primerNombre,segundoNombre,fechaNacimiento,email,usuario,contrasenia,fechaValidez,privilegio) VALUES (?,?,?,?,?,?,?,?);");
+            pre.setString(1, user.getPrimerNombre());
+            pre.setString(2, user.getSegundoNombre());
+            pre.setDate(3, convertFromJAVADateToSQLDate(user.getFechaNacimiento()));
+            pre.setString(4, user.getEmail());
+            pre.setString(5, user.getUsuario());
+            //HASH THE PASSWORD
+            DigestSHA3 md = new DigestSHA3(256);
+            md.update(password.getBytes());
+            //Make the byte to a String
+            byte[] digest = md.digest();
+            StringBuffer buff = new StringBuffer();
+
+            for (byte b : digest) {
+                buff.append(String.format("%02x", b & 0xFF));
+            }
+            String paswuord = buff.toString();
+            //SET IT
+            pre.setString(6, paswuord);
+            pre.setDate(7, convertFromJAVADateToSQLDate(user.getFechaValidez()));
+            pre.setInt(8, user.getPrivilegio());
+            return pre.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }
         return false;
     }
 
-    public static boolean updateUser(Usuario user, String password) {
+    public static boolean updateUser(Usuario user, String password, int photolength) throws ParseException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -175,10 +213,42 @@ public class Handler {
         }
         try {
             Connection connection = DriverManager.getConnection(host, huser, hpassword);
-            Statement statement = connection.createStatement();
-            int rowsaffected = statement.executeUpdate("UPDATE AMSS_BDD.Usuario "
-                    + "SET primerNombre='" + user.getPrimerNombre() + "',segundoNombre='" + user.getSegundoNombre() + "',fechaNacimiento='" + user.getFechaNacimiento().toString() + "',email='" + user.getEmail() + "',usuario='" + user.getUsuario() + "',contrasenia='" + password + "',fechaValidez='" + user.getFechaValidez().toString() + "',privilegio='" + user.getPrivilegio() + "'"
-                    + " WHERE usuario='" + user.getUsuario() + "';");
+            PreparedStatement pre = connection.prepareStatement("UPDATE `AMSS_BDD`.`Usuario`\n"
+                    + "SET\n"
+                    + "`primerNombre` = ?,\n"
+                    + "`segundoNombre` = ?,\n"
+                    + "`fechaNacimiento` = ?,\n"
+                    + "`email` = ?,\n"
+                    + "`usuario` = ?,\n"
+                    + "`contrasenia` = ?,\n"
+                    + "`fechaValidez` = ?,\n"
+                    + "`privilegio` = ?,\n"
+                    + "`image` = ?\n"
+                    + "WHERE `usuario` = ?;");
+
+            pre.setString(1, user.getPrimerNombre());
+            pre.setString(2, user.getSegundoNombre());
+            pre.setDate(3, convertFromJAVADateToSQLDate(user.getFechaNacimiento()));
+            pre.setString(4, user.getEmail());
+            pre.setString(5, user.getUsuario());
+            //HASH THE PASSWORD
+            DigestSHA3 md = new DigestSHA3(256);
+            md.update(password.getBytes());
+            //Make the byte to a String
+            byte[] digest = md.digest();
+            StringBuffer buff = new StringBuffer();
+
+            for (byte b : digest) {
+                buff.append(String.format("%02x", b & 0xFF));
+            }
+            String paswuord = buff.toString();
+            //SET IT
+            pre.setString(6, paswuord);
+            pre.setDate(7, convertFromJAVADateToSQLDate(user.getFechaValidez()));
+            pre.setInt(8, user.getPrivilegio());
+            pre.setBinaryStream(9, user.getPhoto(), photolength);
+            pre.setString(10, user.getUsuario());
+            int rowsaffected = pre.executeUpdate();
             return rowsaffected > 0;
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
@@ -1156,15 +1226,20 @@ public class Handler {
                 ResultSet rs = pre.executeQuery();
                 while (rs.next()) {
                     Blob blob = rs.getBlob("datosMovilidad");
+                    byte[] ans = blob.getBytes(1, (int) blob.length());
+                    StringBuffer buff = new StringBuffer();
+
+                    for (byte b : ans) {
+                        buff.append(String.format("%02x", b & 0xFF));
+                    }
                     array.add(new valoracionFitbit(
                             rs.getInt("idvaloracionFitbit"),
                             rs.getString("usuario"),
-                            Arrays.toString(blob.getBytes(1, (int) blob.length())),
+                            buff.toString(),
                             rs.getDate("fechaPedida"),
                             rs.getString("tiempoPedido")
                     ));
                 }
-
                 //return session;
             }
             return array.toArray(new valoracionFitbit[array.size()]);
@@ -1189,10 +1264,16 @@ public class Handler {
                 ResultSet rs = pre.executeQuery();
                 while (rs.next()) {
                     Blob blob = rs.getBlob("datosMovilidad");
+                    byte[] ans = blob.getBytes(1, (int) blob.length());
+                    StringBuffer buff = new StringBuffer();
+
+                    for (byte b : ans) {
+                        buff.append(String.format("%02x", b & 0xFF));
+                    }
                     vf = new valoracionFitbit(
                             rs.getInt("idvaloracionFitbit"),
                             rs.getString("usuario"),
-                            new String(blob.getBytes(1, (int)blob.length())),
+                            buff.toString(),
                             rs.getDate("fechaPedida"),
                             rs.getString("tiempoPedido")
                     );
@@ -1215,7 +1296,7 @@ public class Handler {
         try {
             Connection connection = DriverManager.getConnection(host, huser, hpassword);
             Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit="+valoracionID+";");
+            statement.executeUpdate("DELETE FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit=" + valoracionID + ";");
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }

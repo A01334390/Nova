@@ -8,6 +8,7 @@ package Servlets;
 import BasicElements.Usuario;
 import DatabaseManager.Handler;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import javax.servlet.RequestDispatcher;
@@ -19,11 +20,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author Luna
  */
+@MultipartConfig(maxFileSize = 16177215)
 public class admin extends HttpServlet {
 
     /**
@@ -94,22 +98,31 @@ public class admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("usuario");
-        if (Handler.userSearch(id, "*")==null) {
+        if (Handler.userSearch(id, "*") == null) {
             Usuario user = null;
             try {
-                user = new Usuario(1000, request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("email"), request.getParameter("usuario"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaNacimiento")), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaValidez")), Integer.parseInt(request.getParameter("privilegio")));
+                user = new Usuario(1000, request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("email"), request.getParameter("usuario"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaNacimiento")), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaValidez")), Integer.parseInt(request.getParameter("privilegio")), null);
             } catch (ParseException ex) {
                 Logger.getLogger(admin.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Handler.addUser(user,request.getParameter("password"));
+            Handler.addUser(user, request.getParameter("password"));
         } else {
             Usuario user = null;
             try {
-                user = new Usuario(1000, request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("email"), request.getParameter("usuario"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaNacimiento")), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaValidez")), Integer.parseInt(request.getParameter("privilegio")));
+                user = new Usuario(1000,
+                        request.getParameter("primerNombre"),
+                        request.getParameter("segundoNombre"),
+                        request.getParameter("email"),
+                        request.getParameter("usuario"),
+                        new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaNacimiento")),
+                        new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaValidez")), 
+                        Integer.parseInt(request.getParameter("privilegio")), 
+                        null);
+                Handler.updateUser(user, request.getParameter("password"), 0);
             } catch (ParseException ex) {
                 Logger.getLogger(admin.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Handler.updateUser(user,request.getParameter("password"));
+
         }
         RequestDispatcher req = request.getRequestDispatcher("/adminHome.jsp");
         req.forward(request, response);

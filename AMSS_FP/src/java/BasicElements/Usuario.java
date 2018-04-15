@@ -9,8 +9,13 @@ package BasicElements;
  *
  * @author Luna
  */
+import com.sun.xml.messaging.saaj.util.Base64;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Usuario {
@@ -19,8 +24,10 @@ public class Usuario {
     private String email;
     private Date fechaNacimiento, fechaValidez;
     private int privilegio, id;
+    private InputStream photo;
+    private byte[] preparedPhoto;
 
-    public Usuario(int id, String primerNombre, String segundoNombre, String email, String usuario, Date fechaNacimiento, Date fechaValidez, int privilegio) {
+    public Usuario(int id, String primerNombre, String segundoNombre, String email, String usuario, Date fechaNacimiento, Date fechaValidez, int privilegio, InputStream photo) {
         this.primerNombre = primerNombre;
         this.segundoNombre = segundoNombre;
         this.email = email;
@@ -63,16 +70,16 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public String getFechaNacimiento() {
-        return dateToString(fechaNacimiento);
+    public Date getFechaNacimiento() {
+        return (fechaNacimiento);
     }
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getFechaValidez() {
-        return dateToString(fechaValidez);
+    public Date getFechaValidez() {
+        return (fechaValidez);
     }
 
     public void setFechaValidez(Date fechaValidez) {
@@ -91,9 +98,22 @@ public class Usuario {
         return this.id;
     }
 
-    private static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        return dateFormat.format(date);
+    public InputStream getPhoto() {
+        return photo;
     }
+
+    public void setPhoto(InputStream photo) {
+        this.photo = photo;
+    }
+    
+    public void setPreparedPhoto(byte[] byteArray){
+        this.preparedPhoto = byteArray;
+    }
+    
+    public String getPreparedPhoto() throws SQLException{
+        byte[] imageByte = preparedPhoto;
+        byte[] encodedImage = Base64.encode(imageByte);
+        return Arrays.toString(encodedImage);
+    }   
 
 }

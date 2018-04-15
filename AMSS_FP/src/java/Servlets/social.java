@@ -66,39 +66,27 @@ public class social extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("action").equals("add")) {
             request.setAttribute("forma", null);
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("usuario", us);
-            request.setAttribute("paciente", pac);
+            request.setAttribute("usuario", request.getParameter("idUsuario"));
+            request.setAttribute("paciente", request.getParameter("idPaciente"));
             request.setAttribute("show", false);
             RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("edit")) {
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
             String idForm = request.getParameter("idForm");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
             formaGerontologia form = Handler.formaGerontologiaSearch(idForm);
-            request.setAttribute("usuario", us);
-            request.setAttribute("paciente", pac);
+            request.setAttribute("usuario", request.getParameter("idUsuario"));
+            request.setAttribute("paciente", request.getParameter("idPaciente"));
             request.setAttribute("forma", form);
             request.setAttribute("show", false);
             RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("show")) {
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
             String idForm = request.getParameter("idForm");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
             formaGerontologia form = Handler.formaGerontologiaSearch(idForm);
-            request.setAttribute("usuario", us);
-            request.setAttribute("paciente", pac);
+            request.setAttribute("usuario", request.getParameter("idUsuario"));
+            request.setAttribute("paciente", request.getParameter("idPaciente"));
             request.setAttribute("forma", form);
             request.setAttribute("show", true);
             RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");

@@ -33,14 +33,31 @@
 
         <!-- CSS
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/skeleton.css">
+        <link rel="stylesheet" href="css/normalize.css" type="text/css">
+        <link rel="stylesheet" href="css/skeleton.css" type="text/css">
+        <script src="js/site.js"></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css">
 
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <link rel="icon" type="image/png" href="images/favicon.png">
     </head>
     <body>
+        <div class="navbar-spacer"></div>
+        <nav class="navbar">
+            <div class="container">
+                <ul class="navbar-list">
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="index.jsp">Nova</a>
+                    </li>
+                </ul>
+                <ul class="navbar-list">
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="PacienteViews/pacienteAll.jsp">Regresar</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
         <div class="container">
             <div class="six columns" style="margin-top: 15%">
                 <h1>Forma de Geriatria</h1>
@@ -146,9 +163,9 @@
                         <input class="u-full-width" type="text" placeholder="Normal" name="levantateAnda_interpretacion" value="<c:out value="${forma.getLevantateAnda_interpretacion()}"/>">
                     </div>
                 </div>
-                        <%if(!request.getAttribute("show").equals(true)){%>
+                <%if (!request.getAttribute("show").equals(true)) {%>
                 <input class="button-primary" type="submit" value="Submit">
-                 <%}%>
+                <%}%>
             </form>
         </div>
     </body>

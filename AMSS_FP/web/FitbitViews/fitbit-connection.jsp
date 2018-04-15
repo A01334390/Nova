@@ -31,8 +31,10 @@
 
         <!-- CSS
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/skeleton.css">
+        <link rel="stylesheet" href="css/normalize.css" type="text/css">
+        <link rel="stylesheet" href="css/skeleton.css" type="text/css">
+        <script src="js/site.js"></script>
+        <link rel="stylesheet" href="css/custom.css" type="text/css">
 
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -65,18 +67,33 @@
             }
         </script>
     </head>
+    <div class="navbar-spacer"></div>
+    <nav class="navbar">
+        <div class="container">
+            <ul class="navbar-list">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="index.jsp">Nova</a>
+                </li>
+            </ul>
+            <ul class="navbar-list">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="PacienteViews/pacienteAll.jsp">Regresar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <body>
         <div class='container'>
             <div class='six columns' style='margin-top:15%'>
                 <h2>Paso 1</h2><p>Iniciar sesión en Fitbit<p>
-                <a href='https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FAMSS_FP%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=15'>Acceder a Fitbit</a>
+                    <a href='https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FAMSS_FP%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=15'>Acceder a Fitbit</a>
             </div>
         </div>
         <div class="container">
             <div class="six columns">
                 <h2>Paso 2</h2>
                 <p>Ingresa la fecha a partir de la cual deseas obtener los datos de movilidad y el tiempo de obtencion<p>
-                
+
             </div>
         </div>
         <div>
@@ -100,15 +117,15 @@
                     </div>
                 </div>
                 <input class="button-primary" onclick='getData()' type="submit" value="Obtener los datos">
-                  <form action='fitbit' method='POST'> 
-                        <div class='row'>
-                            <div class='six columns'>
-                                <h2>Paso 3</h2>
-                                <p>Guardar esta informacion<p>
-                                <div class ="container">
-                                    <textarea name='jsonresult' rows='4' cols='50' id="results"></textarea>
-                                </div>
+                <form action='fitbit' method='POST'> 
+                    <div class='row'>
+                        <div class='six columns'>
+                            <h2>Paso 3</h2>
+                            <p>Guardar esta informacion<p>
+                            <div class ="container">
+                                <textarea name='jsonresult' rows='4' cols='50' id="results"></textarea>
                             </div>
+                        </div>
                         <div class='container'>
                             <div class='row'>
                                 <div class='seven columns'>
@@ -124,5 +141,5 @@
                     </div>
             </div>
         </div>
-</body>
+    </body>
 </html>

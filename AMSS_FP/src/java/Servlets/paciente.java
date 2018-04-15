@@ -106,11 +106,11 @@ public class paciente extends HttpServlet {
         if (Handler.pacienteSearch(id, "*") == null) {
             Paciente pac = null;
             try {
-                pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaDeNacimiento")));
+                pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaDeNacimiento")));
+                Handler.addPaciente(pac);
             } catch (ParseException ex) {
                 Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Handler.addPaciente(pac);
             //Now add the address
             Domicilio dom = null;
             dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
@@ -118,7 +118,7 @@ public class paciente extends HttpServlet {
         } else {
             Paciente pac = null;
             try {
-                pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaDeNacimiento")));
+                pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaDeNacimiento")));
             } catch (ParseException ex) {
                 Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
             }
