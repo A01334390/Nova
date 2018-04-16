@@ -38,7 +38,7 @@ CREATE TABLE `Domicilio` (
   PRIMARY KEY (`idDomicilio`,`usuario`),
   UNIQUE KEY `idDomicilio_UNIQUE` (`idDomicilio`),
   UNIQUE KEY `usuario_UNIQUE` (`usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,9 +103,11 @@ CREATE TABLE `Paciente` (
   `afiliacionMedica` varchar(30) DEFAULT NULL,
   `amai` varchar(5) DEFAULT NULL,
   `cohabitacion` tinyint(4) DEFAULT NULL,
+  `escolaridadMaxima` varchar(45) DEFAULT NULL,
+  `autopadecimiento` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idPaciente`),
   UNIQUE KEY `idPaciente_UNIQUE` (`idPaciente`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +116,7 @@ CREATE TABLE `Paciente` (
 
 LOCK TABLES `Paciente` WRITE;
 /*!40000 ALTER TABLE `Paciente` DISABLE KEYS */;
-INSERT INTO `Paciente` VALUES (9,'A','B','Dom','2012-05-28 00:00:00',0,'D','A','A',0,'A+','IMSS','A/B',0);
+INSERT INTO `Paciente` VALUES (9,'A','B','Dom','2002-05-08 00:00:00',0,'D','A','A',1,'A+','ISSTE','C',1,'pre','asa');
 /*!40000 ALTER TABLE `Paciente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +141,7 @@ CREATE TABLE `Usuario` (
   PRIMARY KEY (`idUsuario`,`usuario`),
   UNIQUE KEY `idUsuario_UNIQUE` (`idUsuario`),
   UNIQUE KEY `usuario_UNIQUE` (`usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -284,6 +286,44 @@ INSERT INTO `formatoGeriatria` VALUES (1,'6/6','6','6','6','6','6','6','6','6','
 UNLOCK TABLES;
 
 --
+-- Table structure for table `reportePaciente`
+--
+
+DROP TABLE IF EXISTS `reportePaciente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reportePaciente` (
+  `idreportePaciente` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(45) DEFAULT NULL,
+  `idGeriatra` int(11) NOT NULL,
+  `idNutricion` int(11) NOT NULL,
+  `idMovilidad` int(11) NOT NULL,
+  `idGerontologia` int(11) NOT NULL,
+  `conclusion` varchar(500) DEFAULT NULL,
+  `fechaLlenado` date DEFAULT NULL,
+  PRIMARY KEY (`idreportePaciente`),
+  KEY `a_idx` (`idGerontologia`),
+  KEY `b_idx` (`idNutricion`),
+  KEY `c_idx` (`idMovilidad`),
+  KEY `d_idx` (`idGeriatra`),
+  CONSTRAINT `a` FOREIGN KEY (`idGerontologia`) REFERENCES `ValoracionGerontologica` (`idValoracionGerontologica`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `b` FOREIGN KEY (`idNutricion`) REFERENCES `evaluacionFragilidad` (`idevaluacionFragilidad`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `c` FOREIGN KEY (`idMovilidad`) REFERENCES `valoracionFitbit` (`idvaloracionFitbit`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `d` FOREIGN KEY (`idGeriatra`) REFERENCES `formatoGeriatria` (`idformatoGeriatria`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reportePaciente`
+--
+
+LOCK TABLES `reportePaciente` WRITE;
+/*!40000 ALTER TABLE `reportePaciente` DISABLE KEYS */;
+INSERT INTO `reportePaciente` VALUES (1,'Dom',2,1,11,1,'aaa','2018-04-15');
+/*!40000 ALTER TABLE `reportePaciente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `valoracionFitbit`
 --
 
@@ -327,4 +367,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-14 23:22:50
+-- Dump completed on 2018-04-15 19:08:06
