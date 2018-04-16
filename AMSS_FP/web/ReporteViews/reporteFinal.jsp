@@ -4,6 +4,8 @@
     Author     : Luna
 --%>
 
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
 <%@page import="BasicElements.formaGerontologia"%>
 <%@page import="BasicElements.valoracionFitbit"%>
 <%@page import="BasicElements.formaFragilidad"%>
@@ -78,7 +80,7 @@
                     </div>
                     <div>
                         <label>Escolaridad maxima</label>
-                        <p>Needed</p>
+                        <p><%=paciente.getEscolaridadMaxima().equals("pri") ? "Primaria" : paciente.getEscolaridadMaxima().equals("sec") ? "Secundaria" : paciente.getEscolaridadMaxima().equals("pre") ? "Preparatoria" : paciente.getEscolaridadMaxima().equals("lic") ? "Licenciatura" : paciente.getEscolaridadMaxima().equals("mae") ? "Maestria" : "Doctorado"%></p>
                     </div>
                     <div>
                         <label>Estado civil:</label>
@@ -86,7 +88,7 @@
                     </div>
                     <div>
                         <label>Autoreporte de padecimientos:</label>
-                        <p>Needed</p>
+                        <p><%=paciente.getAutopadecimiento()%></p>
                     </div>
                     <div>
                         <label>Correo electrónico:</label>
@@ -100,7 +102,7 @@
                     </div>
                     <div>
                         <label>Fecha de evaluación:</label>
-                        <p>Needed</p>
+                        <p><%=Calendar.getInstance().getTime()%></p>
                     </div>
                     <div>
                         <label>Afiliación médica:</label>
@@ -407,15 +409,25 @@
                     </div>
                 </div>
             </div>
-            <!-- @@@@@INFORMACION DE GERONTOLOGIA@@@@@ -->
-
-            <p><%session.getAttribute("paciente");%></p>
-            <p><%session.getAttribute("geriatria");%></p>
-            <p><%session.getAttribute("nutricion");%></p>
-            <p><%session.getAttribute("movilidad");%></p>
-            <p><%session.getAttribute("gerontologia");%></p>
-            <input type="submit" value="imprimir en pdf">
-            <input type="submit" value="Guardar" class="submit">
+            <!-- @@@@@HIDDEN FORMS@@@@@ -->
+            <div class="row">
+                <label>Conclusiones finales</label>
+                <form action="reporte" method="POST">
+                    <input type="text" name="conclusion" required>
+                    <input hidden name="paciente" value="<%=session.getAttribute("paciente")%>" required>
+                    <input hidden name="geriatria" value="<%=session.getAttribute("geriatria")%>" required>
+                    <input hidden name="nutricion" value="<%=session.getAttribute("nutricion")%>" required>
+                    <input hidden name="movilidad" value="<%=session.getAttribute("movilidad")%>" required>
+                    <input hidden name="gerontologia" value="<%=session.getAttribute("gerontologia")%>" required>
+                    <input hidden name="act" value="ngraph" required>
+                    <input class="button-primary" type="submit" value="Submit" />
+                </form>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <input type="submit" value="imprimir en pdf">
+                </div>
+            </div>
         </div>
 
     </body>

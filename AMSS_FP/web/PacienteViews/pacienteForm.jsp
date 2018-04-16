@@ -47,20 +47,20 @@
         <link rel="icon" type="image/png" href="images/favicon.png">
     </head>
     <div class="navbar-spacer"></div>
-        <nav class="navbar">
-            <div class="container">
-                <ul class="navbar-list">
-                    <li class="navbar-item">
-                        <a class="navbar-link" href="index.jsp">Nova</a>
-                    </li>
-                </ul>
-                <ul class="navbar-list">
-                    <li class="navbar-item">
-                        <a class="navbar-link" href="home.jsp">Regresar</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <nav class="navbar">
+        <div class="container">
+            <ul class="navbar-list">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="index.jsp">Nova</a>
+                </li>
+            </ul>
+            <ul class="navbar-list">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="home.jsp">Regresar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <body>
         <div class="container">
             <div class="six columns" style="margin-top: 15%">
@@ -119,6 +119,27 @@
                             <input class="u-full-width" type="date" name="fechaDeNacimiento" value="<c:out value="${paciente.getFechaDeNacimiento()}"/>">
                         </div>
                     </div>   
+
+                        <div class="row">
+                            <div class="one-half column">
+                                <label>Escolaridad Maxima</label>
+                                <select name="escolaridadMaxima" type="text" required>
+                                    <option value="pri" ${paciente.getEscolaridadMaxima().equals("pri")? 'selected' : ''}>Primaria</option>
+                                    <option value="sec" ${paciente.getEscolaridadMaxima().equals("sec")? 'selected' : ''}>Secundaria</option>
+                                    <option value="pre" ${paciente.getEscolaridadMaxima().equals("pre")? 'selected' : ''}>Preparatoria</option>
+                                    <option value="lic" ${paciente.getEscolaridadMaxima().equals("lic")? 'selected' : ''}>Licenciatura</option>
+                                    <option value="mae" ${paciente.getEscolaridadMaxima().equals("mae")? 'selected' : ''}>Maestria</option>
+                                    <option value="doc" ${paciente.getEscolaridadMaxima().equals("doc")? 'selected' : ''}>Doctorado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="one-half column">
+                                <label>Reporte de autopadecimiento:</label>
+                                <input type="text" name="autopadecimiento" value="<c:out value="${paciente.getAutopadecimiento()}"/>" required>
+                            </div>
+                        </div>
 
                     <div class="row">
                         <div class="row">
@@ -249,7 +270,7 @@
                     <div class="row">
                         <div class="seven columns">
                             <label for="katz">Codigo Postal :</label>
-                            <input class="u-full-width" type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
+                            <input class="u-full-width" pattern="/\d\d\d\d\d/" type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
                         </div>
                     </div>
                     <input class="button-primary" type="submit" value="Submit" />

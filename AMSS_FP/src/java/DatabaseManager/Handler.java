@@ -93,9 +93,7 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    byte[] image = resultset.getBytes("image");
                     Usuario us = new Usuario(resultset.getInt("idUsuario"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("email"), resultset.getString("usuario"), resultset.getDate("fechaNacimiento"), resultset.getDate("fechaValidez"), resultset.getInt("privilegio"), null);
-                    us.setPreparedPhoto(image);
                     return us;
                 }
                 //return session;
@@ -273,7 +271,7 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"));
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
 
                 }
                 //return session;
@@ -296,7 +294,7 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE idPaciente=" + username + "");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"));
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
 
                 }
                 //return session;
@@ -320,7 +318,7 @@ public class Handler {
                 //if there is no data on the data set, the session return will be false
                 ArrayList<Paciente> array = new ArrayList<>();
                 while (resultset.next()) {
-                    Paciente pac = new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"));
+                    Paciente pac = new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
                     array.add(pac);
                 }
                 return array.toArray(new Paciente[array.size()]);
@@ -372,6 +370,8 @@ public class Handler {
                     + "`tipoSangre`,\n"
                     + "`afiliacionMedica`,\n"
                     + "`amai`,\n"
+                    + "`escolaridadMaxima`,\n"
+                    + "`autopadecimiento`,\n"
                     + "`cohabitacion`)\n"
                     + "VALUES(\n"
                     + "'" + paciente.getPrimerNombre() + "',\n"
@@ -386,6 +386,8 @@ public class Handler {
                     + "'" + paciente.getTipoSangre() + "',\n"
                     + "'" + paciente.getAfiliacionMedica() + "',\n"
                     + "'" + paciente.getAmai() + "',\n"
+                    + "'" + paciente.getEscolaridadMaxima() + "',\n"
+                    + "'" + paciente.getAutopadecimiento() + "',\n"
                     + "" + paciente.getCohabitacion() + "\n"
                     + ");";
             System.out.println(rment);
@@ -420,6 +422,8 @@ public class Handler {
                     + "`tipoSangre` = '" + paciente.getTipoSangre() + "',\n"
                     + "`afiliacionMedica` = '" + paciente.getAfiliacionMedica() + "',\n"
                     + "`amai` = '" + paciente.getAmai() + "',\n"
+                    + "`escolaridadMaxima` = '" + paciente.getEscolaridadMaxima() + "',\n"
+                    + "`autopadecimiento` = '" + paciente.getAutopadecimiento() + "',\n"
                     + "`cohabitacion` = " + paciente.getCohabitacion() + "\n"
                     + "WHERE `usuario` = '" + paciente.getUsuario() + "';");
             return rowsaffected > 0;
@@ -1297,6 +1301,38 @@ public class Handler {
             Connection connection = DriverManager.getConnection(host, huser, hpassword);
             Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit=" + valoracionID + ";");
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+    }
+
+    public static void addReporte(Reporte repo) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            PreparedStatement pre = connection.prepareStatement("INSERT INTO `AMSS_BDD`.`reportePaciente`\n"
+                    + "("
+                    + "`usuario`,\n"
+                    + "`idGeriatra`,\n"
+                    + "`idNutricion`,\n"
+                    + "`idMovilidad`,\n"
+                    + "`idGerontologia`,\n"
+                    + "`conclusion`,\n"
+                    + "`fechaLlenado`)\n"
+                    + "VALUES\n"
+                    + "(?,?,?,?,?,?,?);");
+            pre.setString(1, repo.getUsuario());
+            pre.setInt(2, repo.getIdGeriatra());
+            pre.setInt(3, repo.getIdNutricion());
+            pre.setInt(4, repo.getIdMovilidad());
+            pre.setInt(5, repo.getIdGerontologia());
+            pre.setString(6, repo.getConclusion());
+            pre.setDate(7, convertFromJAVADateToSQLDate(repo.getFechaLlenado()));
+            pre.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }

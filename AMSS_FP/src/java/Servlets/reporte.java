@@ -6,6 +6,8 @@
 package Servlets;
 
 import BasicElements.Paciente;
+import BasicElements.Reporte;
+import BasicElements.Usuario;
 import BasicElements.formaFragilidad;
 import BasicElements.formaGeriatria;
 import BasicElements.formaGerontologia;
@@ -13,6 +15,8 @@ import BasicElements.valoracionFitbit;
 import DatabaseManager.Handler;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -89,8 +93,22 @@ public class reporte extends HttpServlet {
             request.getSession().setAttribute("gerontologia", request.getParameter("gerontologia"));
             RequestDispatcher req = request.getRequestDispatcher("/ReporteViews/reporteFinal.jsp");
             req.forward(request, response);
+        }else{
+            String paciente = request.getParameter("paciente");
+            String geriatria = request.getParameter("geriatria");
+            String nutricion = request.getParameter("nutricion");
+            String movilidad = request.getParameter("movilidad");
+            String gerontologia = request.getParameter("gerontologia");
+            String conclusiones = request.getParameter("conclusion");
+            //Yes, I think we did it
+            request.getSession().setAttribute("pacienteUsername", paciente);
+            Date date = Calendar.getInstance().getTime();  
+            Reporte repo = new Reporte(1000,paciente,Integer.parseInt(geriatria),Integer.parseInt(nutricion),Integer.parseInt(movilidad),Integer.parseInt(gerontologia),conclusiones,date);
+            Handler.addReporte(repo);
+            //Send him back
+            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            req.forward(request, response);
         }
-
     }
 
     /**

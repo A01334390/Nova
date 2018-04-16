@@ -75,54 +75,7 @@ public class login extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getParameter("action") != null) {
-            if (request.getParameter("action").equals("inventory")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/BasicViews/inventory/inventoryindex.jsp");
-                if (disp != null) {
-                    disp.include(request, response);
-                }
-            }
-            if (request.getParameter("action").equals("order")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/BasicViews/order/orderHome.jsp");
-                if (disp != null) {
-                    disp.include(request, response);
-                }
-            }
-            if (request.getParameter("action").equals("advanced")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/AdvancedViews/advancedhome.jsp");
-            if (disp != null) {
-                    disp.include(request, response);
-                }                
-            }
-            if (request.getParameter("action").equals("material")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/BasicViews/material/materialindex.jsp");
-            if (disp != null) {
-                    disp.include(request, response);
-                }                
-            }
-            if (request.getParameter("action").equals("user")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/BasicViews/user/userindex.jsp");
-                if (disp != null) {
-                    disp.include(request, response);
-                }
-            }
-            if (request.getParameter("action").equals("client")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/BasicViews/client/clientindex.jsp");
-                if (disp != null) {
-                    disp.include(request, response);
-                }
-            }
 
-            if (request.getParameter("action").equals("advanced")) {
-                System.out.println("advanced");
-            }
-            if (request.getParameter("action").equals("notebook")) {
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/BasicViews/notebook/notebookindex.jsp");
-                if (disp != null) {
-                    disp.include(request, response);
-                }
-            }
-        }
     }
 
     /**

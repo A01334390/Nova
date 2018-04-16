@@ -16,10 +16,10 @@ import java.util.Date;
 public class Paciente {
     
     private int pacienteID, genero, estadoCivil, cohabitacion;
-    private String primerNombre, segundoNombre, email, nacionalidad, estadoNacimiento, tipoSangre, afiliacionMedica, amai,usuario;
+    private String primerNombre, segundoNombre, email, nacionalidad, estadoNacimiento, tipoSangre, afiliacionMedica, amai,usuario,escolaridadMaxima,autopadecimiento;
     private Date fechaDeNacimiento;
 
-    public Paciente(int pacienteID, int genero, int estadoCivil, int cohabitacion, String primerNombre, String segundoNombre, String usuario, String email, String nacionalidad, String estadoNacimiento, String tipoSangre, String afiliacionMedica, String amai, Date fechaDeNacimiento) {
+    public Paciente(int pacienteID, int genero, int estadoCivil, int cohabitacion, String primerNombre, String segundoNombre, String usuario, String email, String nacionalidad, String estadoNacimiento, String tipoSangre, String afiliacionMedica, String amai, Date fechaDeNacimiento, String escolaridadMaxima,String autopadecimiento) {
         this.pacienteID = pacienteID;
         this.genero = genero;
         this.estadoCivil = estadoCivil;
@@ -34,6 +34,8 @@ public class Paciente {
         this.afiliacionMedica = afiliacionMedica;
         this.amai = amai;
         this.fechaDeNacimiento = fechaDeNacimiento;
+        this.escolaridadMaxima = escolaridadMaxima;
+        this.autopadecimiento = autopadecimiento;
     }
 
     public String getUsuario() {
@@ -147,9 +149,27 @@ public class Paciente {
     public void setFechaDeNacimiento(Date fechaDeNacimiento) {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
+
+    public String getEscolaridadMaxima() {
+        return escolaridadMaxima;
+    }
+
+    public void setEscolaridadMaxima(String escolaridadMaxima) {
+        this.escolaridadMaxima = escolaridadMaxima;
+    }
+
+    public String getAutopadecimiento() {
+        return autopadecimiento;
+    }
+
+    public void setAutopadecimiento(String autopadecimiento) {
+        this.autopadecimiento = autopadecimiento;
+    }
+    
+    
     
     private static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
         return dateFormat.format(date);
     }
 

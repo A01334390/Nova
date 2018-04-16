@@ -23,7 +23,7 @@
         <!-- Basic Page Needs
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <meta charset="utf-8">
-        <title>Nova - Expediente de <c:out value="${paciente.getPrimerNombre()}"/></title>
+        <title>Nova - Expediente del paciente</title>
         <meta name="description" content="">
         <meta name="author" content="">
 

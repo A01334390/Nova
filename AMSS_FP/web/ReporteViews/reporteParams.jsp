@@ -15,11 +15,27 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+    <head> <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta charset="utf-8">
+        <title>Nova - Forma para Usuarios</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Mobile Specific Metas
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- FONT
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+        <!-- CSS
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="stylesheet" href="css/normalize.css" type="text/css">
+        <link rel="stylesheet" href="css/skeleton.css" type="text/css">
         <script src="js/site.js"></script>
-        <link rel="stylesheet" href="css/custom.css">
+        <link rel="stylesheet" href="css/custom.css" type="text/css">
     </head>
     <body>
         <div class="navbar-spacer"></div>
@@ -115,8 +131,8 @@
                 </tbody>
                 </table>
             </div>
-                    <input name="pacienteUsername" value="<%=session.getAttribute("paciente")%>" type='text' hidden >
-                    <input name="act" value="gen" hidden>
+            <input name="pacienteUsername" value="<%=session.getAttribute("paciente")%>" type='text' hidden >
+            <input name="act" value="gen" hidden>
             <input class="button-primary" type="submit" value="Submit" />
         </form>
     </body>

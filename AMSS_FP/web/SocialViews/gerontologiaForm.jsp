@@ -80,7 +80,7 @@
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input class="u-full-width" type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input class="u-full-width" pattern="/((0[1-9]|1[0-2])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/" type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
 
