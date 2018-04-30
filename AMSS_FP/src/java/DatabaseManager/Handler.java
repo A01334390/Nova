@@ -9,14 +9,13 @@ import BasicElements.*;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.security.Security;
 import org.bouncycastle.jcajce.provider.digest.SHA3.DigestSHA3;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import javax.naming.*;
 
 /**
  *
@@ -24,9 +23,32 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  */
 public class Handler {
 
-    private static String host = "jdbc:mysql://localhost/AMSS_BDD";
-    private static String huser = "root";
-    private static String hpassword = "";
+    private static String getHost() throws NamingException {
+        Context ctx = new InitialContext();
+        Context env = (Context) ctx.lookup("java:comp/env");
+        final String hoster = (String) env.lookup("mysql-address");
+        final String table = (String) env.lookup("mysql-table");
+
+        return "jdbc:mysql://" + hoster + table;
+    }
+
+    private static String getHuser() throws NamingException {
+        Context ctx = new InitialContext();
+        Context env = (Context) ctx.lookup("java:comp/env");
+        final String user = (String) env.lookup("mysql-user");
+
+        return user;
+    }
+
+    private static String getHpassword() throws NamingException {
+        Context ctx = new InitialContext();
+        Context env = (Context) ctx.lookup("java:comp/env");
+        String pass = (String) env.lookup("mysql-password");
+        if (pass.equals("none")) {
+            pass = "";
+        }
+        return pass;
+    }
 
     /**
      * This method validates if the user exit, however, it does so without ever
@@ -37,8 +59,8 @@ public class Handler {
      * @return if the user exists in the database
      * @throws java.io.UnsupportedEncodingException
      */
-    public static boolean userValidation(String username, String password) throws UnsupportedEncodingException {
-        Security.addProvider(new BouncyCastleProvider());
+    public static boolean userValidation(String username, String password) throws UnsupportedEncodingException, NamingException {
+        System.out.println(getHpassword());
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -46,7 +68,7 @@ public class Handler {
         }
         int count = 0;
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 PreparedStatement pre = connection.prepareStatement("SELECT usuario FROM AMSS_BDD.Usuario WHERE usuario=? AND contrasenia=?;");
                 pre.setString(1, username);
                 //Create the HASH
@@ -82,14 +104,14 @@ public class Handler {
 //\____/____/\__,_/\__,_/_/  /_/\____/ 
 //                    
 
-    public static Usuario userSearch(String username, String select) {
+    public static Usuario userSearch(String username, String select) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -105,14 +127,14 @@ public class Handler {
         return null;
     }
 
-    public static Usuario userSearchid(String username, String select) {
+    public static Usuario userSearchid(String username, String select) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Usuario WHERE idUsuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -127,14 +149,14 @@ public class Handler {
         return null;
     }
 
-    public static Usuario[] getAllUsers() {
+    public static Usuario[] getAllUsers() throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.Usuario");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<Usuario> array = new ArrayList<>();
@@ -150,14 +172,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean deleteUsuario(String usuarioID) {
+    public static boolean deleteUsuario(String usuarioID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             PreparedStatement pre = connection.prepareStatement("DELETE FROM AMSS_BDD.Usuario WHERE usuario='" + usuarioID + "';");
             int rowsaffected = pre.executeUpdate();
             return rowsaffected > 0;
@@ -167,14 +189,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addUser(Usuario user, String password) {
+    public static boolean addUser(Usuario user, String password) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             PreparedStatement pre = connection.prepareStatement("INSERT INTO AMSS_BDD.Usuario(primerNombre,segundoNombre,fechaNacimiento,email,usuario,contrasenia,fechaValidez,privilegio) VALUES (?,?,?,?,?,?,?,?);");
             pre.setString(1, user.getPrimerNombre());
             pre.setString(2, user.getSegundoNombre());
@@ -203,14 +225,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean updateUser(Usuario user, String password, int photolength) throws ParseException {
+    public static boolean updateUser(Usuario user, String password, int photolength) throws ParseException, NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             PreparedStatement pre = connection.prepareStatement("UPDATE `AMSS_BDD`.`Usuario`\n"
                     + "SET\n"
                     + "`primerNombre` = ?,\n"
@@ -260,14 +282,14 @@ public class Handler {
 // / ____/ ___ / /____/ // /___/ /|  / / / / /___   
 ///_/   /_/  |_\____/___/_____/_/ |_/ /_/ /_____/   
 //                                                  
-    public static Paciente pacienteSearch(String username, String select) {
+    public static Paciente pacienteSearch(String username, String select) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -283,14 +305,14 @@ public class Handler {
         return null;
     }
 
-    public static Paciente pacienteSearchid(String username, String select) {
+    public static Paciente pacienteSearchid(String username, String select) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE idPaciente=" + username + "");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -306,14 +328,14 @@ public class Handler {
         return null;
     }
 
-    public static Paciente[] getAllPacientes() {
+    public static Paciente[] getAllPacientes() throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.Paciente;");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<Paciente> array = new ArrayList<>();
@@ -330,14 +352,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean deletePaciente(String usuarioID) {
+    public static boolean deletePaciente(String usuarioID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("DELETE FROM AMSS_BDD.Paciente WHERE usuario='" + usuarioID + "';");
             return rowsaffected > 0;
@@ -347,14 +369,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addPaciente(Paciente paciente) {
+    public static boolean addPaciente(Paciente paciente) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String rment = "INSERT INTO `AMSS_BDD`.`Paciente`\n"
                     + "("
@@ -399,14 +421,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean updatePaciente(Paciente paciente) {
+    public static boolean updatePaciente(Paciente paciente) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("UPDATE `AMSS_BDD`.`Paciente`\n"
                     + "SET\n"
@@ -437,14 +459,14 @@ public class Handler {
 ///   __}| {_  | {}  }| | / {} \{_   _}| {}  }| | / {} \ 
 //\  {_ }| {__ | .-. \| |/  /\  \ | |  | .-. \| |/  /\  \
 // `---' `----'`-' `-'`-'`-'  `-' `-'  `-' `-'`-'`-'  `-'
-    public static formaGeriatria formaGeriatriaSearch(String idForma) {
+    public static formaGeriatria formaGeriatriaSearch(String idForma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria WHERE idformatoGeriatria=" + idForma + ";");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -459,14 +481,14 @@ public class Handler {
         return null;
     }
 
-    public static formaGeriatria[] getAllformaGeriatria(String idPaciente) {
+    public static formaGeriatria[] getAllformaGeriatria(String idPaciente) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.formatoGeriatria WHERE idPaciente = " + idPaciente + ";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaGeriatria> array = new ArrayList<>();
@@ -482,14 +504,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean deleteFormaGeriatria(String formaID) {
+    public static boolean deleteFormaGeriatria(String formaID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`formatoGeriatria`\n"
                     + "WHERE idformatoGeriatria=" + formaID + ";");
@@ -500,14 +522,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addFormaGeriatria(formaGeriatria forma) {
+    public static boolean addFormaGeriatria(formaGeriatria forma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String rment = "INSERT INTO `AMSS_BDD`.`formatoGeriatria`\n"
                     + "("
@@ -560,14 +582,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean updateFormaGeriatria(formaGeriatria forma) {
+    public static boolean updateFormaGeriatria(formaGeriatria forma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("UPDATE `AMSS_BDD`.`formatoGeriatria`\n"
                     + "SET\n"
@@ -622,14 +644,14 @@ public class Handler {
 //                           |  \__| $$                                               
 //                            \$$    $$                                               
 //                             \$$$$$$                                                
-    public static formaFragilidad[] getAllformaFragilidad(String idPaciente) {
+    public static formaFragilidad[] getAllformaFragilidad(String idPaciente) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT `evaluacionFragilidad`.`idevaluacionFragilidad`,\n"
                         + "    `evaluacionFragilidad`.`perdidaPeso`,\n"
                         + "    `evaluacionFragilidad`.`perdidaPeso_interpretacion`,\n"
@@ -664,14 +686,14 @@ public class Handler {
         return null;
     }
 
-    public static formaFragilidad formaFragilidadSearch(String idForma) {
+    public static formaFragilidad formaFragilidadSearch(String idForma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.evaluacionFragilidad WHERE idevaluacionFragilidad=" + idForma + ";");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -690,14 +712,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean deleteFormaFragilidad(String formaID) {
+    public static boolean deleteFormaFragilidad(String formaID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`evaluacionFragilidad`\n"
                     + "WHERE idevaluacionFragilidad=" + formaID + ";");
@@ -708,14 +730,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addFormaFragilidad(formaFragilidad forma) {
+    public static boolean addFormaFragilidad(formaFragilidad forma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String rment = "INSERT INTO `AMSS_BDD`.`evaluacionFragilidad`\n"
                     + "("
@@ -766,14 +788,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean updateFormaFragilidad(formaFragilidad forma) {
+    public static boolean updateFormaFragilidad(formaFragilidad forma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String qer = "UPDATE `AMSS_BDD`.`evaluacionFragilidad`\n"
                     + "SET\n"
@@ -805,14 +827,14 @@ public class Handler {
         return false;
     }
 
-    public static formaGerontologia formaGerontologiaSearch(String idForm) {
+    public static formaGerontologia formaGerontologiaSearch(String idForm) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica WHERE idValoracionGerontologica=" + idForm + ";");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -829,14 +851,14 @@ public class Handler {
         return null;
     }
 
-    public static formaGerontologia[] getAllformaGerontologia(String idPaciente) {
+    public static formaGerontologia[] getAllformaGerontologia(String idPaciente) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.ValoracionGerontologica WHERE idPaciente=" + idPaciente + ";");
                 //if there is no data on the data set, the session return will be false
                 ArrayList<formaGerontologia> array = new ArrayList<>();
@@ -854,14 +876,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean deleteFormaGerontologia(String idForm) {
+    public static boolean deleteFormaGerontologia(String idForm) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`ValoracionGerontologica`\n"
                     + "WHERE idValoracionGerontologica=" + idForm + ";");
@@ -872,14 +894,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addFormaGerontologia(formaGerontologia forma) {
+    public static boolean addFormaGerontologia(formaGerontologia forma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String rment = "INSERT INTO `AMSS_BDD`.`ValoracionGerontologica`\n"
                     + "("
@@ -916,14 +938,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean updateFormaGerontologia(formaGerontologia forma) {
+    public static boolean updateFormaGerontologia(formaGerontologia forma) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String qer = "UPDATE `AMSS_BDD`.`ValoracionGerontologica`\n"
                     + "SET\n"
@@ -958,14 +980,14 @@ public class Handler {
      * @param dom
      * @return
      */
-    public static boolean deleteDomicilio(String usuario) {
+    public static boolean deleteDomicilio(String usuario) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("DELETE FROM `AMSS_BDD`.`Domicilio`\n"
                     + "WHERE usuario='" + usuario + "';");
@@ -976,14 +998,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addDomicilio(Domicilio dom) {
+    public static boolean addDomicilio(Domicilio dom) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String rment = "INSERT INTO `AMSS_BDD`.`Domicilio`\n"
                     + "("
@@ -1015,14 +1037,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean updateDomicilio(Domicilio dom) {
+    public static boolean updateDomicilio(Domicilio dom) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String qer = "UPDATE `AMSS_BDD`.`Domicilio`\n"
                     + "SET\n"
@@ -1045,14 +1067,14 @@ public class Handler {
         return false;
     }
 
-    public static Domicilio searchDomicilio(String user) {
+    public static Domicilio searchDomicilio(String user) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT `Domicilio`.`idDomicilio`,\n"
                         + "    `Domicilio`.`pais`,\n"
                         + "    `Domicilio`.`estado`,\n"
@@ -1079,14 +1101,14 @@ public class Handler {
         return null;
     }
 
-    public static Fitbit searchFitbit(String OAUTH_CLIENTID) {
+    public static Fitbit searchFitbit(String OAUTH_CLIENTID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.FitbitUserData WHERE OAUTH_CLIENTID='" + OAUTH_CLIENTID + "';");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -1102,14 +1124,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean deleteFitbit(String OAUTH_CLIENTID) {
+    public static boolean deleteFitbit(String OAUTH_CLIENTID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("DELETE FROM AMSS_BDD.FitbitUserData WHERE OAUTH_CLIENTID='" + OAUTH_CLIENTID + "';");
             return rowsaffected > 0;
@@ -1119,14 +1141,14 @@ public class Handler {
         return false;
     }
 
-    public static Fitbit getAllFitbit() {
+    public static Fitbit getAllFitbit() throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 ResultSet resultset = statement.executeQuery("SELECT * FROM AMSS_BDD.FitbitUserData;");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
@@ -1142,14 +1164,14 @@ public class Handler {
         return null;
     }
 
-    public static boolean addFitbit(Fitbit fitbit) {
+    public static boolean addFitbit(Fitbit fitbit) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             String rment = "INSERT INTO `AMSS_BDD`.`FitbitUserData`\n"
                     + "("
@@ -1176,14 +1198,14 @@ public class Handler {
         return false;
     }
 
-    public static boolean addValoracionFitbit(valoracionFitbit vf) {
+    public static boolean addValoracionFitbit(valoracionFitbit vf) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             PreparedStatement pre = connection.prepareStatement("INSERT INTO `AMSS_BDD`.`valoracionFitbit`\n"
                     + "("
                     + "`usuario`,\n"
@@ -1216,7 +1238,7 @@ public class Handler {
         return sqlDate;
     }
 
-    public static valoracionFitbit[] getAllValoracionFitbit(String usuario) {
+    public static valoracionFitbit[] getAllValoracionFitbit(String usuario) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -1224,7 +1246,7 @@ public class Handler {
         }
         try {
             ArrayList<valoracionFitbit> array = new ArrayList<>();
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 PreparedStatement pre = connection.prepareStatement("SELECT * FROM AMSS_BDD.valoracionFitbit WHERE usuario=?;");
                 pre.setString(1, usuario);
                 ResultSet rs = pre.executeQuery();
@@ -1254,7 +1276,7 @@ public class Handler {
         return null;
     }
 
-    public static valoracionFitbit searchValoracionFitbit(String valoracionID) {
+    public static valoracionFitbit searchValoracionFitbit(String valoracionID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -1262,7 +1284,7 @@ public class Handler {
         }
         try {
             valoracionFitbit vf = null;
-            try (Connection connection = DriverManager.getConnection(host, huser, hpassword); Statement statement = connection.createStatement()) {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
                 PreparedStatement pre = connection.prepareStatement("SELECT * FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit=?;");
                 pre.setString(1, valoracionID);
                 ResultSet rs = pre.executeQuery();
@@ -1291,14 +1313,14 @@ public class Handler {
         return null;
     }
 
-    public static void deleteValoracionFitbit(String valoracionID) {
+    public static void deleteValoracionFitbit(String valoracionID) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM AMSS_BDD.valoracionFitbit WHERE idvaloracionFitbit=" + valoracionID + ";");
         } catch (SQLException e) {
@@ -1306,14 +1328,14 @@ public class Handler {
         }
     }
 
-    public static void addReporte(Reporte repo) {
+    public static void addReporte(Reporte repo) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            Connection connection = DriverManager.getConnection(host, huser, hpassword);
+            Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword());
             PreparedStatement pre = connection.prepareStatement("INSERT INTO `AMSS_BDD`.`reportePaciente`\n"
                     + "("
                     + "`usuario`,\n"

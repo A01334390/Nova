@@ -77,4 +77,24 @@
             30
         </session-timeout>
     </session-config>
+    <env-entry>
+        <env-entry-name>mysql-address</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>localhost/</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>mysql-table</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>AMSS_BDD</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>mysql-user</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>root</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>mysql-password</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>none</env-entry-value>
+    </env-entry>
 </web-app>
