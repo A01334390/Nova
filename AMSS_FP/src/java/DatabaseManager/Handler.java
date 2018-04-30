@@ -6,6 +6,8 @@
 package DatabaseManager;
 
 import BasicElements.*;
+import SecurityElements.RSADecryption;
+import SecurityElements.RSAEncryption;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.text.ParseException;
@@ -22,6 +24,9 @@ import javax.naming.*;
  * @author a01334390
  */
 public class Handler {
+    
+    static RSADecryption rsadec = new RSADecryption();
+    static RSAEncryption rsaenc = new RSAEncryption();
 
     private static String getHost() throws NamingException {
         Context ctx = new InitialContext();
@@ -49,6 +54,23 @@ public class Handler {
         }
         return pass;
     }
+    
+    private static String getPrivateKeyFilePath() throws NamingException {
+        Context ctx = new InitialContext();
+        Context env = (Context) ctx.lookup("java:comp/env");
+        String filepath = (String) env.lookup("private-key-location");
+
+        return filepath;
+    }
+    
+    private static String getPublicKeyFilePath() throws NamingException {
+        Context ctx = new InitialContext();
+        Context env = (Context) ctx.lookup("java:comp/env");
+        String filepath = (String) env.lookup("public-key-location");
+
+        return filepath;
+    }
+  
 
     /**
      * This method validates if the user exit, however, it does so without ever
@@ -60,7 +82,8 @@ public class Handler {
      * @throws java.io.UnsupportedEncodingException
      */
     public static boolean userValidation(String username, String password) throws UnsupportedEncodingException, NamingException {
-        System.out.println(getHpassword());
+        String enc = rsaenc.encrypt(getPublicKeyFilePath(),username);
+        System.out.println(rsadec.decrypt(getPrivateKeyFilePath(), enc));
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -293,7 +316,9 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE usuario='" + username + "'");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
+                    String primerNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("primerNombre"));
+                    String segundoNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("segundoNombre"));
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre,segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
 
                 }
                 //return session;
@@ -316,8 +341,9 @@ public class Handler {
                 ResultSet resultset = statement.executeQuery("SELECT " + select + " FROM AMSS_BDD.Paciente WHERE idPaciente=" + username + "");
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {
-                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
-
+                    String primerNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("primerNombre"));
+                    String segundoNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("segundoNombre"));
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre,segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
                 }
                 //return session;
             }
@@ -340,7 +366,9 @@ public class Handler {
                 //if there is no data on the data set, the session return will be false
                 ArrayList<Paciente> array = new ArrayList<>();
                 while (resultset.next()) {
-                    Paciente pac = new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), resultset.getString("primerNombre"), resultset.getString("segundoNombre"), resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
+                    String primerNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("primerNombre"));
+                    String segundoNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("segundoNombre"));
+                    Paciente pac = new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre,segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
                     array.add(pac);
                 }
                 return array.toArray(new Paciente[array.size()]);
@@ -396,8 +424,8 @@ public class Handler {
                     + "`autopadecimiento`,\n"
                     + "`cohabitacion`)\n"
                     + "VALUES(\n"
-                    + "'" + paciente.getPrimerNombre() + "',\n"
-                    + "'" + paciente.getSegundoNombre() + "',\n"
+                    + "'" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getPrimerNombre()) + "',\n"
+                    + "'" +  rsaenc.encrypt(getPublicKeyFilePath(), paciente.getSegundoNombre())+ "',\n"
                     + "'" + paciente.getUsuario() + "',\n"
                     + "'" + paciente.getFechaDeNacimiento() + "',\n"
                     + "" + paciente.getGenero() + ",\n"
@@ -432,8 +460,8 @@ public class Handler {
             Statement statement = connection.createStatement();
             int rowsaffected = statement.executeUpdate("UPDATE `AMSS_BDD`.`Paciente`\n"
                     + "SET\n"
-                    + "`primerNombre` = '" + paciente.getPrimerNombre() + "',\n"
-                    + "`segundoNombre` = '" + paciente.getSegundoNombre() + "',\n"
+                    + "`primerNombre` = '" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getPrimerNombre()) + "',\n"
+                    + "`segundoNombre` = '" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getSegundoNombre()) + "',\n"
                     + "`usuario` = '" + paciente.getUsuario() + "',\n"
                     + "`fechaDeNacimiento` = '" + paciente.getFechaDeNacimiento() + "',\n"
                     + "`genero` = " + paciente.getGenero() + ",\n"

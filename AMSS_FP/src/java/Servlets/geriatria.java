@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,51 +66,67 @@ public class geriatria extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("action").equals("add")) {
-            request.setAttribute("forma", null);
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("usuario",us);
-            request.setAttribute("paciente",pac);
-             request.setAttribute("show",false);
-            RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
-            req.forward(request, response);
+            try {
+                request.setAttribute("forma", null);
+                String idUsuario = request.getParameter("idUsuario");
+                String idPaciente = request.getParameter("idPaciente");
+                Usuario us = Handler.userSearchid(idUsuario, "*");
+                Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
+                request.setAttribute("usuario",us);
+                request.setAttribute("paciente",pac);
+                request.setAttribute("show",false);
+                RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("edit")) {
-            String idForm = request.getParameter("idForm");
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            formaGeriatria forma = Handler.formaGeriatriaSearch(idForm);
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("forma", forma);
-            request.setAttribute("usuario",us);
-            request.setAttribute("paciente",pac);
-            request.setAttribute("show",false);
-            RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
-            req.forward(request, response);
+            try {
+                String idForm = request.getParameter("idForm");
+                String idUsuario = request.getParameter("idUsuario");
+                String idPaciente = request.getParameter("idPaciente");
+                formaGeriatria forma = Handler.formaGeriatriaSearch(idForm);
+                Usuario us = Handler.userSearchid(idUsuario, "*");
+                Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
+                request.setAttribute("forma", forma);
+                request.setAttribute("usuario",us);
+                request.setAttribute("paciente",pac);
+                request.setAttribute("show",false);
+                RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("erase")) {
-            String formID = request.getParameter("idForm");
-            Handler.deleteFormaGeriatria(formID);
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-            req.forward(request, response);
+            try {
+                String formID = request.getParameter("idForm");
+                Handler.deleteFormaGeriatria(formID);
+                RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if(request.getParameter("action").equals("show")){
-            String formID = request.getParameter("idForm");
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            formaGeriatria forma = Handler.formaGeriatriaSearch(formID);
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("forma", forma);
-            request.setAttribute("forma", forma);
-            request.setAttribute("usuario",us);
-            request.setAttribute("paciente",pac);
-            request.setAttribute("show",true);
-            RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
-            req.forward(request, response);
+            try {
+                String formID = request.getParameter("idForm");
+                String idUsuario = request.getParameter("idUsuario");
+                String idPaciente = request.getParameter("idPaciente");
+                formaGeriatria forma = Handler.formaGeriatriaSearch(formID);
+                Usuario us = Handler.userSearchid(idUsuario, "*");
+                Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
+                request.setAttribute("forma", forma);
+                request.setAttribute("forma", forma);
+                request.setAttribute("usuario",us);
+                request.setAttribute("paciente",pac);
+                request.setAttribute("show",true);
+                RequestDispatcher req = request.getRequestDispatcher("/GeriatraViews/geriatraForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -123,28 +140,32 @@ public class geriatria extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String formID = request.getParameter("idForm");
-        if (Handler.formaGeriatriaSearch(formID) == null) {
-            formaGeriatria forma = null;
-            try {
-                String idUsuario = request.getParameter("idUsuario");
-                String idPaciente = request.getParameter("idPaciente");
-                forma = new formaGeriatria(1000, request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawtonBrody"), request.getParameter("lawtonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(idUsuario), Integer.parseInt(idPaciente));
-            } catch (ParseException ex) {
-                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            String formID = request.getParameter("idForm");
+            if (Handler.formaGeriatriaSearch(formID) == null) {
+                formaGeriatria forma = null;
+                try {
+                    String idUsuario = request.getParameter("idUsuario");
+                    String idPaciente = request.getParameter("idPaciente");
+                    forma = new formaGeriatria(1000, request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawtonBrody"), request.getParameter("lawtonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(idUsuario), Integer.parseInt(idPaciente));
+                } catch (ParseException ex) {
+                    Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.addFormaGeriatria(forma);
+            } else {
+                formaGeriatria forma = null;
+                try {
+                    forma = new formaGeriatria(Integer.parseInt("-1"), request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawthonBrody"), request.getParameter("lawthonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                } catch (ParseException ex) {
+                    Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.updateFormaGeriatria(forma);
             }
-            Handler.addFormaGeriatria(forma);
-        } else {
-            formaGeriatria forma = null;
-            try {
-                forma = new formaGeriatria(Integer.parseInt("-1"), request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawthonBrody"), request.getParameter("lawthonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
-            } catch (ParseException ex) {
-                Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Handler.updateFormaGeriatria(forma);
+            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            req.forward(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-        req.forward(request, response);
 
     }
 

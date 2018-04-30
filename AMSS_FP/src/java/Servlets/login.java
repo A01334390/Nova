@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import DatabaseManager.Handler;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -87,34 +89,38 @@ public class login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        //Make this an MD5 hash
-        if (Handler.userValidation(username, password)) {
-            Usuario us = Handler.userSearch(username,"*");
-            request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());
-            request.getSession().setAttribute("currentPrivilegeLevel", us.getPrivilegio());
-            request.getSession().setAttribute("idUsuario", us.getId());
-            String goTo;
-            if(us.getPrivilegio() == 0){
-                goTo = "adminHome.jsp";
-            }else{
-                goTo = "home.jsp";
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, UnsupportedEncodingException {
+        try {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            //Make this an MD5 hash
+            if (Handler.userValidation(username, password)) {
+                Usuario us = Handler.userSearch(username,"*");
+                request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());
+                request.getSession().setAttribute("currentPrivilegeLevel", us.getPrivilegio());
+                request.getSession().setAttribute("idUsuario", us.getId());
+                String goTo;
+                if(us.getPrivilegio() == 0){
+                    goTo = "adminHome.jsp";
+                }else{
+                    goTo = "home.jsp";
+                }
+                response.sendRedirect(goTo);
+                RequestDispatcher disp = getServletContext().getRequestDispatcher("/"+goTo);
+                if (disp != null) {
+                    disp.include(request, response);
+                }
+            } else {
+                System.out.print("Not Successful");
+                request.getSession().setAttribute("success",false);
+                response.sendRedirect("index.jsp");
+                RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");
+                if (disp != null) {
+                    disp.include(request, response);
+                }
             }
-            response.sendRedirect(goTo);
-            RequestDispatcher disp = getServletContext().getRequestDispatcher("/"+goTo);
-            if (disp != null) {
-                disp.include(request, response);
-            }
-        } else {
-            System.out.print("Not Successful");
-            request.getSession().setAttribute("success",false);
-            response.sendRedirect("index.jsp");
-            RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");
-            if (disp != null) {
-                disp.include(request, response);
-            }
+        } catch (NamingException ex) {
+            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

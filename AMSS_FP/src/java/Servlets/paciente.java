@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -69,20 +70,28 @@ public class paciente extends HttpServlet {
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("edit")) {
-            String pacienteID = request.getParameter("username");
-            Paciente paciente = Handler.pacienteSearch(pacienteID, "*");
-            Domicilio dom = Handler.searchDomicilio(pacienteID);
-            request.setAttribute("paciente", paciente);
-            request.setAttribute("domicilio",dom);
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteForm.jsp");
-            req.forward(request, response);
+            try {
+                String pacienteID = request.getParameter("username");
+                Paciente paciente = Handler.pacienteSearch(pacienteID, "*");
+                Domicilio dom = Handler.searchDomicilio(pacienteID);
+                request.setAttribute("paciente", paciente);
+                request.setAttribute("domicilio",dom);
+                RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("erase")) {
-            String pacienteID = request.getParameter("username");
-            Handler.deletePaciente(pacienteID);
-            Handler.deleteDomicilio(pacienteID);
-            RequestDispatcher req = request.getRequestDispatcher("/home.jsp");
-            req.forward(request, response);
+            try {
+                String pacienteID = request.getParameter("username");
+                Handler.deletePaciente(pacienteID);
+                Handler.deleteDomicilio(pacienteID);
+                RequestDispatcher req = request.getRequestDispatcher("/home.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("view")) {
             String pacienteID = request.getParameter("username");
@@ -102,35 +111,39 @@ public class paciente extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("usuario");
-        if (Handler.pacienteSearch(id, "*") == null) {
-            Paciente pac = null;
-            Domicilio dom = null;
-            try {
-                pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaDeNacimiento")),request.getParameter("escolaridadMaxima"),request.getParameter("autopadecimiento"));
-                Handler.addPaciente(pac);
+        try {
+            String id = request.getParameter("usuario");
+            if (Handler.pacienteSearch(id, "*") == null) {
+                Paciente pac = null;
+                Domicilio dom = null;
+                try {
+                    pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaDeNacimiento")),request.getParameter("escolaridadMaxima"),request.getParameter("autopadecimiento"));
+                    Handler.addPaciente(pac);
+                    dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
+                    Handler.addDomicilio(dom);
+                } catch (ParseException ex) {
+                    Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //Now add the address
+                
+            } else {
+                Paciente pac = null;
+                try {
+                    pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaDeNacimiento")),request.getParameter("escolaridadMaxima"),request.getParameter("autopadecimiento"));
+                    Handler.updatePaciente(pac);
+                } catch (ParseException ex) {
+                    Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                Domicilio dom = null;
                 dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
-            Handler.addDomicilio(dom);
-            } catch (ParseException ex) {
-                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+                Handler.updateDomicilio(dom);
             }
-            //Now add the address
-            
-        } else {
-            Paciente pac = null;
-            try {
-                pac = new Paciente(1000, Integer.parseInt(request.getParameter("genero")), Integer.parseInt(request.getParameter("estadoCivil")), Integer.parseInt(request.getParameter("cohabitacion")), request.getParameter("primerNombre"), request.getParameter("segundoNombre"), request.getParameter("usuario"), request.getParameter("email"), request.getParameter("nacionalidad"), request.getParameter("estadoNacimiento"), request.getParameter("tipoSangre"), request.getParameter("afiliacionMedica"), request.getParameter("amai"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaDeNacimiento")),request.getParameter("escolaridadMaxima"),request.getParameter("autopadecimiento"));
-                            Handler.updatePaciente(pac);
-            } catch (ParseException ex) {
-                Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            Domicilio dom = null;
-            dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
-            Handler.updateDomicilio(dom);
-        }
-        RequestDispatcher req = request.getRequestDispatcher("/index.jsp");
+            RequestDispatcher req = request.getRequestDispatcher("/index.jsp");
             req.forward(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,51 +66,67 @@ public class nutricion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("action").equals("add")) {
-            request.setAttribute("forma", null);
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            request.setAttribute("usuario", us);
-            request.setAttribute("paciente", pac);
-            request.setAttribute("show", false);
-            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
-            req.forward(request, response);
+            try {
+                request.setAttribute("forma", null);
+                String idUsuario = request.getParameter("idUsuario");
+                String idPaciente = request.getParameter("idPaciente");
+                Usuario us = Handler.userSearchid(idUsuario, "*");
+                Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
+                request.setAttribute("usuario", us);
+                request.setAttribute("paciente", pac);
+                request.setAttribute("show", false);
+                RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("edit")) {
-            String idForm = request.getParameter("idForm");
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            formaFragilidad ff = Handler.formaFragilidadSearch(idForm);
-            request.setAttribute("usuario", us);
-            request.setAttribute("paciente", pac);
-            request.setAttribute("forma", ff);
-            request.setAttribute("show", false);
-            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
-            req.forward(request, response);
+            try {
+                String idForm = request.getParameter("idForm");
+                String idUsuario = request.getParameter("idUsuario");
+                String idPaciente = request.getParameter("idPaciente");
+                Usuario us = Handler.userSearchid(idUsuario, "*");
+                Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
+                formaFragilidad ff = Handler.formaFragilidadSearch(idForm);
+                request.setAttribute("usuario", us);
+                request.setAttribute("paciente", pac);
+                request.setAttribute("forma", ff);
+                request.setAttribute("show", false);
+                RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("erase")) {
-            request.setAttribute("forma", null);
-            String idForm = request.getParameter("idForm");
-            Handler.deleteFormaFragilidad(idForm);
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-            req.forward(request, response);
+            try {
+                request.setAttribute("forma", null);
+                String idForm = request.getParameter("idForm");
+                Handler.deleteFormaFragilidad(idForm);
+                RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("show")) {
-            String idForm = request.getParameter("idForm");
-            String idUsuario = request.getParameter("idUsuario");
-            String idPaciente = request.getParameter("idPaciente");
-            Usuario us = Handler.userSearchid(idUsuario, "*");
-            Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
-            formaFragilidad ff = Handler.formaFragilidadSearch(idForm);
-            request.setAttribute("usuario", us);
-            request.setAttribute("paciente", pac);
-            request.setAttribute("forma", ff);
-            request.setAttribute("show", true);
-            RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
-            req.forward(request, response);
+            try {
+                String idForm = request.getParameter("idForm");
+                String idUsuario = request.getParameter("idUsuario");
+                String idPaciente = request.getParameter("idPaciente");
+                Usuario us = Handler.userSearchid(idUsuario, "*");
+                Paciente pac = Handler.pacienteSearchid(idPaciente, "*");
+                formaFragilidad ff = Handler.formaFragilidadSearch(idForm);
+                request.setAttribute("usuario", us);
+                request.setAttribute("paciente", pac);
+                request.setAttribute("forma", ff);
+                request.setAttribute("show", true);
+                RequestDispatcher req = request.getRequestDispatcher("/NutriologoViews/fragilidadForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -123,26 +140,30 @@ public class nutricion extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String formID = request.getParameter("idevaluacionFragilidad");
-        if (Handler.formaFragilidadSearch(formID) == null) {
-            formaFragilidad forma = null;
-            try {
-                forma = new formaFragilidad(1000, Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
-            } catch (ParseException ex) {
-                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            String formID = request.getParameter("idevaluacionFragilidad");
+            if (Handler.formaFragilidadSearch(formID) == null) {
+                formaFragilidad forma = null;
+                try {
+                    forma = new formaFragilidad(1000, Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                } catch (ParseException ex) {
+                    Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.addFormaFragilidad(forma);
+            } else {
+                formaFragilidad forma = null;
+                try {
+                    forma = new formaFragilidad(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                } catch (ParseException ex) {
+                    Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.updateFormaFragilidad(forma);
             }
-            Handler.addFormaFragilidad(forma);
-        } else {
-            formaFragilidad forma = null;
-            try {
-                forma = new formaFragilidad(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
-            } catch (ParseException ex) {
-                Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Handler.updateFormaFragilidad(forma);
+            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            req.forward(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-        req.forward(request, response);
     }
 
     /**

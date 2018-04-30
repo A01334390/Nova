@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -75,17 +76,25 @@ public class fitbit extends HttpServlet {
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("show")) {
-            Fitbit fitbit = Handler.getAllFitbit();
-            request.setAttribute("fitbit", fitbit);
-            RequestDispatcher req = request.getRequestDispatcher("/FitbitViews/fitbit-connection.jsp");
-            req.forward(request, response);
+            try {
+                Fitbit fitbit = Handler.getAllFitbit();
+                request.setAttribute("fitbit", fitbit);
+                RequestDispatcher req = request.getRequestDispatcher("/FitbitViews/fitbit-connection.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("erase")) {
-            String OAUTH_CLIENTID = request.getParameter("OAUTH_CLIENTID");
-            Handler.deleteFitbit(OAUTH_CLIENTID);
-            RequestDispatcher disp = getServletContext().getRequestDispatcher("/FitbitViews/fitbitForm.jsp");
-            if (disp != null) {
-                disp.include(request, response);
+            try {
+                String OAUTH_CLIENTID = request.getParameter("OAUTH_CLIENTID");
+                Handler.deleteFitbit(OAUTH_CLIENTID);
+                RequestDispatcher disp = getServletContext().getRequestDispatcher("/FitbitViews/fitbitForm.jsp");
+                if (disp != null) {
+                    disp.include(request, response);
+                }
+            } catch (NamingException ex) {
+                Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (request.getParameter("action").equals("see")) {
@@ -98,11 +107,15 @@ public class fitbit extends HttpServlet {
         }
 
         if (request.getParameter("action").equals("eliminate")) {
-            String valoracionID = request.getParameter("valoracionID");
-            Handler.deleteValoracionFitbit(valoracionID);
-            RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-            if (disp != null) {
-                disp.include(request, response);
+            try {
+                String valoracionID = request.getParameter("valoracionID");
+                Handler.deleteValoracionFitbit(valoracionID);
+                RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+                if (disp != null) {
+                    disp.include(request, response);
+                }
+            } catch (NamingException ex) {
+                Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -119,27 +132,35 @@ public class fitbit extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (!request.getParameter("diff").equals("graph")) {
-            Fitbit fitbit = new Fitbit(1000, request.getParameter("FITBIT_URL"), request.getParameter("FITBIT_API_URL"), request.getParameter("OAUTH_CLIENTID"), request.getParameter("CLIENT_SECRET"), request.getParameter("REDIRECT_URI"), request.getParameter("EXPIRATION_TIME"));
-            Handler.addFitbit(fitbit);
-            RequestDispatcher req = request.getRequestDispatcher("/adminHome.jsp");
-            req.forward(request, response);
-        } else {
-            valoracionFitbit vf = null;
             try {
-                String username = request.getParameter("username");
-                String jsonResult = request.getParameter("jsonresult");
-                String time = request.getParameter("time");
-                String lapsus = request.getParameter("lapsus");
-                vf = new valoracionFitbit(10000, username,
-                        jsonResult,
-                        new SimpleDateFormat("yyyy-MM-dd").parse(time),
-                        lapsus);
-            } catch (ParseException ex) {
+                Fitbit fitbit = new Fitbit(1000, request.getParameter("FITBIT_URL"), request.getParameter("FITBIT_API_URL"), request.getParameter("OAUTH_CLIENTID"), request.getParameter("CLIENT_SECRET"), request.getParameter("REDIRECT_URI"), request.getParameter("EXPIRATION_TIME"));
+                Handler.addFitbit(fitbit);
+                RequestDispatcher req = request.getRequestDispatcher("/adminHome.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
                 Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Handler.addValoracionFitbit(vf);
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-            req.forward(request, response);
+        } else {
+            try {
+                valoracionFitbit vf = null;
+                try {
+                    String username = request.getParameter("username");
+                    String jsonResult = request.getParameter("jsonresult");
+                    String time = request.getParameter("time");
+                    String lapsus = request.getParameter("lapsus");
+                    vf = new valoracionFitbit(10000, username,
+                            jsonResult,
+                            new SimpleDateFormat("yyyy-MM-dd").parse(time),
+                            lapsus);
+                } catch (ParseException ex) {
+                    Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.addValoracionFitbit(vf);
+                RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

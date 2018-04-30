@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -73,30 +74,42 @@ public class social extends HttpServlet {
             req.forward(request, response);
         }
         if (request.getParameter("action").equals("edit")) {
-            String idForm = request.getParameter("idForm");
-            formaGerontologia form = Handler.formaGerontologiaSearch(idForm);
-            request.setAttribute("usuario", request.getParameter("idUsuario"));
-            request.setAttribute("paciente", request.getParameter("idPaciente"));
-            request.setAttribute("forma", form);
-            request.setAttribute("show", false);
-            RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
-            req.forward(request, response);
+            try {
+                String idForm = request.getParameter("idForm");
+                formaGerontologia form = Handler.formaGerontologiaSearch(idForm);
+                request.setAttribute("usuario", request.getParameter("idUsuario"));
+                request.setAttribute("paciente", request.getParameter("idPaciente"));
+                request.setAttribute("forma", form);
+                request.setAttribute("show", false);
+                RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("show")) {
-            String idForm = request.getParameter("idForm");
-            formaGerontologia form = Handler.formaGerontologiaSearch(idForm);
-            request.setAttribute("usuario", request.getParameter("idUsuario"));
-            request.setAttribute("paciente", request.getParameter("idPaciente"));
-            request.setAttribute("forma", form);
-            request.setAttribute("show", true);
-            RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
-            req.forward(request, response);
+            try {
+                String idForm = request.getParameter("idForm");
+                formaGerontologia form = Handler.formaGerontologiaSearch(idForm);
+                request.setAttribute("usuario", request.getParameter("idUsuario"));
+                request.setAttribute("paciente", request.getParameter("idPaciente"));
+                request.setAttribute("forma", form);
+                request.setAttribute("show", true);
+                RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if (request.getParameter("action").equals("erase")) {
-            String idForm = request.getParameter("idForm");
-            Handler.deleteFormaGerontologia(idForm);
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-            req.forward(request, response);
+            try {
+                String idForm = request.getParameter("idForm");
+                Handler.deleteFormaGerontologia(idForm);
+                RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -110,26 +123,30 @@ public class social extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String formId = request.getParameter("idevaluacionFragilidad");
-        if (Handler.formaGerontologiaSearch(formId) == null) {
-            formaGerontologia forma = null;
-            try {
-                forma = new formaGerontologia(1000, request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
-            } catch (ParseException ex) {
-                Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            String formId = request.getParameter("idevaluacionFragilidad");
+            if (Handler.formaGerontologiaSearch(formId) == null) {
+                formaGerontologia forma = null;
+                try {
+                    forma = new formaGerontologia(1000, request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                } catch (ParseException ex) {
+                    Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.addFormaGerontologia(forma);
+            } else {
+                formaGerontologia forma = null;
+                try {
+                    forma = new formaGerontologia(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                } catch (ParseException ex) {
+                    Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Handler.updateFormaGerontologia(forma);
             }
-            Handler.addFormaGerontologia(forma);
-        } else {
-            formaGerontologia forma = null;
-            try {
-                forma = new formaGerontologia(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
-            } catch (ParseException ex) {
-                Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Handler.updateFormaGerontologia(forma);
+            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            req.forward(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
         }
-        RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-        req.forward(request, response);
     }
 
     /**

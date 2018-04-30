@@ -270,7 +270,7 @@
                     <div class="row">
                         <div class="seven columns">
                             <label for="katz">Codigo Postal :</label>
-                            <input class="u-full-width" pattern="/\d\d\d\d\d/" type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
+                            <input class="u-full-width"  type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
                         </div>
                     </div>
                     <input class="button-primary" type="submit" value="Submit" />
