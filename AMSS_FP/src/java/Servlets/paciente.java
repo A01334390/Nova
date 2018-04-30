@@ -139,7 +139,7 @@ public class paciente extends HttpServlet {
                 dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
                 Handler.updateDomicilio(dom);
             }
-            RequestDispatcher req = request.getRequestDispatcher("/index.jsp");
+            RequestDispatcher req = request.getRequestDispatcher("/home.jsp");
             req.forward(request, response);
         } catch (NamingException ex) {
             Logger.getLogger(paciente.class.getName()).log(Level.SEVERE, null, ex);
