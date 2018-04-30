@@ -53,7 +53,7 @@
                 </ul>
                 <ul class="navbar-list">
                     <li class="navbar-item">
-                        <a class="navbar-link" href="PacienteViews/pacienteAll.jsp">Regresar</a>
+                        <a class="navbar-link" href="backbutt?action=returnReporteParams">Regresar</a>
                     </li>
                 </ul>
             </div>
@@ -425,10 +425,15 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <input type="submit" value="imprimir en pdf">
+                    <input type="submit" id="print-in-pdf" onclick="doPrint()" value="imprimir en pdf">
                 </div>
             </div>
         </div>
 
+        <script>
+            function doPrint(){
+                window.print()
+            }
+        </script>
     </body>
 </html>

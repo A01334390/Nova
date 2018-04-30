@@ -101,7 +101,7 @@
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Fecha de termino :</label>
-                        <input class="u-full-width" pattern="/((0[1-9]|1[0-2])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/" type="text" name="time" placeholder='yyyy-MM-dd' id='time'required>
+                        <input class="u-full-width" pattern="/\d\d\d\d-\d\d-\d\d/" type="text" name="time" placeholder='yyyy-MM-dd' id='time'required>
                     </div>
                 </div>
                 <div class="row">

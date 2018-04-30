@@ -128,11 +128,8 @@ public class social extends HttpServlet {
             }
             Handler.updateFormaGerontologia(forma);
         }
-        response.sendRedirect("PacienteViews/pacienteAll.jsp");
-        RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-        if (disp != null) {
-            disp.include(request, response);
-        }
+        RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+        req.forward(request, response);
     }
 
     /**

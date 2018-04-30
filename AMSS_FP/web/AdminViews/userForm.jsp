@@ -94,7 +94,7 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Correo Electronico : </label>
-                            <input class="u-full-width" pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" type="text" placeholder="hello@nova.io"  name="email" value="<c:out value="${usuario.getEmail()}"/>">
+                            <input class="u-full-width" type="email" placeholder="hello@nova.io"  name="email" value="<c:out value="${usuario.getEmail()}"/>">
                         </div>
                     </div>
 
@@ -115,14 +115,14 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Fecha de Nacimiento : </label>
-                            <input class="u-full-width" pattern="/((0[1-9]|1[0-2])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/" type="date" name="fechaNacimiento" value="<c:out value="${usuario.getFechaNacimiento()}"/>">
+                            <input class="u-full-width"  type="date" name="fechaNacimiento" value="<c:out value="${usuario.getFechaNacimiento()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Fecha de Validez de Acceso : </label>
-                            <input class="u-full-width" pattern="/((0[1-9]|1[0-2])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/" type="date" name="fechaValidez" value="<c:out value="${usuario.getFechaValidez()}"/>">
+                            <input class="u-full-width"  type="date" name="fechaValidez" value="<c:out value="${usuario.getFechaValidez()}"/>">
                         </div>
                     </div>
 

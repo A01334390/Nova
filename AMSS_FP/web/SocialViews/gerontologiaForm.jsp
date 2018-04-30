@@ -52,7 +52,7 @@
                 </ul>
                 <ul class="navbar-list">
                     <li class="navbar-item">
-                        <a class="navbar-link" href="PacienteViews/pacienteAll.jsp">Regresar</a>
+                        <a class="navbar-link" href="backbutt?action=returnPacienteAll">Regresar</a>
                     </li>
                 </ul>
             </div>

@@ -201,7 +201,7 @@ public class formaGeriatria {
     }
     
     private static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yy");
         return dateFormat.format(date);
     }
 }

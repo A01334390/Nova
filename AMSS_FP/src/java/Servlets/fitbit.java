@@ -88,15 +88,16 @@ public class fitbit extends HttpServlet {
                 disp.include(request, response);
             }
         }
-        if(request.getParameter("action").equals("see")){
-            request.getSession().setAttribute("valoracionID",request.getParameter("valoracionID"));
+        if (request.getParameter("action").equals("see")) {
+            request.getSession().setAttribute("valoracionID", request.getParameter("valoracionID"));
             RequestDispatcher disp = getServletContext().getRequestDispatcher("/FitbitViews/valoracionView.jsp");
             if (disp != null) {
                 disp.include(request, response);
             }
-;        }
-        
-        if(request.getParameter("action").equals("eliminate")){
+            ;
+        }
+
+        if (request.getParameter("action").equals("eliminate")) {
             String valoracionID = request.getParameter("valoracionID");
             Handler.deleteValoracionFitbit(valoracionID);
             RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
@@ -120,10 +121,8 @@ public class fitbit extends HttpServlet {
         if (!request.getParameter("diff").equals("graph")) {
             Fitbit fitbit = new Fitbit(1000, request.getParameter("FITBIT_URL"), request.getParameter("FITBIT_API_URL"), request.getParameter("OAUTH_CLIENTID"), request.getParameter("CLIENT_SECRET"), request.getParameter("REDIRECT_URI"), request.getParameter("EXPIRATION_TIME"));
             Handler.addFitbit(fitbit);
-            RequestDispatcher disp = getServletContext().getRequestDispatcher("/adminHome.jsp");
-            if (disp != null) {
-                disp.include(request, response);
-            }
+            RequestDispatcher req = request.getRequestDispatcher("/adminHome.jsp");
+            req.forward(request, response);
         } else {
             valoracionFitbit vf = null;
             try {
@@ -131,7 +130,7 @@ public class fitbit extends HttpServlet {
                 String jsonResult = request.getParameter("jsonresult");
                 String time = request.getParameter("time");
                 String lapsus = request.getParameter("lapsus");
-                vf = new valoracionFitbit(10000,username,
+                vf = new valoracionFitbit(10000, username,
                         jsonResult,
                         new SimpleDateFormat("yyyy-MM-dd").parse(time),
                         lapsus);
@@ -139,10 +138,8 @@ public class fitbit extends HttpServlet {
                 Logger.getLogger(fitbit.class.getName()).log(Level.SEVERE, null, ex);
             }
             Handler.addValoracionFitbit(vf);
-            RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-            if (disp != null) {
-                disp.include(request, response);
-            }
+            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            req.forward(request, response);
         }
     }
 

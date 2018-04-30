@@ -127,7 +127,7 @@ public class nutricion extends HttpServlet {
         if (Handler.formaFragilidadSearch(formID) == null) {
             formaFragilidad forma = null;
             try {
-                forma = new formaFragilidad(1000, Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                forma = new formaFragilidad(1000, Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
             } catch (ParseException ex) {
                 Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -135,16 +135,14 @@ public class nutricion extends HttpServlet {
         } else {
             formaFragilidad forma = null;
             try {
-                forma = new formaFragilidad(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                forma = new formaFragilidad(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), Integer.parseInt(request.getParameter("pobreResistencia")), Integer.parseInt(request.getParameter("actividadFisica")), request.getParameter("perdidaPeso"), request.getParameter("perdidaPeso_interpretacion"), request.getParameter("pobreResistencia_interpretacion"), request.getParameter("velocidadMarcha"), request.getParameter("velocidadMarcha_interpretacion"), request.getParameter("fuerzaPresion"), request.getParameter("fuerzaPresion_interpretacion"), request.getParameter("actividadFisica_interpretacion"), request.getParameter("diagnostico"), request.getParameter("evaluacionFuncional"), request.getParameter("evaluacionCognitiva"), request.getParameter("evaluacionNutricional"), request.getParameter("evaluacionDeFragilidad"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
             } catch (ParseException ex) {
                 Logger.getLogger(nutricion.class.getName()).log(Level.SEVERE, null, ex);
             }
             Handler.updateFormaFragilidad(forma);
         }
-        RequestDispatcher disp = getServletContext().getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
-        if (disp != null) {
-            disp.include(request, response);
-        }
+        RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+        req.forward(request, response);
     }
 
     /**

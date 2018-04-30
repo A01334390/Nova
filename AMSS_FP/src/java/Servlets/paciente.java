@@ -129,11 +129,8 @@ public class paciente extends HttpServlet {
             dom = new Domicilio(request.getParameter("pais"), request.getParameter("estado"), request.getParameter("ciudad"), request.getParameter("colonia"), request.getParameter("calle"), request.getParameter("codigoPostal"), request.getParameter("usuario"), Integer.parseInt(request.getParameter("numeroInterno")), Integer.parseInt(request.getParameter("numeroExterno")));
             Handler.updateDomicilio(dom);
         }
-        response.sendRedirect("home.jsp");
-        RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");
-        if (disp != null) {
-            disp.include(request, response);
-        }
+        RequestDispatcher req = request.getRequestDispatcher("/index.jsp");
+            req.forward(request, response);
     }
 
     /**

@@ -132,7 +132,7 @@ public class formaGerontologia {
     }
     
     private static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
         return dateFormat.format(date);
     }
     
