@@ -1387,5 +1387,72 @@ public class Handler {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }
     }
+    
+    public static Reporte[] getAllReportes(String usuario) throws NamingException{
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            ArrayList<Reporte> array = new ArrayList<>();
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
+                PreparedStatement pre = connection.prepareStatement("SELECT * FROM AMSS_BDD.reportePaciente WHERE usuario=?;");
+                pre.setString(1, usuario);
+                ResultSet rs = pre.executeQuery();
+                while (rs.next()) {
+                    array.add(new Reporte(
+                            rs.getInt("idreportePaciente"),
+                            rs.getString("usuario"),
+                            rs.getInt("idGeriatra"),
+                            rs.getInt("idNutricion"),
+                            rs.getInt("idMovilidad"),
+                            rs.getInt("idGerontologia"),
+                            rs.getString("conclusion"),
+                            rs.getDate("fechaLlenado")
+                    ));
+                }
+                //return session;
+            }
+            return array.toArray(new Reporte[array.size()]);
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
+    
+    public static Reporte searchReporte(String idreportePaciente) throws NamingException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            Reporte reporter = null;
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
+                PreparedStatement pre = connection.prepareStatement("SELECT * FROM AMSS_BDD.reportePaciente WHERE idreportePaciente=?;");
+                pre.setInt(1, Integer.parseInt(idreportePaciente));
+                ResultSet rs = pre.executeQuery();
+                while (rs.next()) {
+                    reporter = new Reporte(
+                            rs.getInt("idreportePaciente"),
+                            rs.getString("usuario"),
+                            rs.getInt("idGeriatra"),
+                            rs.getInt("idNutricion"),
+                            rs.getInt("idMovilidad"),
+                            rs.getInt("idGerontologia"),
+                            rs.getString("conclusion"),
+                            rs.getDate("fechaLlenado")
+                    );
+                }
+            }
+            return reporter;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+
+        return null;
+    }
 
 }

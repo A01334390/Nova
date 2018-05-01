@@ -413,14 +413,21 @@
             <div class="row">
                 <label>Conclusiones finales</label>
                 <form action="reporte" method="POST">
-                    <input type="text" name="conclusion" required>
+                    <%if(session.getAttribute("conclusiones") == null){%>
+                        <input type="text" name="conclusion" required>
+                    <%}else{%>
+                        <input type="text" name="conclusion" value="<%=session.getAttribute("conclusiones")%>" required>
+                    <%}%>
                     <input hidden name="paciente" value="<%=session.getAttribute("paciente")%>" required>
                     <input hidden name="geriatria" value="<%=session.getAttribute("geriatria")%>" required>
                     <input hidden name="nutricion" value="<%=session.getAttribute("nutricion")%>" required>
                     <input hidden name="movilidad" value="<%=session.getAttribute("movilidad")%>" required>
                     <input hidden name="gerontologia" value="<%=session.getAttribute("gerontologia")%>" required>
                     <input hidden name="act" value="ngraph" required>
-                    <input class="button-primary" type="submit" value="Submit" />
+                    <%if(session.getAttribute("conclusiones") == null){%>
+                        <input class="button-primary" type="submit" value="Submit" />
+                    <%}%>
+                    
                 </form>
             </div>
             <div class="container">

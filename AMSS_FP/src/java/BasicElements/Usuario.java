@@ -9,7 +9,6 @@ package BasicElements;
  *
  * @author Luna
  */
-import com.sun.xml.messaging.saaj.util.Base64;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -111,9 +110,7 @@ public class Usuario {
     }
     
     public String getPreparedPhoto() throws SQLException{
-        byte[] imageByte = preparedPhoto;
-        byte[] encodedImage = Base64.encode(imageByte);
-        return Arrays.toString(encodedImage);
+        return null;
     }   
 
 }

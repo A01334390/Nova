@@ -109,7 +109,8 @@
             %>
             <a href="paciente?action=edit&username=<%=paciente.getUsuario()%>">Editar</a> /  
             <a href="paciente?action=erase&username=<%=paciente.getUsuario()%>">Eliminar</a> /
-            <a href="reporte?action=create&username=<%=paciente.getUsuario()%>">Hacer Reporte</a>
+            <a href="reporte?action=create&username=<%=paciente.getUsuario()%>">Hacer Reporte</a> /
+            <a href="reporte?action=showAll&username=<%=paciente.getUsuario()%>">Ver todos los reportes</a>
             <%
                 }
             %>

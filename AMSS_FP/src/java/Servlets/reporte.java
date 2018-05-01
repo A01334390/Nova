@@ -74,6 +74,26 @@ public class reporte extends HttpServlet {
             request.getSession().setAttribute("paciente", request.getParameter("username"));
             req.forward(request, response);
         }
+        if (request.getParameter("action").equals("showAll")) {
+            RequestDispatcher req = request.getRequestDispatcher("/ReporteViews/reporteAll.jsp");
+            request.getSession().setAttribute("paciente", request.getParameter("username"));
+            req.forward(request, response);
+        }
+        if (request.getParameter("action").equals("show")) {
+            try {
+                Reporte reporter = Handler.searchReporte(request.getParameter("idreportePaciente"));
+                request.getSession().setAttribute("paciente", reporter.getUsuario());
+                request.getSession().setAttribute("geriatria", reporter.getIdGeriatra());
+                request.getSession().setAttribute("nutricion", reporter.getIdNutricion());
+                request.getSession().setAttribute("movilidad", reporter.getIdMovilidad());
+                request.getSession().setAttribute("gerontologia", reporter.getIdGerontologia());
+                request.getSession().setAttribute("conclusiones", reporter.getConclusion());
+                RequestDispatcher req = request.getRequestDispatcher("/ReporteViews/reporteFinal.jsp");
+                req.forward(request, response);
+            } catch (NamingException ex) {
+                Logger.getLogger(reporte.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
@@ -94,9 +114,10 @@ public class reporte extends HttpServlet {
             request.getSession().setAttribute("nutricion", request.getParameter("nutriologia"));
             request.getSession().setAttribute("movilidad", request.getParameter("movilidad"));
             request.getSession().setAttribute("gerontologia", request.getParameter("gerontologia"));
+            request.getSession().setAttribute("conclusiones", null);
             RequestDispatcher req = request.getRequestDispatcher("/ReporteViews/reporteFinal.jsp");
             req.forward(request, response);
-        }else{
+        } else {
             try {
                 String paciente = request.getParameter("paciente");
                 String geriatria = request.getParameter("geriatria");
@@ -107,7 +128,7 @@ public class reporte extends HttpServlet {
                 //Yes, I think we did it
                 request.getSession().setAttribute("pacienteUsername", paciente);
                 Date date = Calendar.getInstance().getTime();
-                Reporte repo = new Reporte(1000,paciente,Integer.parseInt(geriatria),Integer.parseInt(nutricion),Integer.parseInt(movilidad),Integer.parseInt(gerontologia),conclusiones,date);
+                Reporte repo = new Reporte(1000, paciente, Integer.parseInt(geriatria), Integer.parseInt(nutricion), Integer.parseInt(movilidad), Integer.parseInt(gerontologia), conclusiones, date);
                 Handler.addReporte(repo);
                 //Send him back
                 RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
