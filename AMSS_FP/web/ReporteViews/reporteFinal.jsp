@@ -37,6 +37,8 @@
         <link rel="stylesheet" href="css/skeleton.css" type="text/css">
         <script src="js/site.js"></script>
         <link rel="stylesheet" href="css/custom.css" type="text/css">
+        <script src="js/chartist.js"></script>
+        <link rel="stylesheet" href="css/chartist.css" type="text/css">
 
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -345,9 +347,8 @@
             <div class="row">
                 <h2>Resultados de valoracion con Fitbit</h2>
                 <div class="nine columns">
-                    <textarea readonly="false" cols="70">
-                        <%=vf.getDatosMovilidad()%>
-                    </textarea>
+                        <div class="ct-chart ct-perfect-fourth"></div>
+
                 </div>
             </div>
             <div>
@@ -413,10 +414,10 @@
             <div class="row">
                 <label>Conclusiones finales</label>
                 <form action="reporte" method="POST">
-                    <%if(session.getAttribute("conclusiones") == null){%>
-                        <input type="text" name="conclusion" required>
-                    <%}else{%>
-                        <input type="text" name="conclusion" value="<%=session.getAttribute("conclusiones")%>" required>
+                    <%if (session.getAttribute("conclusiones") == null) {%>
+                    <input type="text" name="conclusion" required>
+                    <%} else {%>
+                    <input type="text" name="conclusion" value="<%=session.getAttribute("conclusiones")%>" required>
                     <%}%>
                     <input hidden name="paciente" value="<%=session.getAttribute("paciente")%>" required>
                     <input hidden name="geriatria" value="<%=session.getAttribute("geriatria")%>" required>
@@ -424,10 +425,10 @@
                     <input hidden name="movilidad" value="<%=session.getAttribute("movilidad")%>" required>
                     <input hidden name="gerontologia" value="<%=session.getAttribute("gerontologia")%>" required>
                     <input hidden name="act" value="ngraph" required>
-                    <%if(session.getAttribute("conclusiones") == null){%>
-                        <input class="button-primary" type="submit" value="Submit" />
+                    <%if (session.getAttribute("conclusiones") == null) {%>
+                    <input class="button-primary" type="submit" value="Submit" />
                     <%}%>
-                    
+
                 </form>
             </div>
             <div class="container">
@@ -436,9 +437,39 @@
                 </div>
             </div>
         </div>
-
         <script>
-            function doPrint(){
+            var jsondata = <%=vf.getDatosMovilidad()%>
+            let labelsprep = []
+            let seriesprep = []
+            for (var dat in jsondata) {
+                for (var elem in jsondata[dat]) {
+                    labelsprep.push(jsondata[dat][elem].dateTime)
+                    seriesprep.push(jsondata[dat][elem].value)
+                }
+            }
+
+            var data = {
+                //prepare the data
+
+                // A labels array that can contain any sort of values
+                labels: labelsprep,
+                // Our series array that contains series objects or in this case series data arrays
+                series: [seriesprep]
+            };
+
+            var options = {
+                width: 500,
+                height: 300
+            };
+
+            // Create a new line chart object where as first parameter we pass in a selector
+            // that is resolving to our chart container element. The Second parameter
+            // is the actual data object.
+            new Chartist.Line('.ct-chart', data, options);
+
+        </script>
+        <script>
+            function doPrint() {
                 window.print()
             }
         </script>

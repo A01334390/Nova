@@ -35,6 +35,8 @@
         <link rel="stylesheet" href="css/skeleton.css" type="text/css">
         <script src="js/site.js"></script>
         <link rel="stylesheet" href="css/custom.css" type="text/css">
+        <script src="js/chartist.js"></script>
+        <link rel="stylesheet" href="css/chartist.css" type="text/css">
 
         <!-- Favicon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -50,11 +52,13 @@
 
             function getData() {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'https://api.fitbit.com/1/user/' + userId + '/activities/steps/' + document.getElementById('time') + '/' + document.getElementById('lapsus') + '.json');
+                var uri = 'https://api.fitbit.com/1/user/' + userId + '/activities/tracker/steps/date/' + document.getElementById('time').value + '/' + document.getElementById('lapsus').value + '.json';
+                xhr.open('GET', uri);
                 xhr.setRequestHeader("Authorization", 'Bearer ' + access_token);
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         document.getElementById("results").innerHTML = xhr.responseText;
+                        graphMovility(xhr.responseText);
                     }
                 };
                 xhr.send();
@@ -77,7 +81,7 @@
             </ul>
             <ul class="navbar-list">
                 <li class="navbar-item">
-                    <a class="navbar-link" href="PacienteViews/pacienteAll.jsp">Regresar</a>
+                    <a class="navbar-link" href="backbutt?action=returnPacienteAll">Regresar</a>
                 </li>
             </ul>
         </div>
@@ -86,7 +90,7 @@
         <div class='container'>
             <div class='six columns' style='margin-top:15%'>
                 <h2>Paso 1</h2><p>Iniciar sesión en Fitbit<p>
-                    <a href='https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FAMSS_FP%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=15'>Acceder a Fitbit</a>
+                    <a href='https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FNova%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604000'>Acceder a Fitbit</a>
             </div>
         </div>
         <div class="container">
@@ -110,7 +114,7 @@
                         <select name='lapsus' type='text'id='lapsus' required>
                             <option value='1d'>1 dia</option>
                             <option value='7d'>7 dias</option>
-                            <option value='40d'>30 dias</option>
+                            <option value='30d'>30 dias</option>
                             <option value='1w'>1 semana</option>
                             <option value='1m'>1 mes</option>
                         </select>
@@ -123,7 +127,8 @@
                             <h2>Paso 3</h2>
                             <p>Guardar esta informacion<p>
                             <div class ="container">
-                                <textarea name='jsonresult' rows='4' cols='50' id="results"></textarea>
+                                <div class="ct-chart ct-perfect-fourth"></div>
+                                <textarea name='jsonresult' rows='4' cols='50' id="results" hidden></textarea>
                             </div>
                         </div>
                         <div class='container'>
@@ -141,5 +146,37 @@
                     </div>
             </div>
         </div>
+        <script>
+            function graphMovility(jsondata) {
+                jsondata = JSON.parse(jsondata)
+                let labelsprep = []
+                let seriesprep = []
+                for (var dat in jsondata) {
+                    for (var elem in jsondata[dat]) {
+                        labelsprep.push(jsondata[dat][elem].dateTime)
+                        seriesprep.push(jsondata[dat][elem].value)
+                    }
+                }
+
+                var data = {
+                    //prepare the data
+
+                    // A labels array that can contain any sort of values
+                    labels: labelsprep,
+                    // Our series array that contains series objects or in this case series data arrays
+                    series: [seriesprep]
+                };
+                
+                var options = {
+                  width: 500,
+                  height: 600
+                };
+
+                // Create a new line chart object where as first parameter we pass in a selector
+                // that is resolving to our chart container element. The Second parameter
+                // is the actual data object.
+                new Chartist.Line('.ct-chart', data,options);
+            }
+        </script>
     </body>
 </html>

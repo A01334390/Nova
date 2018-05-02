@@ -8,6 +8,8 @@ package DatabaseManager;
 import BasicElements.*;
 import SecurityElements.RSADecryption;
 import SecurityElements.RSAEncryption;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.text.ParseException;
@@ -24,7 +26,7 @@ import javax.naming.*;
  * @author a01334390
  */
 public class Handler {
-    
+
     static RSADecryption rsadec = new RSADecryption();
     static RSAEncryption rsaenc = new RSAEncryption();
 
@@ -54,7 +56,7 @@ public class Handler {
         }
         return pass;
     }
-    
+
     private static String getPrivateKeyFilePath() throws NamingException {
         Context ctx = new InitialContext();
         Context env = (Context) ctx.lookup("java:comp/env");
@@ -62,7 +64,7 @@ public class Handler {
 
         return filepath;
     }
-    
+
     private static String getPublicKeyFilePath() throws NamingException {
         Context ctx = new InitialContext();
         Context env = (Context) ctx.lookup("java:comp/env");
@@ -70,7 +72,6 @@ public class Handler {
 
         return filepath;
     }
-  
 
     /**
      * This method validates if the user exit, however, it does so without ever
@@ -82,7 +83,7 @@ public class Handler {
      * @throws java.io.UnsupportedEncodingException
      */
     public static boolean userValidation(String username, String password) throws UnsupportedEncodingException, NamingException {
-        String enc = rsaenc.encrypt(getPublicKeyFilePath(),username);
+        String enc = rsaenc.encrypt(getPublicKeyFilePath(), username);
         System.out.println(rsadec.decrypt(getPrivateKeyFilePath(), enc));
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -318,7 +319,7 @@ public class Handler {
                 while (resultset.next()) {
                     String primerNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("primerNombre"));
                     String segundoNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("segundoNombre"));
-                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre,segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre, segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
 
                 }
                 //return session;
@@ -343,7 +344,7 @@ public class Handler {
                 while (resultset.next()) {
                     String primerNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("primerNombre"));
                     String segundoNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("segundoNombre"));
-                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre,segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
+                    return new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre, segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
                 }
                 //return session;
             }
@@ -368,7 +369,7 @@ public class Handler {
                 while (resultset.next()) {
                     String primerNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("primerNombre"));
                     String segundoNombre = rsadec.decrypt(getPrivateKeyFilePath(), resultset.getString("segundoNombre"));
-                    Paciente pac = new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre,segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
+                    Paciente pac = new Paciente(resultset.getInt("idPaciente"), resultset.getInt("genero"), resultset.getInt("estadoCivil"), resultset.getInt("cohabitacion"), primerNombre, segundoNombre, resultset.getString("usuario"), resultset.getString("email"), resultset.getString("nacionalidad"), resultset.getString("estadoNacimiento"), resultset.getString("tipoSangre"), resultset.getString("afiliacionMedica"), resultset.getString("amai"), resultset.getDate("fechaDeNacimiento"), resultset.getString("escolaridadMaxima"), resultset.getString("autopadecimiento"));
                     array.add(pac);
                 }
                 return array.toArray(new Paciente[array.size()]);
@@ -425,7 +426,7 @@ public class Handler {
                     + "`cohabitacion`)\n"
                     + "VALUES(\n"
                     + "'" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getPrimerNombre()) + "',\n"
-                    + "'" +  rsaenc.encrypt(getPublicKeyFilePath(), paciente.getSegundoNombre())+ "',\n"
+                    + "'" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getSegundoNombre()) + "',\n"
                     + "'" + paciente.getUsuario() + "',\n"
                     + "'" + paciente.getFechaDeNacimiento() + "',\n"
                     + "" + paciente.getGenero() + ",\n"
@@ -1266,7 +1267,7 @@ public class Handler {
         return sqlDate;
     }
 
-    public static valoracionFitbit[] getAllValoracionFitbit(String usuario) throws NamingException {
+    public static valoracionFitbit[] getAllValoracionFitbit(String usuario) throws NamingException, IOException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -1280,16 +1281,12 @@ public class Handler {
                 ResultSet rs = pre.executeQuery();
                 while (rs.next()) {
                     Blob blob = rs.getBlob("datosMovilidad");
-                    byte[] ans = blob.getBytes(1, (int) blob.length());
-                    StringBuffer buff = new StringBuffer();
-
-                    for (byte b : ans) {
-                        buff.append(String.format("%02x", b & 0xFF));
-                    }
+                    byte[] bdata = blob.getBytes(1, (int) blob.length());
+                    String s = new String(bdata);
                     array.add(new valoracionFitbit(
                             rs.getInt("idvaloracionFitbit"),
                             rs.getString("usuario"),
-                            buff.toString(),
+                            s,
                             rs.getDate("fechaPedida"),
                             rs.getString("tiempoPedido")
                     ));
@@ -1318,16 +1315,12 @@ public class Handler {
                 ResultSet rs = pre.executeQuery();
                 while (rs.next()) {
                     Blob blob = rs.getBlob("datosMovilidad");
-                    byte[] ans = blob.getBytes(1, (int) blob.length());
-                    StringBuffer buff = new StringBuffer();
-
-                    for (byte b : ans) {
-                        buff.append(String.format("%02x", b & 0xFF));
-                    }
+                    byte[] bdata = blob.getBytes(1, (int) blob.length());
+                    String s = new String(bdata);
                     vf = new valoracionFitbit(
                             rs.getInt("idvaloracionFitbit"),
                             rs.getString("usuario"),
-                            buff.toString(),
+                            s,
                             rs.getDate("fechaPedida"),
                             rs.getString("tiempoPedido")
                     );
@@ -1387,8 +1380,8 @@ public class Handler {
             System.out.println(e.getSQLState()); //Must be a JPopup or something
         }
     }
-    
-    public static Reporte[] getAllReportes(String usuario) throws NamingException{
+
+    public static Reporte[] getAllReportes(String usuario) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -1421,7 +1414,7 @@ public class Handler {
 
         return null;
     }
-    
+
     public static Reporte searchReporte(String idreportePaciente) throws NamingException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
