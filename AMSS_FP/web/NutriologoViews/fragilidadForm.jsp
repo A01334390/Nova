@@ -77,106 +77,106 @@
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input class="u-full-width" type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input required class="u-full-width" type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Perdida de Peso:</label>
-                        <select name="perdidaPeso" type="text" required>
+                        <select required name="perdidaPeso" type="text" required>
                             <option value ="0" ${forma.getPerdidaPeso() == 0 ? 'selected="selected"' : ''}> No </option>
                             <option value ="1" ${forma.getPerdidaPeso() == 1 ? 'selected="selected"' : ''}> Si </option>
                         </select>
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="perdidaPeso_interpretacion" value="<c:out value="${forma.getPerdidaPeso_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="perdidaPeso_interpretacion" value="<c:out value="${forma.getPerdidaPeso_interpretacion()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Pobre Resistencia:</label>
-                        <select name="pobreResistencia" type="text" required>
+                        <select required name="pobreResistencia" type="text" required>
                             <option value ="0" ${forma.getPobreResistencia() == 0 ? 'selected="selected"' : ''}> No </option>
                             <option value ="1" ${forma.getPobreResistencia() == 1 ? 'selected="selected"' : ''}> Si </option>
                         </select>
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="pobreResistencia_interpretacion" value="<c:out value="${forma.getPerdidaPeso_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="pobreResistencia_interpretacion" value="<c:out value="${forma.getPerdidaPeso_interpretacion()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Velocidad de la Marcha:</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="velocidadMarcha" value="<c:out value="${forma.getVelocidadMarcha()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="velocidadMarcha" value="<c:out value="${forma.getVelocidadMarcha()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="velocidadMarcha_interpretacion" value="<c:out value="${forma.getVelocidadMarcha_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="velocidadMarcha_interpretacion" value="<c:out value="${forma.getVelocidadMarcha_interpretacion()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Debilitamiento (Fuerza de Prension):</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="fuerzaPresion" value="<c:out value="${forma.getFuerzaPresion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="fuerzaPresion" value="<c:out value="${forma.getFuerzaPresion()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="getFuerzaPresion_interpretacion" value="<c:out value="${forma.getFuerzaPresion_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="getFuerzaPresion_interpretacion" value="<c:out value="${forma.getFuerzaPresion_interpretacion()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Actividad Fisica:</label>
-                        <select name="actividadFisica" type="text" required>
+                        <select required name="actividadFisica" type="text" required>
                             <option value ="0" ${forma.getActividadFisica() == 0 ? 'selected="selected"' : ''}> No </option>
                             <option value ="1" ${forma.getActividadFisica() == 1 ? 'selected="selected"' : ''}> Si </option>
                         </select>
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="actividadFisica_interpretacion" value="<c:out value="${forma.getActividadFisica_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="actividadFisica_interpretacion" value="<c:out value="${forma.getActividadFisica_interpretacion()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Diagnostico:</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="diagnostico" value="<c:out value="${forma.getDiagnostico()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="diagnostico" value="<c:out value="${forma.getDiagnostico()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Evaluacion Funcional</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="evaluacionFuncional" rows="5" value="<c:out value="${forma.getEvaluacionFuncional()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="evaluacionFuncional" rows="5" value="<c:out value="${forma.getEvaluacionFuncional()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Evaluacion Cognitiva</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="evaluacionCognitiva" rows="5" value="<c:out value="${forma.getEvaluacionCognitiva()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="evaluacionCognitiva" rows="5" value="<c:out value="${forma.getEvaluacionCognitiva()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Evaluacion Nutricional</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="evaluacionNutricional" rows="5" value="<c:out value="${forma.getEvaluacionNutricional()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="evaluacionNutricional" rows="5" value="<c:out value="${forma.getEvaluacionNutricional()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Evaluacion De Fragilidad</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="evaluacionDeFragilidad" rows="5" value="<c:out value="${forma.getEvaluacionDeFragilidad()}"/>">
+                        <input required hidden class="u-full-width" type="text" placeholder="Normal" name="evaluacionDeFragilidad" rows="5" value="<c:out value="${forma.getEvaluacionDeFragilidad()}"/>">
                     </div>
                 </div>
 

@@ -70,6 +70,7 @@ public class social extends HttpServlet {
             request.setAttribute("usuario", request.getParameter("idUsuario"));
             request.setAttribute("paciente", request.getParameter("idPaciente"));
             request.setAttribute("show", false);
+            request.setAttribute("outside", false);
             RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
             req.forward(request, response);
         }
@@ -81,6 +82,7 @@ public class social extends HttpServlet {
                 request.setAttribute("paciente", request.getParameter("idPaciente"));
                 request.setAttribute("forma", form);
                 request.setAttribute("show", false);
+                request.setAttribute("outside", false);
                 RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
                 req.forward(request, response);
             } catch (NamingException ex) {
@@ -95,6 +97,7 @@ public class social extends HttpServlet {
                 request.setAttribute("paciente", request.getParameter("idPaciente"));
                 request.setAttribute("forma", form);
                 request.setAttribute("show", true);
+                request.setAttribute("outside", false);
                 RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
                 req.forward(request, response);
             } catch (NamingException ex) {
@@ -142,7 +145,12 @@ public class social extends HttpServlet {
                 }
                 Handler.updateFormaGerontologia(forma);
             }
-            RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            RequestDispatcher req;
+            if(request.getParameter("outside").equals("true")){
+                req = request.getRequestDispatcher("/index.jsp");
+            }else{
+                req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
+            }
             req.forward(request, response);
         } catch (NamingException ex) {
             Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);

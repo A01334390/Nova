@@ -80,55 +80,55 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">Primer nombre :</label>
-                            <input class="u-full-width" type="text" placeholder="Nombres" name="primerNombre" value="<c:out value="${usuario.getPrimerNombre()}"/>">
+                            <input required class="u-full-width" type="text" placeholder="Nombres" name="primerNombre" value="<c:out value="${usuario.getPrimerNombre()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Segundo Nombre : </label>
-                            <input class="u-full-width" type="text" placeholder="Apellidos"  name="segundoNombre" value="<c:out value="${usuario.getSegundoNombre()}"/>">
+                            <input required class="u-full-width" type="text" placeholder="Apellidos"  name="segundoNombre" value="<c:out value="${usuario.getSegundoNombre()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Correo Electronico : </label>
-                            <input class="u-full-width" type="email" placeholder="hello@nova.io"  name="email" value="<c:out value="${usuario.getEmail()}"/>">
+                            <input required class="u-full-width" type="email" placeholder="hello@nova.io"  name="email" value="<c:out value="${usuario.getEmail()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Nombre de Usuario : </label>
-                            <input class="u-full-width" type="text" placeholder="username"  name="usuario" value="<c:out value="${usuario.getUsuario()}"/>">
+                            <input required class="u-full-width" type="text" placeholder="username"  name="usuario" value="<c:out value="${usuario.getUsuario()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Contraseña : </label>
-                            <input class="u-full-width" type="password" placeholder="password"  name="password" value="<c:out value="${usuario.getUsuario()}"/>">
+                            <input required class="u-full-width" type="password" placeholder="password"  name="password" value="<c:out value="${usuario.getUsuario()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Fecha de Nacimiento : </label>
-                            <input class="u-full-width"  type="date" name="fechaNacimiento" value="<c:out value="${usuario.getFechaNacimiento()}"/>">
+                            <input required class="u-full-width"  type="date" name="fechaNacimiento" value="<c:out value="${usuario.getFechaNacimiento()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Fecha de Validez de Acceso : </label>
-                            <input class="u-full-width"  type="date" name="fechaValidez" value="<c:out value="${usuario.getFechaValidez()}"/>">
+                            <input required class="u-full-width"  type="date" name="fechaValidez" value="<c:out value="${usuario.getFechaValidez()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
-                            <select name="privilegio" type="text" required>
+                            <select required name="privilegio" type="text" required>
                                 <option value ="0" ${usuario.getPrivilegio() == 0 ? 'selected="selected"' : ''}> Administrador </option>
                                 <option value ="1" ${usuario.getPrivilegio() == 1 ? 'selected="selected"' : ''}> Jefe de Geriatria </option>
                                 <option value ="2" ${usuario.getPrivilegio() == 2 ? 'selected="selected"' : ''}> Medico Geriatra </option>

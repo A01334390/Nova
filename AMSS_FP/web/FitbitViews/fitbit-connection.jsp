@@ -121,29 +121,29 @@
                     </div>
                 </div>
                 <input class="button-primary" onclick='getData()' type="submit" value="Obtener los datos">
-                <form action='fitbit' method='POST'> 
-                    <div class='row'>
-                        <div class='six columns'>
-                            <h2>Paso 3</h2>
-                            <p>Guardar esta informacion<p>
-                            <div class ="container">
-                                <div class="ct-chart ct-perfect-fourth"></div>
-                                <textarea name='jsonresult' rows='4' cols='50' id="results" hidden></textarea>
-                            </div>
-                        </div>
-                        <div class='container'>
-                            <div class='row'>
-                                <div class='seven columns'>
+                <div class='row'>
+                    <div class='six columns'>
+                        <h2>Paso 3</h2>
+                        <p>Guardar esta informacion<p>
+                    </div>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='seven columns'>
+                                <form action='fitbit' method='POST'>
                                     <input class='u-full-width' type='text' value='<%=session.getAttribute("pacienteUsername")%>' name='username' hidden>
                                     <input class="u-full-width" type="text" value="graph" name="diff" hidden>
                                     <input class='u-full-width' id='lap' type='text' name='lapsus'required hidden>
                                     <input class="u-full-width" id='tim' type="text" name="time" required hidden>
+                                    <textarea name='jsonresult' rows='4' cols='50' id="results" hidden></textarea>
                                     <input class="button-primary" type="submit" value="Almacenar los datos">
-                                    </form>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+                    <div class ="container">
+                        <div class="ct-chart ct-perfect-fourth"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <script>
@@ -166,16 +166,16 @@
                     // Our series array that contains series objects or in this case series data arrays
                     series: [seriesprep]
                 };
-                
+
                 var options = {
-                  width: 500,
-                  height: 600
+                    width: 800,
+                    height: 600
                 };
 
                 // Create a new line chart object where as first parameter we pass in a selector
                 // that is resolving to our chart container element. The Second parameter
                 // is the actual data object.
-                new Chartist.Line('.ct-chart', data,options);
+                new Chartist.Line('.ct-chart', data, options);
             }
         </script>
     </body>

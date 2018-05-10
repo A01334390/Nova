@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <%
     if (session.getAttribute("currentSessionName") == null) {
-        response.sendRedirect("/index.jsp");
+        response.sendRedirect("../index.jsp");
     }
 %>
 <html>
@@ -67,69 +67,70 @@
             <form action="social" method="POST" name="formAddGerontologia">
                 <div class="row">
                     <div class="three columns">
-                        <input  class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
+                        <input hidden class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
                     </div>
                     <div class="three columns">
-                        <input  class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
+                        <input hidden class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
                     </div>
                     <div class="three columns">
-                        <input  class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
+                        <input hidden class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input class="u-full-width" pattern="/((0[1-9]|1[0-2])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/" type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input class="u-full-width" required type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Dispositivos en uso:</label>
-                        <input class="u-full-width" type="text" name="dispositivosUso" value="<c:out value="${forma.getDispositivosUso()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="dispositivosUso" value="<c:out value="${forma.getDispositivosUso()}"/>"></div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Dispositivo de mayor uso:</label>
-                        <input class="u-full-width" type="text" name="dispositivoMayorUso" value="<c:out value="${forma.getDispositivoMayorUso()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="dispositivoMayorUso" value="<c:out value="${forma.getDispositivoMayorUso()}"/>"></div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Frecuencia de uso:</label>
-                        <input class="u-full-width" type="text" name="frecuenciaUso" value="<c:out value="${forma.getFrecuenciaUso()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="frecuenciaUso" value="<c:out value="${forma.getFrecuenciaUso()}"/>"></div>
                 </div>
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Actividades de uso:</label>
-                        <input class="u-full-width" type="text" name="actividadesUso" value="<c:out value="${forma.getActividadesUso()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="actividadesUso" value="<c:out value="${forma.getActividadesUso()}"/>"></div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Usos a favorecer:</label>
-                        <input class="u-full-width" type="text" name="usosFavorecer" value="<c:out value="${forma.getUsosFavorecer()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="usosFavorecer" value="<c:out value="${forma.getUsosFavorecer()}"/>"></div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Apoyo social percibido (Prueba Duke-corta):</label>
-                        <input class="u-full-width" type="text" name="apoyoSocialPercibido" value="<c:out value="${forma.getApoyosocialPercibido()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="apoyoSocialPercibido" value="<c:out value="${forma.getApoyosocialPercibido()}"/>"></div>
                 </div>
                 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Actividades Comunitarias:</label>
-                        <input class="u-full-width" type="text" name="actividadesComunitarias" value="<c:out value="${forma.getActividadesComunitarias()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="actividadesComunitarias" value="<c:out value="${forma.getActividadesComunitarias()}"/>"></div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Impresion Diagnostica:</label>
-                        <input class="u-full-width" type="text" name="impresionDiagnostica" value="<c:out value="${forma.getImpresionDiagnostica()}"/>"></div>
+                        <input class="u-full-width" required type="text" name="impresionDiagnostica" value="<c:out value="${forma.getImpresionDiagnostica()}"/>"></div>
                 </div>
+        <input name="outside" value=<%=request.getAttribute("outside")%>>
         <%if (!request.getAttribute("show").equals(true)) {%>
         <input class="button-primary" type="submit" value="Submit">
         <%}%>

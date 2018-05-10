@@ -80,87 +80,87 @@
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input class="u-full-width"  type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input required class="u-full-width"  type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Escala de Katz :</label>
-                        <input class="u-full-width" type="text" placeholder="X/6" name="katz" value="<c:out value="${forma.getKatz()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="X/6" name="katz" value="<c:out value="${forma.getKatz()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="katz_interpretacion" value="<c:out value="${forma.getKatz_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="katz_interpretacion" value="<c:out value="${forma.getKatz_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Escala de Barthel :</label>
-                        <input class="u-full-width" type="text"  placeholder="X/100" name="barthel" value="<c:out value="${forma.getBarthel()}"/>">
+                        <input required class="u-full-width" type="text"  placeholder="X/100" name="barthel" value="<c:out value="${forma.getBarthel()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="barthel_interpretacion" value="<c:out value="${forma.getBarthel_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="barthel_interpretacion" value="<c:out value="${forma.getBarthel_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Escala de Lawton-Brody :</label>
-                        <input class="u-full-width" type="text"  placeholder="X/8" name="lawtonBrody" value="<c:out value="${forma.getLawtonBrody()}"/>">
+                        <input required class="u-full-width" type="text"  placeholder="X/8" name="lawtonBrody" value="<c:out value="${forma.getLawtonBrody()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="lawtonBrody_interpretacion" value="<c:out value="${forma.getLawtonBrody_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="lawtonBrody_interpretacion" value="<c:out value="${forma.getLawtonBrody_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Examen minimo del estado mental :</label>
-                        <input class="u-full-width" type="text" placeholder="X/30" name="estadoMental" value="<c:out value="${forma.getEstadoMental()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="X/30" name="estadoMental" value="<c:out value="${forma.getEstadoMental()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="estadoMental_interpretacion" value="<c:out value="${forma.getEstadoMental_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="estadoMental_interpretacion" value="<c:out value="${forma.getEstadoMental_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Escala de Depresion :</label>
-                        <input class="u-full-width" type="text" placeholder="X/15" name="escalaDepresion" value="<c:out value="${forma.getEscalaDepresion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="X/15" name="escalaDepresion" value="<c:out value="${forma.getEscalaDepresion()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="escalaDepresion_interpretacion" value="<c:out value="${forma.getEscalaDepresion_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="escalaDepresion_interpretacion" value="<c:out value="${forma.getEscalaDepresion_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Cribado Nutricional :</label>
-                        <input class="u-full-width" type="text" placeholder="X/30" name="cribadoNutricional" value="<c:out value="${forma.getCribadoNutricional()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="X/30" name="cribadoNutricional" value="<c:out value="${forma.getCribadoNutricional()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="cribadoNutricional_interpretacion" value="<c:out value="${forma.getCribadoNutricional_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="cribadoNutricional_interpretacion" value="<c:out value="${forma.getCribadoNutricional_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Prueba corta de desempenio :</label>
-                        <input class="u-full-width" type="text" placeholder="X/30" name="pruebaDesempenio" value="<c:out value="${forma.getPruebaDesempenio_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="X/30" name="pruebaDesempenio" value="<c:out value="${forma.getPruebaDesempenio_interpretacion()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="pruebaDesempenio_interpretacion" value="<c:out value="${forma.getPruebaDesempenio_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="pruebaDesempenio_interpretacion" value="<c:out value="${forma.getPruebaDesempenio_interpretacion()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="four columns">
                         <label for="katz">Prueba levantate y anda :</label>
-                        <input class="u-full-width" type="text" placeholder="Segundos" name="levantateAnda" value="<c:out value="${forma.getLevantateAnda()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Segundos" name="levantateAnda" value="<c:out value="${forma.getLevantateAnda()}"/>">
                     </div>
                     <div class="five columns">
                         <label for="katz">Interpretacion :</label>
-                        <input class="u-full-width" type="text" placeholder="Normal" name="levantateAnda_interpretacion" value="<c:out value="${forma.getLevantateAnda_interpretacion()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="levantateAnda_interpretacion" value="<c:out value="${forma.getLevantateAnda_interpretacion()}"/>">
                     </div>
                 </div>
                 <%if (!request.getAttribute("show").equals(true)) {%>

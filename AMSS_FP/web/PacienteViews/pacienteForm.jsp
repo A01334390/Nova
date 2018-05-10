@@ -74,49 +74,49 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">Primer nombre :</label>
-                            <input class="u-full-width" type="text" placeholder="Nombres" name="primerNombre" value="<c:out value="${paciente.getPrimerNombre()}"/>">
+                            <input class="u-full-width" required type="text" placeholder="Nombres" name="primerNombre" value="<c:out value="${paciente.getPrimerNombre()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Segundo Nombre : </label>
-                            <input class="u-full-width" type="text" placeholder="Apellidos"  name="segundoNombre" value="<c:out value="${paciente.getSegundoNombre()}"/>">
+                            <input class="u-full-width" required type="text" placeholder="Apellidos"  name="segundoNombre" value="<c:out value="${paciente.getSegundoNombre()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Correo Electronico : </label>
-                            <input class="u-full-width" type="text" placeholder="hello@nova.io"  name="email" value="<c:out value="${paciente.getEmail()}"/>">
+                            <input class="u-full-width" required type="text" placeholder="hello@nova.io"  name="email" value="<c:out value="${paciente.getEmail()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Nombre de Usuario : </label>
-                            <input class="u-full-width" type="text" placeholder="username"  name="usuario" value="<c:out value="${paciente.getUsuario()}"/>">
+                            <input class="u-full-width" required type="text" placeholder="username"  name="usuario" value="<c:out value="${paciente.getUsuario()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Nacionalidad : </label>
-                            <input class="u-full-width" type="text" placeholder="Mexicana"  name="nacionalidad" value="<c:out value="${paciente.getNacionalidad()}"/>">
+                            <input class="u-full-width" required type="text" placeholder="Mexicana"  name="nacionalidad" value="<c:out value="${paciente.getNacionalidad()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Estado de Nacimiento : </label>
-                            <input class="u-full-width" type="text" name="estadoNacimiento" value="<c:out value="${paciente.getEstadoNacimiento()}"/>">
+                            <input class="u-full-width" required type="text" name="estadoNacimiento" value="<c:out value="${paciente.getEstadoNacimiento()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Fecha de Nacimiento : </label>
-                            <input class="u-full-width" type="date" name="fechaDeNacimiento" value="<c:out value="${paciente.getFechaDeNacimiento()}"/>">
+                            <input class="u-full-width" required type="date" name="fechaDeNacimiento" value="<c:out value="${paciente.getFechaDeNacimiento()}"/>">
                         </div>
                     </div>   
 
@@ -137,7 +137,7 @@
                         <div class="row">
                             <div class="one-half column">
                                 <label>Reporte de autopadecimiento:</label>
-                                <input type="text" name="autopadecimiento" value="<c:out value="${paciente.getAutopadecimiento()}"/>" required>
+                                <input required type="text" name="autopadecimiento" value="<c:out value="${paciente.getAutopadecimiento()}"/>" required>
                             </div>
                         </div>
 
@@ -145,7 +145,7 @@
                         <div class="row">
                             <label >Genero : </label>
                             <div class="one-half column">
-                                <select name="genero" type="text" required>
+                                <select required name="genero" type="text" required>
                                     <option value ="0" ${paciente.getGenero() == 0 ? 'selected="selected"' : ''}> Hombre </option>
                                     <option value ="1" ${paciente.getGenero() == 1 ? 'selected="selected"' : ''}> Mujer </option>
                                     <option value ="2" ${paciente.getGenero() == 2 ? 'selected="selected"' : ''}> No deseo identificarme </option>
@@ -236,41 +236,41 @@
                     <div class="row">
                         <div class="three columns">
                             <label for="katz">Pais :</label>
-                            <input class="u-full-width" type="text" name="pais" value="<c:out value="${domicilio.getPais()}"/>">
+                            <input required class="u-full-width" type="text" name="pais" value="<c:out value="${domicilio.getPais()}"/>">
                         </div>
                         <div class="four columns">
                             <label for="katz">Estado :</label>
-                            <input class="u-full-width" type="text" name="estado" value="<c:out value="${domicilio.getEstado()}"/>">
+                            <input required class="u-full-width" type="text" name="estado" value="<c:out value="${domicilio.getEstado()}"/>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="three columns">
                             <label for="katz">Ciudad :</label>
-                            <input class="u-full-width" type="text" name="ciudad" value="<c:out value="${domicilio.getCiudad()}"/>">
+                            <input required class="u-full-width" type="text" name="ciudad" value="<c:out value="${domicilio.getCiudad()}"/>">
                         </div>
                         <div class="four columns">
                             <label for="katz">Colonia :</label>
-                            <input class="u-full-width" type="text" name="colonia" value="<c:out value="${domicilio.getColonia()}"/>">
+                            <input required class="u-full-width" type="text" name="colonia" value="<c:out value="${domicilio.getColonia()}"/>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="three columns">
                             <label for="katz">Calle :</label>
-                            <input class="u-full-width" type="text" name="calle" value="<c:out value="${domicilio.getCalle()}"/>">
+                            <input required class="u-full-width" type="text" name="calle" value="<c:out value="${domicilio.getCalle()}"/>">
                         </div>
                         <div class="two columns">
                             <label for="katz">Numero Externo :</label>
-                            <input class="u-full-width" type="text" name="numeroExterno" value="<c:out value="${domicilio.getNumeroExterno()}"/>">
+                            <input required class="u-full-width" type="text" name="numeroExterno" value="<c:out value="${domicilio.getNumeroExterno()}"/>">
                         </div>
                         <div class="two columns">
                             <label for="katz">Numero Interno :</label>
-                            <input class="u-full-width" type="text" name="numeroInterno" value="<c:out value="${domicilio.getNumeroInterno()}"/>">
+                            <input required class="u-full-width" type="text" name="numeroInterno" value="<c:out value="${domicilio.getNumeroInterno()}"/>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="seven columns">
                             <label for="katz">Codigo Postal :</label>
-                            <input class="u-full-width"  type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
+                            <input required class="u-full-width"  type="text" name="codigoPostal" value="<c:out value="${domicilio.getCodigoPostal()}"/>">
                         </div>
                     </div>
                     <input class="button-primary" type="submit" value="Submit" />

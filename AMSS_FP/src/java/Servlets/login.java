@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import DatabaseManager.Handler;
+import static DatabaseManager.Handler.loginPaciente;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -91,32 +92,54 @@ public class login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, UnsupportedEncodingException {
         try {
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
+            String isPaciente = request.getParameter("paciente");
             //Make this an MD5 hash
-            if (Handler.userValidation(username, password)) {
-                Usuario us = Handler.userSearch(username,"*");
-                request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());
-                request.getSession().setAttribute("currentPrivilegeLevel", us.getPrivilegio());
-                request.getSession().setAttribute("idUsuario", us.getId());
-                String goTo;
-                if(us.getPrivilegio() == 0){
-                    goTo = "adminHome.jsp";
-                }else{
-                    goTo = "home.jsp";
-                }
-                response.sendRedirect(goTo);
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/"+goTo);
-                if (disp != null) {
-                    disp.include(request, response);
+            
+            if ("true".equals(isPaciente)) {
+                String idPaciente = request.getParameter("idPaciente");
+                String apellidoPaterno = request.getParameter("apellidoPaterno");
+                if (loginPaciente(idPaciente, apellidoPaterno)) {
+                    request.getSession().setAttribute("currentSessionName", "Usuario externo");
+                    request.setAttribute("forma", null);
+                    request.setAttribute("usuario", 1);
+                    request.setAttribute("paciente", request.getParameter("idPaciente"));
+                    request.setAttribute("show", false);
+                    request.setAttribute("outside", true);
+                    RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
+                    req.forward(request, response);
+                } else {
+                    System.out.print("Not Successful");
+                    request.getSession().setAttribute("success", false);
+                    RequestDispatcher req = request.getRequestDispatcher("/paclogin.jsp");
+                    req.forward(request, response);
                 }
             } else {
-                System.out.print("Not Successful");
-                request.getSession().setAttribute("success",false);
-                response.sendRedirect("index.jsp");
-                RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");
-                if (disp != null) {
-                    disp.include(request, response);
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
+                if (Handler.userValidation(username, password)) {
+                    Usuario us = Handler.userSearch(username, "*");
+                    request.getSession().setAttribute("currentSessionName", us.getPrimerNombre());
+                    request.getSession().setAttribute("currentPrivilegeLevel", us.getPrivilegio());
+                    request.getSession().setAttribute("idUsuario", us.getId());
+                    String goTo;
+                    if (us.getPrivilegio() == 0) {
+                        goTo = "adminHome.jsp";
+                    } else {
+                        goTo = "home.jsp";
+                    }
+                    response.sendRedirect(goTo);
+                    RequestDispatcher disp = getServletContext().getRequestDispatcher("/" + goTo);
+                    if (disp != null) {
+                        disp.include(request, response);
+                    }
+                } else {
+                    System.out.print("Not Successful");
+                    request.getSession().setAttribute("success", false);
+                    response.sendRedirect("/index.jsp");
+                    RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");
+                    if (disp != null) {
+                        disp.include(request, response);
+                    }
                 }
             }
         } catch (NamingException ex) {

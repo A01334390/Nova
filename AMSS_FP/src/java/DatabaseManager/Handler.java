@@ -83,8 +83,6 @@ public class Handler {
      * @throws java.io.UnsupportedEncodingException
      */
     public static boolean userValidation(String username, String password) throws UnsupportedEncodingException, NamingException {
-        String enc = rsaenc.encrypt(getPublicKeyFilePath(), username);
-        System.out.println(rsadec.decrypt(getPrivateKeyFilePath(), enc));
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
@@ -107,6 +105,32 @@ public class Handler {
                 }
                 String paswuord = buff.toString();
                 pre.setString(2, paswuord);
+                ResultSet resultset = pre.executeQuery();
+                //if there is no data on the data set, the session return will be false
+                while (resultset.next()) {
+                    count++;
+                }
+            }
+            return count != 0;
+            //return session;
+        } catch (SQLException e) {
+            System.out.println(e.getSQLState()); //Must be a JPopup or something
+        }
+        return false;
+    }
+
+    public static boolean loginPaciente(String idPaciente, String usuario) throws NamingException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int count = 0;
+        try {
+            try (Connection connection = DriverManager.getConnection(getHost(), getHuser(), getHpassword()); Statement statement = connection.createStatement()) {
+                PreparedStatement pre = connection.prepareStatement("SELECT idPaciente FROM AMSS_BDD.Paciente WHERE idPaciente=? AND usuario=?;");
+                pre.setString(1, idPaciente);
+                pre.setString(2, usuario);
                 ResultSet resultset = pre.executeQuery();
                 //if there is no data on the data set, the session return will be false
                 while (resultset.next()) {

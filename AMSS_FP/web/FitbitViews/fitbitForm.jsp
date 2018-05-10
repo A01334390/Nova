@@ -67,37 +67,37 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">URL de Fitbit :</label>
-                            <input class="u-full-width" type="text" placeholder="fitbit.com" name="FITBIT_URL" value="">
+                            <input required class="u-full-width" type="text" placeholder="fitbit.com" name="FITBIT_URL" value="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">URL del API de Fitbit :</label>
-                            <input class="u-full-width" type="text" placeholder="api.fitbit.com" name="FITBIT_API_URL" value="">
+                            <input required class="u-full-width" type="text" placeholder="api.fitbit.com" name="FITBIT_API_URL" value="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">OAuth 2.0 ID de Cliente :</label>
-                            <input class="u-full-width" pattern="/\d\d[A-Z][A-Z][A-Z]\d/" type="text" placeholder="22CWB4" name="OAUTH_CLIENTID" value="">
+                            <input required class="u-full-width" pattern="/\d\d[A-Z][A-Z][A-Z]\d/" type="text" placeholder="22CWB4" name="OAUTH_CLIENTID" value="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">Secreto del cliente :</label>
-                            <input class="u-full-width" type="text" placeholder="db0f341198f4914dcb22ce837056292c" name="CLIENT_SECRET" value="">
+                            <input required class="u-full-width" type="text" placeholder="db0f341198f4914dcb22ce837056292c" name="CLIENT_SECRET" value="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">URI de redirección :</label>
-                            <input class="u-full-width" type="text" placeholder="http://localhost/fitbit" name="REDIRECT_URI" value="">
+                            <input required class="u-full-width" type="text" placeholder="http://localhost/fitbit" name="REDIRECT_URI" value="">
                         </div>
                     </div>
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">Tiempo de expiración :</label>
-                            <input class="u-full-width" type="text" placeholder="604800" name="EXPIRATION_TIME" value="">
+                            <input required class="u-full-width" type="text" placeholder="604800" name="EXPIRATION_TIME" value="">
                         </div>
                     </div>
                     <input class="u-full-width" type="text" value="ngraph" name="diff" hidden>

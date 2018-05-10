@@ -70,6 +70,7 @@
                     <div class="one-half column" style="margin-top: 5%">
                         <label>Inicio de sesion</label>
                         <p>Si deseas iniciar sesion, haz click <a href="login.jsp">aqui</a></p>
+                        <p>Si eres un paciente, haz click <a href="paclogin.jsp">aqui</a></p>
                     </div>
                 </div>
             </form>
