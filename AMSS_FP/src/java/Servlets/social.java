@@ -131,7 +131,18 @@ public class social extends HttpServlet {
             if (Handler.formaGerontologiaSearch(formId) == null) {
                 formaGerontologia forma = null;
                 try {
-                    forma = new formaGerontologia(1000, request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                    forma = new formaGerontologia(1000, 
+                            request.getParameter("dispositivosUso"), 
+                            request.getParameter("dispositivoMayorUso"),
+                            request.getParameter("frecuenciaUso"), 
+                            request.getParameter("actividadesUso"), 
+                            request.getParameter("usosFavorecer"), 
+                            request.getParameter("apoyoSocialPercibido"), 
+                            request.getParameter("actividadesComunitarias"), 
+                            request.getParameter("impresionDiagnostica"), 
+                            new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), 
+                            Integer.parseInt(request.getParameter("idUsuario")), 
+                            Integer.parseInt(request.getParameter("idPaciente")));
                 } catch (ParseException ex) {
                     Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -139,7 +150,7 @@ public class social extends HttpServlet {
             } else {
                 formaGerontologia forma = null;
                 try {
-                    forma = new formaGerontologia(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd/MM/yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                    forma = new formaGerontologia(Integer.parseInt(request.getParameter("idevaluacionFragilidad")), request.getParameter("dispositivosUso"), request.getParameter("dispositivoMayorUso"), request.getParameter("frecuenciaUso"), request.getParameter("actividadesUso"), request.getParameter("usosFavorecer"), request.getParameter("apoyoSocialPercibido"), request.getParameter("actividadesComunitarias"), request.getParameter("impresionDiagnostica"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
                 } catch (ParseException ex) {
                     Logger.getLogger(social.class.getName()).log(Level.SEVERE, null, ex);
                 }

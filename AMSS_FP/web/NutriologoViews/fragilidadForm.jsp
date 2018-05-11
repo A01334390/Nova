@@ -65,19 +65,19 @@
             <form action="nutricion" method="POST" name="formAddFormita">
                 <div class="row">
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdevaluacionFragilidad()}"/>">
+                        <input  class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdevaluacionFragilidad()}"/>">
                     </div>
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario.getId()}"/>">
+                        <input  class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario.getId()}"/>">
                     </div>
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente.getPacienteID()}"/>">
+                        <input class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente.getPacienteID()}"/>">
                     </div>
                 </div>
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input required class="u-full-width" type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input required class="u-full-width" type="text" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
 
@@ -176,7 +176,7 @@
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Evaluacion De Fragilidad</label>
-                        <input required hidden class="u-full-width" type="text" placeholder="Normal" name="evaluacionDeFragilidad" rows="5" value="<c:out value="${forma.getEvaluacionDeFragilidad()}"/>">
+                        <input required class="u-full-width" type="text" placeholder="Normal" name="evaluacionDeFragilidad" rows="5" value="<c:out value="${forma.getEvaluacionDeFragilidad()}"/>">
                     </div>
                 </div>
 

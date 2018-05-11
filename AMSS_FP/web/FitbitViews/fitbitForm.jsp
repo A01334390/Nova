@@ -79,7 +79,7 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for="primerNombre">OAuth 2.0 ID de Cliente :</label>
-                            <input required class="u-full-width" pattern="/\d\d[A-Z][A-Z][A-Z]\d/" type="text" placeholder="22CWB4" name="OAUTH_CLIENTID" value="">
+                            <input required class="u-full-width" type="text" placeholder="22CWB4" name="OAUTH_CLIENTID" value="">
                         </div>
                     </div>
                     <div class="row">

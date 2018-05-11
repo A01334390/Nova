@@ -131,10 +131,7 @@
                 <th>Acciones</th>
                 </thead>
                 <tbody>
-                    <%
-                        }
-                    %>
-                <tbody>
+                   
                     <%
                         formaGeriatria forma[] = Handler.getAllformaGeriatria(Integer.toString(paciente.getPacienteID()));
                         for (int i = 0; i < forma.length; i++) {
@@ -153,6 +150,7 @@
                     %>
                 </tbody>
             </table>
+                <%}%>
         </div>
 
         <div class="container" style="margin-top: 5%">
@@ -160,7 +158,7 @@
                 if (session.getAttribute("currentPrivilegeLevel").equals(1) || session.getAttribute("currentPrivilegeLevel").equals(3)) {
             %>
             <hr>
-            <h5> Formatos de Nutriologia </h5>
+            <h5> Formatos de Fragilidad </h5>
             <a href='nutricion?action=add&idUsuario=<%=session.getAttribute("idUsuario")%>&idPaciente=<%=paciente.getPacienteID()%>'>Agregar nueva valoracion de nutricion</a>
             <table>
                 <thead>
@@ -168,9 +166,6 @@
                 <th>Fecha de llenado</th>
                 <th>Acciones</th>
                 </thead>
-                <%
-                    }
-                %>
                 <tbody>
                     <%
                         formaFragilidad formaFrag[] = Handler.getAllformaFragilidad(Integer.toString(paciente.getPacienteID()));
@@ -190,12 +185,14 @@
                     %>
                 </tbody>
             </table>
-
+                <%
+                    }
+                %>
         </div>
 
         <div class="container" style="margin-top: 5%">
             <%
-                if (session.getAttribute("currentPrivilegeLevel").equals(1) || session.getAttribute("currentPrivilegeLevel").equals(4)) {
+                if (session.getAttribute("currentPrivilegeLevel").equals(1) || session.getAttribute("currentPrivilegeLevel").equals(3)) {
             %>
             <hr>
             <h5> Información de movilidad </h5>

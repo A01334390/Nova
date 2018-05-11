@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -128,10 +129,15 @@ public class login extends HttpServlet {
                         goTo = "home.jsp";
                     }
                     response.sendRedirect(goTo);
-                    RequestDispatcher disp = getServletContext().getRequestDispatcher("/" + goTo);
+                    if(us.getFechaValidez().before(new Date())){
+                        RequestDispatcher disp = getServletContext().getRequestDispatcher("/" + goTo);
                     if (disp != null) {
                         disp.include(request, response);
                     }
+                    }else{
+                        
+                    }
+                    
                 } else {
                     System.out.print("Not Successful");
                     request.getSession().setAttribute("success", false);

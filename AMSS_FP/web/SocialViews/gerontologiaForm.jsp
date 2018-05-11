@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <%
     if (session.getAttribute("currentSessionName") == null) {
-        response.sendRedirect("../index.jsp");
+        response.sendRedirect("/index.jsp");
     }
 %>
 <html>
@@ -67,20 +67,20 @@
             <form action="social" method="POST" name="formAddGerontologia">
                 <div class="row">
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
+                        <input  class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
                     </div>
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
+                        <input  class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
                     </div>
                     <div class="three columns">
-                        <input hidden class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
+                        <input  class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input class="u-full-width" required type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input class="u-full-width" required type="text" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
 

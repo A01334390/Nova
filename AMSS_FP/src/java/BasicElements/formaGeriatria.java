@@ -200,6 +200,10 @@ public class formaGeriatria {
         this.idPaciente = idPaciente;
     }
     
+    public Date getDateString(){
+        return this.fechaLlenado;
+    }
+    
     private static String dateToString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yy");
         return dateFormat.format(date);

@@ -141,7 +141,7 @@ public class geriatria extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String formID = request.getParameter("idForm");
+            String formID = request.getParameter("idformatoGeriatria");
             if (Handler.formaGeriatriaSearch(formID) == null) {
                 formaGeriatria forma = null;
                 try {
@@ -155,7 +155,9 @@ public class geriatria extends HttpServlet {
             } else {
                 formaGeriatria forma = null;
                 try {
-                    forma = new formaGeriatria(Integer.parseInt("-1"), request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawthonBrody"), request.getParameter("lawthonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(request.getParameter("idUsuario")), Integer.parseInt(request.getParameter("idPaciente")));
+                    String idUsuario = request.getParameter("idUsuario");
+                    String idPaciente = request.getParameter("idPaciente");
+                    forma = new formaGeriatria(Integer.parseInt(formID), request.getParameter("katz"), request.getParameter("katz_interpretacion"), request.getParameter("barthel"), request.getParameter("barthel_interpretacion"), request.getParameter("lawtonBrody"), request.getParameter("lawtonBrody_interpretacion"), request.getParameter("estadoMental"), request.getParameter("estadoMental_interpretacion"), request.getParameter("escalaDepresion"), request.getParameter("escalaDepresion_interpretacion"), request.getParameter("cribadoNutricional"), request.getParameter("cribadoNutricional_interpretacion"), request.getParameter("pruebaDesempenio"), request.getParameter("pruebaDesempenio_interpretacion"), request.getParameter("levantateAnda"), request.getParameter("levantateAnda_interpretacion"), new SimpleDateFormat("dd-MM-yy").parse(request.getParameter("fechaLlenado")), Integer.parseInt(idUsuario), Integer.parseInt(idPaciente));
                 } catch (ParseException ex) {
                     Logger.getLogger(geriatria.class.getName()).log(Level.SEVERE, null, ex);
                 }

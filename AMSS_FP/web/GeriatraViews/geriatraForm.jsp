@@ -80,7 +80,7 @@
                 <div class="row">
                     <div class="nine columns">
                         <label for="katz">Fecha de Aplicacion :</label>
-                        <input required class="u-full-width"  type="date" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
+                        <input required class="u-full-width"  type="text" name="fechaLlenado" value="<c:out value="${forma.getFechaLlenado()}"/>">
                     </div>
                 </div>
                 <div class="row">

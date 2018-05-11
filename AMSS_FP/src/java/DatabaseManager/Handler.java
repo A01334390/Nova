@@ -488,7 +488,6 @@ public class Handler {
                     + "`primerNombre` = '" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getPrimerNombre()) + "',\n"
                     + "`segundoNombre` = '" + rsaenc.encrypt(getPublicKeyFilePath(), paciente.getSegundoNombre()) + "',\n"
                     + "`usuario` = '" + paciente.getUsuario() + "',\n"
-                    + "`fechaDeNacimiento` = '" + paciente.getFechaDeNacimiento() + "',\n"
                     + "`genero` = " + paciente.getGenero() + ",\n"
                     + "`email` = '" + paciente.getEmail() + "',\n"
                     + "`nacionalidad` = '" + paciente.getNacionalidad() + "',\n"
@@ -662,7 +661,6 @@ public class Handler {
                     + "`pruebaDesempenio_interpretacion` = '" + forma.getPruebaDesempenio_interpretacion() + "',\n"
                     + "`levantateAnda` = '" + forma.getLevantateAnda() + "',\n"
                     + "`levantateAnda_interpretacion` = '" + forma.getLevantateAnda_interpretacion() + "',\n"
-                    + "`fechaLlenado` = '" + forma.getFechaLlenado() + "',\n"
                     + "`idUsuario` = " + forma.getIdUsuario() + ",\n"
                     + "`idPaciente` = " + forma.getIdPaciente() + "\n"
                     + "WHERE `idformatoGeriatria` = " + forma.getIdformatoGeriatra() + ";");
@@ -867,7 +865,6 @@ public class Handler {
                     + "`evaluacionCognitiva` = '" + forma.getEvaluacionCognitiva() + "',\n"
                     + "`evaluacionNutricional` = '" + forma.getEvaluacionNutricional() + "',\n"
                     + "`evaluacionDeFragilidad` = '" + forma.getEvaluacionDeFragilidad() + "',\n"
-                    + "`fechaLlenado` = '" + forma.getFechaLlenado() + "',\n"
                     + "`IdPaciente` = " + forma.getIdPaciente() + ",\n"
                     + "`idUsuario` = " + forma.getIdUsuario() + "\n"
                     + "WHERE `idevaluacionFragilidad` = " + forma.getIdevaluacionFragilidad() + ";";
@@ -1010,7 +1007,6 @@ public class Handler {
                     + "`apoyosocialPercibido` = '" + forma.getApoyosocialPercibido() + "',\n"
                     + "`actividadesComunitarias` = '" + forma.getActividadesComunitarias() + "',\n"
                     + "`impresionDiagnostica` = '" + forma.getImpresionDiagnostica() + "',\n"
-                    + "`fechaLlenado` = '" + forma.getFechaLlenado() + "',\n"
                     + "`idUsuario` = " + forma.getIdUsuario() + ",\n"
                     + "`idPaciente` = " + forma.getIdPaciente() + "\n"
                     + "WHERE `idValoracionGerontologica` = " + forma.getIdvaloracionGerontologica() + ";";

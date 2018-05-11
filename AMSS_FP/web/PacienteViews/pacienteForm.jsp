@@ -73,14 +73,14 @@
                 <form action="paciente" method="POST" name="formAddPaciente">
                     <div class="row">
                         <div class="one-half column">
-                            <label for="primerNombre">Primer nombre :</label>
+                            <label for="primerNombre">Nombres :</label>
                             <input class="u-full-width" required type="text" placeholder="Nombres" name="primerNombre" value="<c:out value="${paciente.getPrimerNombre()}"/>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="one-half column">
-                            <label for ="passwordInput">Segundo Nombre : </label>
+                            <label for ="passwordInput">Apellidos : </label>
                             <input class="u-full-width" required type="text" placeholder="Apellidos"  name="segundoNombre" value="<c:out value="${paciente.getSegundoNombre()}"/>">
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                     <div class="row">
                         <div class="one-half column">
                             <label for ="passwordInput">Fecha de Nacimiento : </label>
-                            <input class="u-full-width" required type="date" name="fechaDeNacimiento" value="<c:out value="${paciente.getFechaDeNacimiento()}"/>">
+                            <input class="u-full-width" required type="text" name="fechaDeNacimiento" value="<c:out value="${paciente.getFechaDeNacimiento()}"/>">
                         </div>
                     </div>   
 

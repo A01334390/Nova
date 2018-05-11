@@ -90,7 +90,7 @@
         <div class='container'>
             <div class='six columns' style='margin-top:15%'>
                 <h2>Paso 1</h2><p>Iniciar sesión en Fitbit<p>
-                    <a href='https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FNova%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604000'>Acceder a Fitbit</a>
+                    <a href='https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=22CWB4&redirect_uri=http%3A%2F%2Flocalhost%2FNova%2Ffitbit%3Faction%3Dshow&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=6040'>Acceder a Fitbit</a>
             </div>
         </div>
         <div class="container">
