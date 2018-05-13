@@ -95,7 +95,7 @@ public class login extends HttpServlet {
         try {
             String isPaciente = request.getParameter("paciente");
             //Make this an MD5 hash
-            
+
             if ("true".equals(isPaciente)) {
                 String idPaciente = request.getParameter("idPaciente");
                 String apellidoPaterno = request.getParameter("apellidoPaterno");
@@ -106,6 +106,7 @@ public class login extends HttpServlet {
                     request.setAttribute("paciente", request.getParameter("idPaciente"));
                     request.setAttribute("show", false);
                     request.setAttribute("outside", true);
+                    request.getSession().setAttribute("success", true);
                     RequestDispatcher req = request.getRequestDispatcher("/SocialViews/gerontologiaForm.jsp");
                     req.forward(request, response);
                 } else {
@@ -128,24 +129,22 @@ public class login extends HttpServlet {
                     } else {
                         goTo = "home.jsp";
                     }
-                    response.sendRedirect(goTo);
-                    if(us.getFechaValidez().before(new Date())){
-                        RequestDispatcher disp = getServletContext().getRequestDispatcher("/" + goTo);
-                    if (disp != null) {
-                        disp.include(request, response);
+                    if (us.getFechaValidez().before(new Date())) {
+                        request.getSession().setAttribute("success", true);
+                        RequestDispatcher req = request.getRequestDispatcher("/login.jsp");
+                        req.forward(request, response);
+                    } else {
+                        request.getSession().setAttribute("success", true);
+                        RequestDispatcher req = request.getRequestDispatcher("/" + goTo);
+                        req.forward(request, response);
                     }
-                    }else{
-                        
-                    }
-                    
+
                 } else {
                     System.out.print("Not Successful");
                     request.getSession().setAttribute("success", false);
-                    response.sendRedirect("/index.jsp");
-                    RequestDispatcher disp = getServletContext().getRequestDispatcher("/index.jsp");
-                    if (disp != null) {
-                        disp.include(request, response);
-                    }
+                    RequestDispatcher req = request.getRequestDispatcher("/login.jsp");
+                    req.forward(request, response);
+
                 }
             }
         } catch (NamingException ex) {

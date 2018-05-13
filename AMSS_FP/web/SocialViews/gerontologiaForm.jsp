@@ -67,13 +67,13 @@
             <form action="social" method="POST" name="formAddGerontologia">
                 <div class="row">
                     <div class="three columns">
-                        <input  class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
+                        <input  hidden class="u-full-width" type="text" name="idevaluacionFragilidad" value="<c:out value="${forma.getIdvaloracionGerontologica()}"/>">
                     </div>
                     <div class="three columns">
-                        <input  class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
+                        <input  hidden class="u-full-width" type="text" name="idUsuario" value="<c:out value="${usuario}"/>">
                     </div>
                     <div class="three columns">
-                        <input  class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
+                        <input  hidden class="u-full-width" type="text" name="idPaciente" value="<c:out value="${paciente}"/>">
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@
                         <label for="katz">Impresion Diagnostica:</label>
                         <input class="u-full-width" required type="text" name="impresionDiagnostica" value="<c:out value="${forma.getImpresionDiagnostica()}"/>"></div>
                 </div>
-        <input name="outside" value=<%=request.getAttribute("outside")%>>
+        <input hidden name="outside" value=<%=request.getAttribute("outside")%>>
         <%if (!request.getAttribute("show").equals(true)) {%>
         <input class="button-primary" type="submit" value="Submit">
         <%}%>

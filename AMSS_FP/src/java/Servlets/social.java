@@ -158,7 +158,8 @@ public class social extends HttpServlet {
             }
             RequestDispatcher req;
             if(request.getParameter("outside").equals("true")){
-                req = request.getRequestDispatcher("/index.jsp");
+                request.getSession().setAttribute("filled", true);
+                req = request.getRequestDispatcher("/paclogin.jsp");
             }else{
                 req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
             }
