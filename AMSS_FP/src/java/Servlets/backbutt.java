@@ -57,11 +57,13 @@ public class backbutt extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getParameter("action").equals("returnPacienteAll")){
+            request.getSession().setAttribute("pasecom", true);
             RequestDispatcher req = request.getRequestDispatcher("/PacienteViews/pacienteAll.jsp");
             req.forward(request, response);
         }
         
         if(request.getParameter("action").equals("returnReporteParams")){
+            request.getSession().setAttribute("pasecom", true);
             RequestDispatcher req = request.getRequestDispatcher("/ReporteViews/reporteParams.jsp");
             req.forward(request, response);
         }

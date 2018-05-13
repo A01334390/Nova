@@ -11,7 +11,9 @@
 
     <%
         if (session.getAttribute("currentSessionName") == null) {
-            response.sendRedirect("/index.jsp");
+            session.setAttribute("success", false);
+            RequestDispatcher req = request.getRequestDispatcher("/login.jsp");
+            req.forward(request, response);
         }
     %>
 
@@ -38,30 +40,38 @@
     <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link rel="icon" type="image/png" href="images/favicon.png">
-    
+
     <script src="js/site.js"></script>
-        <link rel="stylesheet" href="css/custom.css" type="text/css">
+    <link rel="stylesheet" href="css/custom.css" type="text/css">
 </head>
 <body>
     <div class="navbar-spacer"></div>
-        <nav class="navbar">
-            <div class="container">
-                <ul class="navbar-list">
-                    <li class="navbar-item">
-                        <a class="navbar-link" href="index.jsp">Nova</a>
-                    </li>
-                </ul>
-                <ul class="navbar-list">
-                    <li class="navbar-item">
-                        <a class="navbar-link" href="index.jsp">Regresar</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <nav class="navbar">
+        <div class="container">
+            <ul class="navbar-list">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="index.jsp">Nova</a>
+                </li>
+            </ul>
+            <ul class="navbar-list">
+                <li class="navbar-item">
+                    <a class="navbar-link" href="index.jsp">Regresar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <div class="six columns" style="margin-top: 15%">
             <h1>Bienvenido a la pagina principal, <%=session.getAttribute("currentSessionName")%></h1>
             <h5> Aqui podras ver los pacientes registrados, observar su informacion relacionada y sus formatos. </h5>
+        </div>
+    </div>
+    <div class="container">
+        <div class="six columns">
+            <form action="paciente" method="POST">
+                <input name="idExpediente" type="text" placeholder="Numero de paciente">
+                <input type="button" name="submit" value="Buscar">
+            </form>
         </div>
     </div>
 
@@ -118,5 +128,12 @@
             </tbody>
         </table>
     </div>
+    <script>
+        let pasecom = <%=session.getAttribute("pasecom")%>
+        if (pasecom === false) {
+            alert("No se encontro el numero de expediente solicitado")
+        }
+        <%request.getSession().setAttribute("pasecom", true);%>
+    </script>
 </body>
 </html>

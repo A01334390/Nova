@@ -13,7 +13,9 @@
 
     <%
         if (session.getAttribute("currentSessionName") == null) {
-            response.sendRedirect("/index.jsp");
+            session.setAttribute("success", false);
+            RequestDispatcher req = request.getRequestDispatcher("/login.jsp");
+            req.forward(request, response);
         }
     %>
     <head>
@@ -82,6 +84,12 @@
         <div class="container">
             <h1>Usuarios</h1>
             <h5> Aqui podras ver los usuarios registrados, editar sus datos y eliminarlos del sistema. </h5>
+
+                <form action="admin" method="POST">
+                    <input name="username" type="text" placeholder="Nombre de usuario">
+                    <input type="button" name="submit" value="Buscar">
+                </form>
+
             <p><a href="admin?action=add">Agregar nuevo usuario</a></p>
             <table>
                 <thead>

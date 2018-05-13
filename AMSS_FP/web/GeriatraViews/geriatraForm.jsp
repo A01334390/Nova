@@ -10,10 +10,12 @@
 
 <!DOCTYPE html>
 <%
-    if (session.getAttribute("currentSessionName") == null) {
-        response.sendRedirect("/index.jsp");
-    }
-%>
+        if (session.getAttribute("currentSessionName") == null) {
+            session.setAttribute("success", false);
+            RequestDispatcher req = request.getRequestDispatcher("/login.jsp");
+            req.forward(request, response);
+        }
+    %>
 <html>
     <head>
         <!-- Basic Page Needs

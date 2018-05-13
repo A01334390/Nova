@@ -15,6 +15,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <%
+        if (session.getAttribute("currentSessionName") == null) {
+            session.setAttribute("success", false);
+            RequestDispatcher req = request.getRequestDispatcher("/login.jsp");
+            req.forward(request, response);
+        }
+    %>
     <head>
         <!-- Basic Page Needs
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
